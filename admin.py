@@ -33,7 +33,7 @@ class adminCog:
 
     @self.bot.event
     async def on_member_join(self, ctx):
-        if self.raidmode = True:
+        if self.raidmode == True:
             await ctx.add_roles(discord.utils.get(ctx.guild.roles, name="jail"))
             await ctx.send("This server is currently under attack! Please DM <@164921837107675137> or <@163691476788838401> if you are a legitimate user to get unjailed.")
         elif self.welcomeChannel != 0:
