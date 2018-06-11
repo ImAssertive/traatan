@@ -1,7 +1,7 @@
 import discord, asyncio, sys, traceback, checks
 from discord.ext import commands
 
-initial_extensions = ['pubquiz', 'misc']
+initial_extensions = ['pubquiz', 'misc', 'admin']
 
 
 def getPrefix(bot, message):
