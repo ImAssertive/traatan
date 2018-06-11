@@ -31,7 +31,6 @@ class adminCog:
             await ctx.guild.get_member(memberid).add_roles(discord.utils.get(ctx.guild.roles, name="jail"))
             await ctx.channel.send("Jailed " + ctx.guild.get_member(memberid).mention)
 
-    @self.bot.event
     async def on_member_join(self, ctx):
         if self.raidmode == True:
             await ctx.add_roles(discord.utils.get(ctx.guild.roles, name="jail"))
