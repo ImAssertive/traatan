@@ -16,7 +16,7 @@ class adminCog:
     @commands.command(name="raidmode", aliases=['rm', 'raid', 'raidtoggle'])
     @checks.has_role("Admin", "Moderator")
     async def raidmode(self, ctx):
-        self.raidmodeState = not str(self.raidmodeState)
+        self.raidmodeState = not self.raidmodeState
         await ctx.channel.send("Raid mode set to: " + str(self.raidmodeState))
 
     @commands.command(name="jail", aliases=['silence', 'unmute', 'unsilence', 'unjail'])
