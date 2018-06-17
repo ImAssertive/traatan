@@ -3,6 +3,8 @@ from discord.ext import commands
 
 initial_extensions = ['admin']
 
+con = lite.connect('tt.db')
+scur = con.cursor()
 
 def getPrefix(bot, message):
     prefixes = ["tt!", "t!"]

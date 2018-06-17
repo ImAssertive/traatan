@@ -5,46 +5,43 @@ from discord.ext import commands
 
 class adminCog:
     def __init__(self, bot):
+        global con, cur
         self.bot = bot
-        self.con = lite.connect('tt.db')
-        self.cur = self.con.cursor()
+
+
+    # @commands.command()
+    # @checks.has_roleedit_permission()
 
     @commands.command()
     @checks.justme()
-    async def botban(self, ctx, member):
-        memberid = useful.getid(member)
-        self.cur.execute("UPDATE Users SET banned=1 WHERE userID =?", memberid,)
-        self.con.commit()
+    async def botban(self, ctx, memberid):
+        cur.execute("UPDATE Users SET banned=1 WHERE userID =?", memberid,)
+        con.commit()
 
     @commands.command()
     @checks.justme()
-    async def botunban(self, ctx, member):
-        memberid = useful.getid(member)
-        self.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", memberid,)
-        self.con.commit()
+    async def botunban(self, ctx, memberid):
+        cur.execute("UPDATE Users SET banned=0 WHERE userID =?", memberid,)
+        con.commit()
 
     async def on_guild_join(self, ctx):
-        self.cur.execute("SELECT * FROM Guilds WHERE guildID = ?", (ctx.id,))
-        result = self.cur.fetchone()
+        cur.execute("SELECT * FROM Guilds WHERE guildID = ?", (ctx.id,))
+        result = cur.fetchone()
         if not result:
-            #self.cur.execute('''SET IDENTITY_INSERT Guilds ON''')
-            self.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?)''',(ctx.id,))
-           # self.cur.execute('''SET IDENTITY_INSERT Guilds OFF''')
-            self.con.commit()
+            cur.execute('''INSERT INTO Guilds (guildID) VALUES(?)''',(ctx.id,))
+            con.commit()
 
     async def on_member_join(self, ctx):
-        print(ctx.id)
-        self.cur.execute("SELECT * FROM Users WHERE userID = ?", (ctx.id,))
-        if not self.cur.fetchone():
-            self.cur.execute('''INSERT INTO Users (userID) VALUES(?)''',(ctx.id,))
-            self.con.commit()
-        test=[(ctx.guild.id),(ctx.guild.id)]
-        self.cur.execute("SELECT * FROM GuildUsers WHERE guildID = ? AND userID = ?", test)
-        print(self.cur.fetchone())
-        if not self.cur.fetchone():
-            self.cur.execute('''INSERT INTO GuildUsers (guildID, userID) VALUES(?,?)''', test)
-            self.con.commit()
-            print("mew")
+        cur.execute("SELECT * FROM Users WHERE userID = ?", (ctx.id,))
+        if not cur.fetchone():
+            cur.execute('''INSERT INTO Users (userID) VALUES(?)''',(ctx.id,))
+            con.commit()
+        IDs=[(ctx.guild.id),(ctx.id)]
+        cur.execute("SELECT * FROM GuildUsers WHERE guildID = ? AND userID = ?", IDs)
+        print(cur.fetchone())
+        if not cur.fetchone():
+            cur.execute('''INSERT INTO GuildUsers (guildID, userID) VALUES(?,?)''', IDs)
+            con.commit()
 
 
 

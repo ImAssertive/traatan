@@ -18,3 +18,10 @@ def justme():
             await ctx.channel.send(":no_good: You do not have permission for that!")
             return False
     return commands.check(predicate)
+
+# def has_roleedit_permission(ctx):
+#     async def predicate(ctx):
+#         if ctx.author.id == ctx.guild.owner_id or ctx.author.id == 163691476788838401 or
+#
+#
+#     return commands.check(predicate)
