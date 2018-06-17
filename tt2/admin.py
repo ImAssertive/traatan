@@ -6,7 +6,7 @@ from discord.ext import commands
 class adminCog:
     def __init__(self, bot):
         self.bot = bot
-        self.con = lite.connect(db)
+        self.con = lite.connect('tt.db')
         self.cur = self.con.cursor()
 
     async def on_guild_join(self, ctx):
