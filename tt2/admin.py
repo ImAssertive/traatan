@@ -14,17 +14,20 @@ class adminCog:
 
     @commands.command()
     @checks.justme()
+    global con, cur
     async def botban(self, ctx, memberid):
         cur.execute("UPDATE Users SET banned=1 WHERE userID =?", memberid,)
         con.commit()
 
     @commands.command()
     @checks.justme()
+    global con, cur
     async def botunban(self, ctx, memberid):
         cur.execute("UPDATE Users SET banned=0 WHERE userID =?", memberid,)
         con.commit()
 
     async def on_guild_join(self, ctx):
+        global con, cur
         cur.execute("SELECT * FROM Guilds WHERE guildID = ?", (ctx.id,))
         result = cur.fetchone()
         if not result:
@@ -32,6 +35,7 @@ class adminCog:
             con.commit()
 
     async def on_member_join(self, ctx):
+        global con, cur
         cur.execute("SELECT * FROM Users WHERE userID = ?", (ctx.id,))
         if not cur.fetchone():
             cur.execute('''INSERT INTO Users (userID) VALUES(?)''',(ctx.id,))
