@@ -23,7 +23,7 @@ class adminCog:
     async def botunban(self, ctx, member):
         memberid = int(useful.getid(member))
         print(memberid)
-        self.bot.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", memberid)
+        self.bot.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", (memberid,))
         self.bot.con.commit()
 
     async def on_guild_join(self, ctx):
