@@ -13,10 +13,12 @@ class adminCog:
         print(ctx.id)
         self.cur.execute("SELECT * FROM Guilds WHERE guildID = ?", (ctx.id,))
         if not self.cur.fetchone():
+            print("mew")
             #self.cur.execute('''SET IDENTITY_INSERT Guilds ON''')
             self.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?)''',(ctx.id,))
            # self.cur.execute('''SET IDENTITY_INSERT Guilds OFF''')
             self.con.commit()
+        print("wew")
 
 
 
