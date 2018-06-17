@@ -36,10 +36,11 @@ class adminCog:
             self.bot.con.commit()
         IDs=[(ctx.guild.id),(ctx.id)]
         self.bot.cur.execute("SELECT * FROM GuildUsers WHERE guildID = ? AND userID = ?", IDs)
-        print(self.bot.cur.fetchone())
-        if not self.bot.cur.fetchone():
+        print(str(self.bot.cur.fetchone()))
+        if str(self.bot.cur.fetchone()) == "None":
             self.bot.cur.execute('''INSERT INTO GuildUsers (guildID, userID) VALUES(?,?)''', IDs)
             self.bot.con.commit()
+            print("wew")
 
 
 
