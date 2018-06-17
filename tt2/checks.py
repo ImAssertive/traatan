@@ -21,7 +21,6 @@ def justme():
 
 # def has_roleedit_permission(ctx):
 #     async def predicate(ctx):
-#         global con, cur
 #         if ctx.author.id == ctx.guild.owner_id or ctx.author.id == 163691476788838401 or
 #
 #

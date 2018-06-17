@@ -20,6 +20,8 @@ def gettoken():
 token = gettoken()
 
 bot = commands.Bot(command_prefix=getPrefix, pm_help=False, description='/r/Traa community help bot! tt!help for commands')
+bot.con = lite.connect('tt.db')
+bot.cur = bot.con.cursor()
 
 if __name__ == '__main__':
     for extension in initial_extensions:
