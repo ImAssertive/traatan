@@ -12,7 +12,9 @@ class adminCog:
     async def on_guild_join(self, ctx):
         print(ctx.id)
         self.cur.execute("SELECT * FROM Guilds WHERE guildID = ?", (ctx.id,))
-        if not self.cur.fetchone():
+        result = self.cur.fetchone()
+        print(result)
+        if not result:
             print("mew")
             #self.cur.execute('''SET IDENTITY_INSERT Guilds ON''')
             self.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?)''',(ctx.id,))
