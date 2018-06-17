@@ -1,4 +1,5 @@
 import discord, asyncio, sys, traceback, checks
+import sqlite3 as lite
 from discord.ext import commands
 
 initial_extensions = ['admin']
