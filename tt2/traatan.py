@@ -1,8 +1,9 @@
 import discord, asyncio, sys, traceback, checks
 from discord.ext import commands
 
-initial_extensions = ['pubquiz', 'misc', 'admin', 'overwatch']
+initial_extensions = ['admin']
 
+db='tt.db'
 
 def getPrefix(bot, message):
     prefixes = ["tt!", "t!"]

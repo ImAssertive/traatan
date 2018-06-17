@@ -37,9 +37,9 @@ class miscCog:
     async def cute(self, ctx, member):
         memberID = useful.getid(member)
         try:
-            toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).nick +" is cute af and i wuv them")
+            toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).nick +" is cute and valid and i love them :heartpulse:")
         except TypeError:
-            toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).name +" is cute af and i wuv them")
+            toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).name +" is cute and valid and i love them :heartpulse:")
         await ctx.channel.send(toOutput)
         if self.deleteBlueText:
             await ctx.message.delete()

@@ -1,0 +1,26 @@
+Pubquiz Start
+Pubquiz Stop
+Pubquiz Question
+Pubquiz Superquestion
+Pubquiz Override
+Pubquiz Settime
+Pubquiz Correct
+Pubquiz QMHelp
+
+Pubquiz join/leave/dm/stopdm SEPARATE THESE
+Pubquiz Help
+
+Bluetext
+Bluetext Code
+Bluetext Delete (ME ONLY :))
+
+SetWelcomeChannel
+ToggleRaidMode
+SetRaidModeRole
+SetRaidModeText
+Mute/Unmute
+
+
+Cute
+
+toggleBlueTextDelete
