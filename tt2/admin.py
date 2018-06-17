@@ -14,15 +14,15 @@ class adminCog:
 
     @commands.command()
     @checks.justme()
-    global con, cur
     async def botban(self, ctx, memberid):
+        global con, cur
         cur.execute("UPDATE Users SET banned=1 WHERE userID =?", memberid,)
         con.commit()
 
     @commands.command()
     @checks.justme()
-    global con, cur
     async def botunban(self, ctx, memberid):
+        global con, cur
         cur.execute("UPDATE Users SET banned=0 WHERE userID =?", memberid,)
         con.commit()
 
