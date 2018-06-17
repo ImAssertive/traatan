@@ -7,8 +7,13 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
-    #@commands.command()
+    @commands.command()
+    @checks.is_not_banned()
     #@checks.has_roleedit_permission()
+    async def addrole(self, ctx, *, roleName):
+        role = discord.utils.get(ctx.guild.roles, name= roleName)
+
+
 
     @commands.command()
     @checks.justme()
@@ -27,21 +32,13 @@ class adminCog:
         self.bot.con.commit()
 
     async def on_guild_join(self, ctx):
-        # self.bot.cur.execute("SELECT * FROM Guilds WHERE guildID = ?", (ctx.id,))
-        # result = self.bot.cur.fetchone()
-        # if not result:
         self.bot.cur.execute('''INSERT OR IGNORE INTO Guilds (guildID) VALUES(?)''',(ctx.id,))
         self.bot.con.commit()
 
     async def on_member_join(self, ctx):
-        # self.bot.cur.execute("SELECT * FROM Users WHERE userID = ?", (ctx.id,))
-        # if not self.bot.cur.fetchone():
         self.bot.cur.execute('''INSERT OR IGNORE INTO Users (userID) VALUES(?)''',(ctx.id,))
         self.bot.con.commit()
         IDs=[(ctx.guild.id),(ctx.id)]
-        # self.bot.cur.execute("SELECT * FROM GuildUsers WHERE guildID = ? AND userID = ?", IDs)
-        # print(str(self.bot.cur.fetchone()))
-        # if str(self.bot.cur.fetchone()) == "None":
         self.bot.cur.execute('''INSERT OR IGNORE INTO GuildUsers (guildID, userID) VALUES(?,?)''', IDs)
         self.bot.con.commit()
 

@@ -19,6 +19,12 @@ def justme():
             return False
     return commands.check(predicate)
 
+def is_not_banned():
+    async def predicate(ctx):
+        bot.cur.execute("SELECT * FROM Users WHERE userID =? AND banned=0", (ctx.author.id,))
+        if bot.cur.fetchone:
+            return True
+        return False
 # def has_roleedit_permission(ctx):
 #     async def predicate(ctx):
 #         if ctx.author.id == ctx.guild.owner_id or ctx.author.id == 163691476788838401 or
