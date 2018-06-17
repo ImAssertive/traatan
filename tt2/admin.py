@@ -13,13 +13,15 @@ class adminCog:
     @commands.command()
     @checks.justme()
     async def botban(self, ctx, memberid):
-        self.bot.cur.execute("UPDATE Users SET banned=1 WHERE userID =?", memberid,)
+        memberid = int(useful.getid(member))
+        self.bot.cur.execute("UPDATE Users SET banned=1 WHERE userID =?", memberid)
         self.bot.con.commit()
 
     @commands.command()
     @checks.justme()
-    async def botunban(self, ctx, memberid):
-        self.bot.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", memberid,)
+    async def botunban(self, ctx, member):
+        memberid = int(useful.getid(member))
+        self.bot.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", memberid)
         self.bot.con.commit()
 
     async def on_guild_join(self, ctx):
@@ -40,7 +42,6 @@ class adminCog:
         # if str(self.bot.cur.fetchone()) == "None":
         self.bot.cur.execute('''INSERT OR IGNORE INTO GuildUsers (guildID, userID) VALUES(?,?)''', IDs)
         self.bot.con.commit()
-        print("wew")
 
 
 
