@@ -8,7 +8,7 @@ class adminCog:
         self.bot = bot
 
     @commands.command()
-    @checks.is_not_banned()
+    @checks.is_not_banned(self.bot)
     #@checks.has_roleedit_permission()
     async def addrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name= roleName)
