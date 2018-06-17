@@ -10,7 +10,8 @@ class adminCog:
         self.cur = self.con.cursor()
 
     async def on_guild_join(self, ctx):
-        self.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?)''',ctx.id)
+        print(ctx.id)
+        self.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?)''',ctx.id,)
         self.con.commit()
 
 
