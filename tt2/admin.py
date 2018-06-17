@@ -38,11 +38,13 @@ class adminCog:
         if not self.cur.fetchone():
             self.cur.execute('''INSERT INTO Users (userID) VALUES(?)''',(ctx.id,))
             self.con.commit()
+            print("ewr")
+        print("wq")
 
-        self.cur.execute("SELECT * FROM GuildUsers WHERE guildID = ? AND userID = ?", [(ctx.guild.id,),(ctx.id,)])
+        self.cur.execute("SELECT * FROM GuildUsers WHERE guildID = ? AND userID = ?", (ctx.guild.id,),(ctx.id,))
         print(self.cur.fetchone())
         if not self.cur.fetchone():
-            self.cur.execute('''INSERT INTO GuildUsers (guildID, userID) VALUES(?,?)''',[(ctx.guild.id,),(ctx.id,)])
+            self.cur.execute('''INSERT INTO GuildUsers (guildID, userID) VALUES(?,?)''',(ctx.guild.id,),(ctx.id,))
             self.con.commit()
             print("mew")
 
