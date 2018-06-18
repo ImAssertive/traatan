@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
 bot.con = lite.connect('tt.db')
 bot.cur = bot.con.cursor()
+bot.test = "test"
 
 
 @bot.event

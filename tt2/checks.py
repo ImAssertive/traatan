@@ -19,8 +19,9 @@ def justme():
             return False
     return commands.check(predicate)
 
-def is_not_banned(bot):
+def is_not_banned():
     async def predicate(ctx, bot):
+        print(bot.test)
         bot.cur.execute("SELECT * FROM Users WHERE userID =? AND banned=0", (ctx.author.id,))
         if bot.cur.fetchone:
             return True
