@@ -91,6 +91,6 @@ class Bot(commands.Bot):
         self.db = kwargs.pop("db")
 
     async def on_ready(self):
-        print("Username: {0}\nID: {0.id}".format(self.user))s
+        print("Username: {0}\nID: {0.id}".format(self.user))
 loop = asyncio.get_event_loop()
 loop.run_until_complete(run())
