@@ -9,7 +9,7 @@ async def run():
     description = "/r/Traa community help bot! tt!help for commands"
     credentials = credentialsFile.getCredentials()
     db = await asyncpg.create_pool(**credentials)
-    useful.createdb(db)
+    await useful.createdb(db)
     bot = Bot(description=description, db=db)
     try:
         await bot.start(config.token)

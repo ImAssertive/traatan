@@ -2,7 +2,7 @@ def getid(mention):
     id = int("".join(each for each in mention if each.isdigit()))
     return id
 
-def createdb(db):
+async def createdb(db):
     await db.execute('''CREATE TABLE IF NOT EXISTS Users(userID bigint PRIMARY KEY,
     pubquizDM boolean DEFAULT false,
     banned boolean DEFAULT false);''') #Users
