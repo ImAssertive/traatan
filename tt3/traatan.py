@@ -1,7 +1,5 @@
-import discord, asyncio, sys, traceback, checks
+import discord, asyncio, sys, traceback, checks, useful
 from discord.ext import commands
-
-initial_extensions = ['admin']
 
 
 def getPrefix(bot, message):
@@ -9,12 +7,14 @@ def getPrefix(bot, message):
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 async def run():
+    initial_extensions = ['admin']
     credFile = open("credentials.txt", "r")
     credString = credFile.read()
     credList = credString.split("\n")
     credentials = eval(credList[1])
     db = await asyncpg.create_pool(**credentials)
-    bot = commands.Bot(command_prefix=getPrefix, pm_help=False, description='/r/Traa community help bot! tt!help for commands', db=db)
+    useful.createdb(db)
+    bot = commands.Bot(command_prefix=getPrefix, description='/r/Traa community help bot! tt!help for more info', db=db)
     if __name__ == '__main__':
         for extension in initial_extensions:
             try:
@@ -29,14 +29,6 @@ async def run():
         await bot.logout()
 
 
-@bot.event
-async def on_ready():
-    print('------')
-    print('Logged in as')
-    print(bot.user.name)
-    print(bot.user.id)
-    print('------')
+loop = asyncio.get_event_loop()
+loop.run_until_complete(run())
 
-
-
-bot.run(str(credList[0]))
