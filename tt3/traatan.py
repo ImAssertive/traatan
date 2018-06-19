@@ -10,8 +10,7 @@ initial_extensions = ['admin']
 credFile = open("credentials.txt", "r")
 credString = credFile.read()
 credList = credString.split("\n")
-credentials = eval(credList[1])
-print(str(credentials))
+credentials = credList[1]
 db = await asyncpg.create_pool(**credentials)
 useful.createdb(db)
 bot = commands.Bot(command_prefix=getPrefix, description='/r/Traa community help bot! tt!help for more info')
