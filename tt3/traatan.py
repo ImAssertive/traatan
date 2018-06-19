@@ -24,15 +24,15 @@ async def run():
     leaveChannel bigint,
     leaveText text,
     adminEnabled boolean DEFAULT true,
-    banned boolean DEFAULT false);''') #Guild
-
-    await db.execute('''CREATE TABLE IF NOT EXISTS Games(gameID serial PRIMARY KEY,
+    banned boolean DEFAULT false);
+    
+    CREATE TABLE IF NOT EXISTS Games(gameID serial PRIMARY KEY,
     gameName text,
     gameReleaseDate text,
     gamePublisher text,
-    gameDescription text);''')#Games
-
-    await db.execute('''CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
+    gameDescription text);
+    
+    CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
     guildID bigint references Guilds(guildID),
     administrator boolean DEFAULT false,
     pqStart boolean DEFAULT false,
@@ -56,16 +56,15 @@ async def run():
     mute boolean DEFAULT false,
     cute boolean DEFAULT true, 
     setMuteRole boolean DEFAULT false);
-    ''')#Roles
-
-    await db.execute('''CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID),
+    
+    CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID),
     guildID bigint references Guilds(guildID),
     pubquizScoreTotal integer DEFAULT 0,
     pubquizScoreWeekly integer DEFAULT 0,
     banned boolean DEFAULT false,
-    PRIMARY KEY(userID, guildID));''')
-
-    await db.execute('''CREATE TABLE IF NOT EXISTS UserGameAccounts(accountID serial PRIMARY KEY,
+    PRIMARY KEY(userID, guildID));
+    
+    CREATE TABLE IF NOT EXISTS UserGameAccounts(accountID serial PRIMARY KEY,
     userID bigint references Users(userID),
     gameID serial references Games(gameID),
     accountRank text,
@@ -73,7 +72,7 @@ async def run():
     accountRegion text,
     accountPublic boolean DEFAULT true,
     accountInfo text,
-    accountPlatform text);''') #UserGameAccounts
+    accountPlatform text);'''
     bot = Bot(description=description, db=db)
     try:
         await bot.start(credentialsFile.getToken())

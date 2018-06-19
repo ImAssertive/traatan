@@ -33,23 +33,17 @@ class adminCog:
     #     self.bot.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", (memberid,))
     #     self.bot.con.commit()
     #
-    # async def on_guild_join(self, ctx):
-    #     self.bot.cur.execute('''INSERT OR IGNORE INTO Guilds (guildID) VALUES(?)''',(ctx.id,))
-    #     self.bot.con.commit()
-    #
-    # async def on_member_join(self, ctx):
-    #     self.bot.cur.execute('''INSERT OR IGNORE INTO Users (userID) VALUES(?)''',(ctx.id,))
-    #     self.bot.con.commit()
-    #     IDs=[(ctx.guild.id),(ctx.id)]
-    #     self.bot.cur.execute('''INSERT OR IGNORE INTO GuildUsers (guildID, userID) VALUES(?,?)''', IDs)
-    #     self.bot.con.commit()
+    async def on_guild_join(self, ctx):
+        self.bot.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?);
+        EXCEPTION WHEN unique_violation THEN END''',(ctx.id,))
+        self.bot.con.commit()
 
-    async def on_ready():
-        print('------')
-        print('Logged in as')
-        print(bot.user.name)
-        print(bot.user.id)
-        print('------')
+    async def on_member_join(self, ctx):
+        self.bot.db.execute('''INSERT INTO Users (userID) VALUES(?); 
+        EXCEPTION WHEN unique_violation THEN END;''',(ctx.id,))
+        IDs=[(ctx.guild.id),(ctx.id)]
+        self.bot.db.execute('''INSERT INTO GuildUsers (guildID, userID) VALUES(?,?);
+        EXCEPTION WHEN unique_violation THEN END;''', IDs)
 
 
 
