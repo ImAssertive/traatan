@@ -2,9 +2,9 @@ import discord, asyncio, sys, traceback, checks, useful, asyncpg
 from discord.ext import commands
 
 
-def getPrefix(bot, message):
-    prefixes = ["tt!", "traa!"]
-    return commands.when_mentioned_or(*prefixes)(bot, message)
+# def getPrefix(bot, message):
+#     prefixes = ["tt!", "traa!"]
+#     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 async def run():
     initial_extensions = ['admin']
@@ -14,7 +14,7 @@ async def run():
     credentials = eval(credList[1])
     db = await asyncpg.create_pool(**credentials)
     #await useful.createdb(db)
-    bot = commands.Bot(command_prefix=getPrefix, description='/r/Traa community help bot! tt!help for more info', db=db)
+    bot = commands.Bot(command_prefix="tt!", description='/r/Traa community help bot! tt!help for more info', db=db)
     if __name__ == '__main__':
         for extension in initial_extensions:
             try:
