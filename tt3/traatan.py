@@ -75,7 +75,7 @@ async def run():
     accountInfo text,
     accountPlatform text);''') #UserGameAccounts    bot = Bot(description=description, db=db)
     try:
-        await bot.start(config.token)
+        await bot.start(credentialsFile.getToken())
     except KeyboardInterrupt:
         await db.close()
         await bot.logout()
