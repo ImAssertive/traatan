@@ -36,7 +36,6 @@ class adminCog:
     async def on_guild_join(self, ctx):
         self.bot.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?);
         EXCEPTION WHEN unique_violation THEN END''',(ctx.id,))
-        self.bot.con.commit()
 
     async def on_member_join(self, ctx):
         self.bot.db.execute('''INSERT INTO Users (userID) VALUES(?); 
