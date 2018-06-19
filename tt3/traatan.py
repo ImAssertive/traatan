@@ -72,7 +72,7 @@ async def run():
     accountRegion text,
     accountPublic boolean DEFAULT true,
     accountInfo text,
-    accountPlatform text);'''
+    accountPlatform text);''')
     bot = Bot(description=description, db=db)
     try:
         await bot.start(credentialsFile.getToken())
