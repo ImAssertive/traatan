@@ -1,27 +1,36 @@
-import discord, asyncio, sys, traceback, checks, useful, asyncpg, credentialsFile
+import discord, asyncio, sys, traceback, checks, asyncpg, useful, credentialsFile
 from discord.ext import commands
 
-
 def getPrefix(bot, message):
-    prefixes = ["tt!", "traa!"]
+    prefixes = ["tt!", "t!"]
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
-initial_extensions = ['admin']
-credFile = open("credentials.txt", "r")
-credString = credFile.read()
-credList = credString.split("\n")
-credentials = credentialsFile.getCredentials()
-await db = asyncpg.create_pool(**credentials)
-useful.createdb(db)
-bot = commands.Bot(command_prefix=getPrefix, description='/r/Traa community help bot! tt!help for more info')
-bot.db = db
+async def run():
+    description = "/r/Traa community help bot! tt!help for commands"
+    credentials = credentialsFile.getCredentials()
+    db = await asyncpg.create_pool(**credentials)
+    useful.createdb(db)
+    bot = Bot(description=description, db=db)
+    try:
+        await bot.start(config.token)
+    except KeyboardInterrupt:
+        await db.close()
+        await bot.logout()
 
-if __name__ == '__main__':
-    for extension in initial_extensions:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            print('Failed to load extension ' + extension, file=sys.stderr)
-            traceback.print_exc()
+class Bot(commands.Bot):
+    def __init__(self, **kwargs):
+        super().__init__(
+            description=kwargs.pop("description"),
+            command_prefix=getPrefix
+        )
 
-bot.run(str(credList[0]))
+        self.db = kwargs.pop("db")
+
+    async def on_ready(self):
+        print('------')
+        print('Logged in as')
+        print(bot.user.name)
+        print(bot.user.id)
+        print('------')
+loop = asyncio.get_event_loop()
+loop.run_until_complete(run())
