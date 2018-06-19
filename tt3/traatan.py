@@ -13,7 +13,7 @@ async def run():
     credList = credString.split("\n")
     credentials = eval(credList[1])
     db = await asyncpg.create_pool(**credentials)
-    useful.createdb(db)
+    await useful.createdb(db)
     bot = commands.Bot(command_prefix=getPrefix, description='/r/Traa community help bot! tt!help for more info', db=db)
     if __name__ == '__main__':
         for extension in initial_extensions:
