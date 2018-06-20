@@ -34,15 +34,21 @@ class adminCog:
     #     self.bot.con.commit()
     #
     async def on_guild_join(self, ctx):
-        self.bot.cur.execute('''INSERT INTO Guilds (guildID) VALUES(?);
-        EXCEPTION WHEN unique_violation THEN END''',(ctx.id,))
+        connection = self.bot.db.acquire()
+        async with connection.transaction():
+            query = "INSERT INTO Guilds (guildID) VALUES($1) ON CONFLICT DO NOTHING"
+            await self.bot.db.execute(query, ctx.id)
+        await bot.db.release(connection)
 
     async def on_member_join(self, ctx):
-        self.bot.db.execute('''INSERT INTO Users (userID) VALUES(?); 
-        EXCEPTION WHEN unique_violation THEN END;''',(ctx.id,))
-        IDs=[(ctx.guild.id),(ctx.id)]
-        self.bot.db.execute('''INSERT INTO GuildUsers (guildID, userID) VALUES(?,?);
-        EXCEPTION WHEN unique_violation THEN END;''', IDs)
+        connection = self.bot.db.acquire()
+        async with connection.transaction():
+            query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
+            await self.bot.db.execute(query, ctx.id)
+            query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1,$2) ON CONFLICT DO NOTHING"
+            await self.bot.db.execute(query, ctx.guild.id, ctx.id)
+        await bot.db.release(connection)
+
 
 
 
