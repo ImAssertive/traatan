@@ -1,5 +1,4 @@
 import discord, asyncio, sys, traceback, checks, useful, asyncpg
-import sqlite3 as lite
 from discord.ext import commands
 
 
@@ -15,24 +14,6 @@ class adminCog:
     #     role = discord.utils.get(ctx.guild.roles, name= roleName)
 
 
-
-    # @commands.command()
-    # @checks.justme()
-    # async def botban(self, ctx, member):
-    #     memberid = int(useful.getid(member))
-    #     print(memberid)
-    #     self.bot.cur.execute("UPDATE Users SET banned=1 WHERE userID =?", (memberid,))
-    #     self.bot.con.commit()
-    #
-    # @commands.command()
-    # @checks.justme()
-    # async def botunban(self, ctx, member):
-    #     memberid = int(useful.getid(member))
-    #     print(memberid)
-    #     self.bot.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", (memberid,))
-    #     self.bot.con.commit()
-
-
     @commands.command()
     @checks.justme()
     async def botban(self, ctx, member):
@@ -42,7 +23,7 @@ class adminCog:
             query = "UPDATE Users SET banned = true WHERE userID = $1"
             await self.bot.db.execute(query, memberid)
         await self.bot.db.release(connection)
-        await ctx.channel.send(":greentick: | Done!")
+        await ctx.channel.send(":white_check_mark: | Done!")
 
 
     @commands.command()
@@ -54,54 +35,7 @@ class adminCog:
             query = "UPDATE Users SET banned = false WHERE userID = $1"
             await self.bot.db.execute(query, memberid)
         await self.bot.db.release(connection)
-        await ctx.channel.send(":greentick: | Done!")
-
-    @commands.command()
-    @checks.justme()
-    async def addmembers(self, ctx):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            for member in ctx.guild.members:
-                query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
-                await self.bot.db.execute(query, member.id)
-                query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1, $2) ON CONFLICT DO NOTHING"
-                await self.bot.db.execute(query, ctx.guild.id, member.id)
-        await self.bot.db.release(connection)
-        await ctx.channel.send(":greentick: | Done!")
-
-
-
-    @commands.command()
-    @checks.justme()
-    async def addguild(self, ctx):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "INSERT INTO Guilds (guildID) VALUES($1) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.id)
-        await self.bot.db.release(connection)
-        await ctx.channel.send(":greentick: | Done!")
-
-
-
-    async def on_guild_join(self, ctx):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "INSERT INTO Guilds (guildID) VALUES($1) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.id)
-        await self.bot.db.release(connection)
-
-    async def on_member_join(self, ctx):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.id)
-            query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1, $2) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.guild.id, ctx.id)
-            print("nyoom desu poi")
-        await self.bot.db.release(connection)
-
-
-
+        await ctx.channel.send(":white_check_mark: | Done!")
 
 def setup(bot):
     bot.add_cog(adminCog(bot))
