@@ -74,6 +74,15 @@ async def run():
     accountInfo text,
     accountPlatform text);''')
     bot = Bot(description=description, db=db)
+    
+    if __name__ == '__main__':
+        for extension in initial_extensions:
+            try:
+                bot.load_extension(extension)
+            except Exception as e:
+                print('Failed to load extension ' + extension, file=sys.stderr)
+                traceback.print_exc()
+
     try:
         await bot.start(credentialsFile.getToken())
     except KeyboardInterrupt:
