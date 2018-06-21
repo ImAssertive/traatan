@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, useful
+import discord, asyncio, sys, traceback, checks, useful, asyncpg
 import sqlite3 as lite
 from discord.ext import commands
 
@@ -41,12 +41,15 @@ class adminCog:
         await bot.db.release(connection)
 
     async def on_member_join(self, ctx):
+        print(self.bot.db)
         connection = self.bot.db.acquire()
+        print(connection)
         async with connection.transaction():
             query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
             await self.bot.db.execute(query, ctx.id)
-            query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1,$2) ON CONFLICT DO NOTHING"
+            query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1, $2) ON CONFLICT DO NOTHING"
             await self.bot.db.execute(query, ctx.guild.id, ctx.id)
+            print("nyoom desu poi")
         await bot.db.release(connection)
 
 
