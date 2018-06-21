@@ -31,7 +31,30 @@ class adminCog:
     #     print(memberid)
     #     self.bot.cur.execute("UPDATE Users SET banned=0 WHERE userID =?", (memberid,))
     #     self.bot.con.commit()
-    #
+
+
+    @commands.command()
+    @checks.justme()
+    async def botban(self, ctx, member):
+        memberid = int(useful.getid(member))
+        await ctx.channel.send(":green_tick: | Done!")
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Users SET banned = true WHERE userID = $1"
+            await self.bot.db.execute(query, memberid)
+        await self.bot.db.release(connection)
+
+    @commands.command()
+    @checks.justme()
+    async def botunban(self, ctx, member):
+        memberid = int(useful.getid(member))
+        await ctx.channel.send(":green_tick: | Done!")
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Users SET banned = false WHERE userID = $1"
+            await self.bot.db.execute(query, memberid)
+        await self.bot.db.release(connection)
+
     async def on_guild_join(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
