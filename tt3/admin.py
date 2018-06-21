@@ -8,7 +8,9 @@ class adminCog:
         self.bot = bot
 
 
-
+    @commands.command()
+    async def test(self, ctx):
+        await ctx.channel.send("nyoom desu poi")
     # @commands.command()
     # @checks.is_not_banned()
     # #@checks.has_roleedit_permission()
