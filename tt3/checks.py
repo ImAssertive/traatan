@@ -46,3 +46,5 @@ def bluetext_enabled():
                 return True
         await ctx.channel.send(":no_good: Bluetext commands are not enabled here!")
         return False
+    return commands.check(predicate)
+

@@ -45,7 +45,7 @@ class miscCog:
             toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).nick +" is cute and valid and i love them")
         except TypeError:
             toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).name +" is cute and valid and i love them")
-        await ctx.channel.send(toOutput)
+        await ctx.channel.send(toOutput + ":heartpulse:")
         if self.deleteBlueText and ctx.author.id == 163691476788838401:
             await ctx.message.delete()
 
@@ -54,9 +54,9 @@ class miscCog:
     async def toggleBlueTextDelete(self, ctx):
         self.deleteBlueText = not self.deleteBlueText
         if self.deleteBlueText:
-            await ctx.channel.send(":white_check_mark: Hiding bluetext commands!")
+            await ctx.channel.send(":white_check_mark: | Hiding bluetext commands!")
         else:
-            await ctx.channel.send(":white_check_mark: No longer hiding bluetext commands!")
+            await ctx.channel.send(":white_check_mark: | No longer hiding bluetext commands!")
 
 
 def setup(bot):
