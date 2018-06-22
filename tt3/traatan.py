@@ -14,7 +14,7 @@ async def run():
     banned boolean DEFAULT false);''') #Users
 
     await db.execute('''CREATE TABLE IF NOT EXISTS Guilds(guildID bigint PRIMARY KEY,
-    overwatchEnabled boolean DEFAULT true,
+    gamesEnabled boolean DEFAULT true,
     pubquizEnabled boolean DEFAULT true,
     bluetextEnabled boolean DEFAULT true,
     welcomeEnabled boolean DEFAULT false,
@@ -99,8 +99,16 @@ class Bot(commands.Bot):
         )
 
         self.db = kwargs.pop("db")
+        self.currentColour = -1
 
     async def on_ready(self):
         print("Username: {0}\nID: {0.id}".format(self.user))
+
+    def getcolour(self):
+        colours = ["5C6BC0", "AB47BC", "EF5350", "FFA726", "FFEE58", "66BB6A"]
+        self.currentColour += 1
+        if self.currentColour ==  len(colours) - 1:
+            self.currentColour = 0
+        return discord.Colour(int(colours[self.currentColour], 16))
 loop = asyncio.get_event_loop()
 loop.run_until_complete(run())

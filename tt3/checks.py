@@ -48,3 +48,57 @@ def bluetext_enabled():
         return False
     return commands.check(predicate)
 
+def pubquiz_enabled():
+    async def predicate(ctx):
+        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+            return True
+        else:
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND pubquizEnabled = true"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if result:
+                return True
+        await ctx.channel.send(":no_good: Pubquiz commands are not enabled here!")
+        return False
+    return commands.check(predicate)
+
+def pubquiz_enabled():
+    async def predicate(ctx):
+        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+            return True
+        else:
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND pubquizEnabled = true"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if result:
+                return True
+        await ctx.channel.send(":no_good: Pubquiz commands are not enabled here!")
+        return False
+    return commands.check(predicate)
+
+def admin_enabled():
+    async def predicate(ctx):
+        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+            return True
+        else:
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND adminEnabled = true"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if result:
+                return True
+        await ctx.channel.send(":no_good: Admin commands are not enabled here!")
+        return False
+    return commands.check(predicate)
+
+def games_enabled():
+    async def predicate(ctx):
+        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+            return True
+        else:
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND gamesEnabled = true"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if result:
+                return True
+        await ctx.channel.send(":no_good: Games commands are not enabled here!")
+        return False
+    return commands.check(predicate)
+
+def setup_options1(ctx, options):
+    return (ctx.contents.lower() in options) and ctx.guild = None

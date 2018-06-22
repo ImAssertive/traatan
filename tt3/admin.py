@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, useful, asyncpg
+import discord, asyncio, sys, traceback, checks, useful, asyncpg, settingsFunctions
 from discord.ext import commands
 
 
@@ -6,15 +6,42 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
-
-    @commands.command()
-    @checks.is_not_banned()
-    async def nyoom(self, ctx):
-        await ctx.channel.send("...")
-
-    # async def addrole(self, ctx, *, roleName):
-    #     role = discord.utils.get(ctx.guild.roles, name= roleName)
-
+    @commands.command(name='setup', aliases='botsetup', 'su')
+    async def setup(self, ctx):
+        if not ctx.guild:
+            await ctx.author.send(":no_good: | This command can not be used in DM!")
+        else:
+            choice = "zslkjreskjrleskjrlkesmrlksmfcs,mf,eszresjtlezkpoteroeszkldszmfsdm fmlksejtlkesjtlksjt"
+            options = ["info", "yes", "no", "skip"]
+            while choice not in options:
+                embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!",colour=self.bot.getcolour())
+                embed.add_field(name="Firstly - would you like to have pubquiz commands enabled?",value="Options: `Yes`, `No`, `Info`, `Skip`")
+                await ctx.channel.send(embed = embed)
+                try:
+                    choice = await self.bot.wait_for_message(self, check=checks.setup_options1(ctx, options), timeout = 60.0)
+                except asyncio.TimeoutError:
+                    try:
+                        await ctx.channel.send(":no: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup to me again to restart the process.")
+                    except TypeError:
+                        await ctx.channel.send(":no: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup to me again to restart the process.")
+                elif choice.lower() == "yes":
+                    connection = await self.bot.db.acquire()
+                    async with connection.transaction():
+                        query = "UPDATE Guilds SET pubquizEnabled = true WHERE guildID = $1"
+                        await self.bot.db.execute(query, ctx.guild.id)
+                    await self.bot.db.release(connection)
+                    await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
+                elif choice.lower() == "no":
+                    connection = await self.bot.db.acquire()
+                    async with connection.transaction():
+                        query = "UPDATE Guilds SET pubquizEnabled = false WHERE guildID = $1"
+                        await self.bot.db.execute(query, ctx.guild.id)
+                    await self.bot.db.release(connection)
+                    await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
+                elif choice.lower == "info":
+                    await ctx.channel.send("Info coming soon.")
+                elif choice.lower == "skip":
+                    await ctx.channel.send("Got it!")
 
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'])
     @checks.justme()
