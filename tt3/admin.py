@@ -14,9 +14,9 @@ class adminCog:
     #     role = discord.utils.get(ctx.guild.roles, name= roleName)
 
 
-    @commands.command()
+    @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'])
     @checks.justme()
-    async def botban(self, ctx, member):
+    async def botglobalban(self, ctx, member):
         memberid = int(useful.getid(member))
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -26,9 +26,9 @@ class adminCog:
         await ctx.channel.send(":white_check_mark: | Done!")
 
 
-    @commands.command()
+    @commands.command(name='botglobalunban', aliases=['bgub', 'wback'])
     @checks.justme()
-    async def botunban(self, ctx, member):
+    async def botglobalunban(self, ctx, member):
         memberid = int(useful.getid(member))
         connection = await self.bot.db.acquire()
         async with connection.transaction():

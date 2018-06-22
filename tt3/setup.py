@@ -29,7 +29,7 @@ class setupCog:
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             query = "INSERT INTO Guilds (guildID) VALUES($1) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.id)
+            await self.bot.db.execute(query, ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 

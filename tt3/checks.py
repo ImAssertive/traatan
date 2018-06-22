@@ -12,7 +12,7 @@ def has_role(*arg):
 
 def justme():
     async def predicate(ctx):
-        if ctx.author.id == 163691476788838401:
+        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
             await ctx.channel.send(":no_good: You do not have permission for that!")
@@ -22,13 +22,16 @@ def justme():
 def is_not_banned():
     async def predicate(ctx, bot):
         print(bot.test)
-        bot.cur.execute("SELECT * FROM Users WHERE userID =? AND banned=0", (ctx.author.id,))
-        if bot.cur.fetchone:
-            return True
+        query = "SELECT * FROM Users WHERE userID = $1 AND banned = 0"
+        result = await bot.db.fetchrow(query, ctx.author.id)
+        if result:
+            query = "SELECT * FROM GuildUsers WHERE guildID = $1 AND userID = $2 AND banned = 0"
+            result = await bot.db.fetchrow(query, ctx.guild.id, ctx.author.id)
+            if result:
+                query = "SELECT * FROM Guilds WHERE guildID = $1 AND banned = 0"
+                result = await bot.db.fetchrow(query, ctx.guild.id)
+                if result:
+                    return True
+
         return False
-# def has_roleedit_permission(ctx):
-#     async def predicate(ctx):
-#         if ctx.author.id == ctx.guild.owner_id or ctx.author.id == 163691476788838401 or
-#
-#
-#     return commands.check(predicate)
+    return commands.check(predicate)
