@@ -21,16 +21,16 @@ class adminCog:
                     choice = await self.bot.wait_for_message(self, check=checks.setup_options1(ctx, options), timeout = 60.0)
                 except asyncio.TimeoutError:
                     try:
-                        await ctx.channel.send(":no: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup to me again to restart the process.")
+                        await ctx.channel.send(":no: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                     except TypeError:
-                        await ctx.channel.send(":no: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup to me again to restart the process.")
+                        await ctx.channel.send(":no: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                 elif choice.lower() == "yes":
                     connection = await self.bot.db.acquire()
                     async with connection.transaction():
                         query = "UPDATE Guilds SET pubquizEnabled = true WHERE guildID = $1"
                         await self.bot.db.execute(query, ctx.guild.id)
                     await self.bot.db.release(connection)
-                    await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
+                    await ctx.channel.send("Got it! Pubquiz commands have been enabled.")
                 elif choice.lower() == "no":
                     connection = await self.bot.db.acquire()
                     async with connection.transaction():
