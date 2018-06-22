@@ -26,6 +26,7 @@ async def run():
     adminEnabled boolean DEFAULT true,
     banned boolean DEFAULT false);
     
+    
     CREATE TABLE IF NOT EXISTS Games(gameID serial PRIMARY KEY,
     gameName text,
     gameReleaseDate text,
