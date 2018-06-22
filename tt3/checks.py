@@ -21,13 +21,13 @@ def justme():
 
 def is_not_banned():
     async def predicate(ctx):
-        query = "SELECT * FROM Users WHERE userID = $1 AND banned = 0"
+        query = "SELECT * FROM Users WHERE userID = $1 AND banned = false"
         result = await ctx.bot.db.fetchrow(query, ctx.author.id)
         if result:
-            query = "SELECT * FROM GuildUsers WHERE guildID = $1 AND userID = $2 AND banned = 0"
+            query = "SELECT * FROM GuildUsers WHERE guildID = $1 AND userID = $2 AND banned = false"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id, ctx.author.id)
             if result:
-                query = "SELECT * FROM Guilds WHERE guildID = $1 AND banned = 0"
+                query = "SELECT * FROM Guilds WHERE guildID = $1 AND banned = false"
                 result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
                 if result:
                     return True
