@@ -40,7 +40,7 @@ def bluetext_enabled():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND blueTextEnabled = true
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND blueTextEnabled = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
