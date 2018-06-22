@@ -8,7 +8,7 @@ class adminCog:
 
 
     @commands.command()
-    @checks.is_not_banned(bot)
+    @checks.is_not_banned()
     async def nyoom(self, ctx):
         await ctx.channel.send("...")
 
