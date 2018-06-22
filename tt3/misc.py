@@ -6,11 +6,13 @@ class miscCog:
         self.bot = bot
         self.deleteBlueText = False
 
-    def blueTextFunction(self, userText):
+    def blueTextFunction(self, userText, spaces):
         blueText = ""
         for counter in range(0,len(userText)):
-            if userText[counter].isalpha():
+            if userText[counter].isalpha() and spaces == True:
                 blueText += ":regional_indicator_" + userText[counter].lower() + ": "
+            elif userText[counter].isalpha() and spaces == False:
+                blueText += ":regional_indicator_" + userText[counter].lower() + ":"
             elif userText[counter].isdigit():
                 blueText += ":" + inflect.engine().number_to_words(userText[counter]) + ":"
             else:
@@ -21,7 +23,7 @@ class miscCog:
     @checks.is_not_banned()
     @checks.bluetext_enabled()
     async def bluetext(self, ctx, *, userText):
-        toOutput = self.blueTextFunction(userText)
+        toOutput = self.blueTextFunction(userText, False)
         await ctx.channel.send(toOutput)
         if self.deleteBlueText:
             await ctx.message.delete()
@@ -30,7 +32,7 @@ class miscCog:
     @checks.is_not_banned()
     @checks.bluetext_enabled()
     async def bluetextcode(self, ctx, *, userText):
-        toOutput = self.blueTextFunction(userText)
+        toOutput = self.blueTextFunction(userText, True)
         await ctx.channel.send("Here's your code:")
         await ctx.channel.send("```" + toOutput + "```")
         if self.deleteBlueText and ctx.author.id == 163691476788838401:
@@ -42,9 +44,9 @@ class miscCog:
     async def cute(self, ctx, member):
         memberID = useful.getid(member)
         try:
-            toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).nick +" is cute and valid and i love them")
+            toOutput = self.blueTextFunction((ctx.guild.get_member(memberID).nick +" is cute and valid and i love them"), False)
         except TypeError:
-            toOutput = self.blueTextFunction(ctx.guild.get_member(memberID).name +" is cute and valid and i love them")
+            toOutput = self.blueTextFunction((ctx.guild.get_member(memberID).name +" is cute and valid and i love them"), False)
         await ctx.channel.send(toOutput + ":heartpulse:")
         if self.deleteBlueText and ctx.author.id == 163691476788838401:
             await ctx.message.delete()
