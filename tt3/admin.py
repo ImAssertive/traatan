@@ -7,9 +7,11 @@ class adminCog:
         self.bot = bot
 
 
-    # @commands.command()
-    # @checks.is_not_banned()
-    # #@checks.has_roleedit_permission()
+    @commands.command()
+    @checks.is_not_banned()
+    async def nyoom(self, ctx):
+        await ctx.channel.send("...")
+
     # async def addrole(self, ctx, *, roleName):
     #     role = discord.utils.get(ctx.guild.roles, name= roleName)
 
