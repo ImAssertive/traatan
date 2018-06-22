@@ -11,7 +11,7 @@ class adminCog:
         if not ctx.guild:
             await ctx.author.send(":no_good: | This command can not be used in DM!")
         else:
-            choice = "zslkjreskjrleskjrlkesmrlksmfcs,mf,eszresjtlezkpoteroeszkldszmfsdm fmlksejtlkesjtlksjt"
+            choice = "choice"
             options = ["info", "yes", "no", "skip"]
             while choice not in options:
                 embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!",colour=self.bot.getcolour())
@@ -22,8 +22,10 @@ class adminCog:
                 except asyncio.TimeoutError:
                     try:
                         await ctx.channel.send(":no: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                        break
                     except TypeError:
                         await ctx.channel.send(":no: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                        break
                 elif choice.lower() == "yes":
                     connection = await self.bot.db.acquire()
                     async with connection.transaction():

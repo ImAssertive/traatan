@@ -102,3 +102,4 @@ def games_enabled():
 
 def setup_options1(ctx, options):
     return (ctx.contents.lower() in options) and ctx.guild != None
+
