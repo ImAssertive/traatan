@@ -105,7 +105,7 @@ class Bot(commands.Bot):
         print("Username: {0}\nID: {0.id}".format(self.user))
 
     def getcolour(self):
-        colours = ["5C6BC0", "AB47BC", "EF5350", "FFA726", "FFEE58", "66BB6A", "5BCEFA". "F5A9B8", "FFFFFF", "F5A9B8", "5BCEFA"]
+        colours = ["5C6BC0", "AB47BC", "EF5350", "FFA726", "FFEE58", "66BB6A", "5BCEFA", "F5A9B8", "FFFFFF", "F5A9B8", "5BCEFA"]
         self.currentColour += 1
         if self.currentColour ==  len(colours) - 1:
             self.currentColour = 0
