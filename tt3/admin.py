@@ -29,6 +29,7 @@ class adminCog:
                 else:
                     choice = ctx.message.content
                     print(choice)
+                    print(msg)
                     if choice.lower() == "yes":
                         connection = await self.bot.db.acquire()
                         async with connection.transaction():
