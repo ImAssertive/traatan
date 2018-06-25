@@ -54,7 +54,6 @@ class setupCog:
             await self.bot.db.execute(query, ctx.id)
             query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1, $2) ON CONFLICT DO NOTHING"
             await self.bot.db.execute(query, ctx.guild.id, ctx.id)
-            print("nyoom desu poi")
         await self.bot.db.release(connection)
 
 

@@ -100,7 +100,6 @@ def games_enabled():
         return False
     return commands.check(predicate)
 
-def setup_options1(ctx, options):
-    print(ctx)
-    return (ctx.message.content.lower() in options) and ctx.guild != None
+def setup_options1(ctx):
+    return (ctx.message.content.lower() in ["info", "yes", "no", "skip"]) and ctx.guild != None
 

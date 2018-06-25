@@ -18,13 +18,13 @@ class adminCog:
                 embed.add_field(name="Firstly - would you like to have pubquiz commands enabled?",value="Options: `Yes`, `No`, `Info`, `Skip`")
                 await ctx.channel.send(embed = embed)
                 try:
-                    msg = await self.bot.wait_for('message', check=checks.setup_options1(ctx, options), timeout = 60.0)
+                    msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
                 except asyncio.TimeoutError:
                     try:
-                        await ctx.channel.send(":no: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                        await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         break
                     except TypeError:
-                        await ctx.channel.send(":no: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                        await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         break
                 else:
                     choice = ctx.message.content
@@ -46,6 +46,7 @@ class adminCog:
                         await ctx.channel.send("Info coming soon.")
                     elif choice.lower == "skip":
                         await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
+            print("test")
     
 
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'])
