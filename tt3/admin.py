@@ -27,7 +27,7 @@ class adminCog:
                         await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         break
                 else:
-                    choice = ctx.message.content
+                    choice = ctx.content
                     if choice.lower() == "yes":
                         connection = await self.bot.db.acquire()
                         async with connection.transaction():
