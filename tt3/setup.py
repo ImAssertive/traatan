@@ -39,7 +39,7 @@ class setupCog:
         memberid = useful.getid(member)
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "DELETE * FROM Users WHERE userID = $1"
+            query = "DELETE FROM Users WHERE userID = $1"
             await self.bot.db.execute(query, memberid)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
@@ -60,16 +60,16 @@ class setupCog:
     async def on_guild_remove(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "DELETE * FROM GuildUsers WHERE guildID = $1"
+            query = "DELETE FROM GuildUsers WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.id)
-            query = "DELETE * FROM Guilds WHERE guildID = $1"
+            query = "DELETE FROM Guilds WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.id)
         await self.bot.db.release(connection)
 
     async def on_member_remove(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "DELETE * FROM GuildUsers WHERE userID = $1 AND guildID = $2"
+            query = "DELETE FROM GuildUsers WHERE userID = $1 AND guildID = $2"
             await self.bot.db.execute(query, ctx.id, ctx.guild.id)
         await self.bot.db.release(connection)
 
