@@ -232,7 +232,7 @@ class adminCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
-    @commands.command()
+    @commands.command(name="setfarewell", aliases=['setleave'])
     @checks.leave_enabled()
     @checks.justme() #CHANGE
     async def setfarewell(self, ctx):
@@ -263,9 +263,9 @@ class adminCog:
             query = "UPDATE Guilds SET welcometext = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, welcometext, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send("Done! Welcome text set to '" + welcometext + "'")
+        await ctx.channel.send("Done! Welcome text set to ```" + welcometext + "```")
 
-    @commands.command()
+    @commands.command(name="setfarewelltext", aliases =['setleavetext'])
     @checks.leave_enabled()
     @checks.justme() #CHANGE
     async def setfarewelltext(self, ctx, *, leavetext):
@@ -274,7 +274,7 @@ class adminCog:
             query = "UPDATE Guilds SET leavetext = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, leavetext, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send("Done! Welcome text set to: ```" + leavetext + "```")
+        await ctx.channel.send("Done! Farewell text set to: ```" + leavetext + "```")
 
 
     @commands.command()
