@@ -13,7 +13,7 @@ class adminCog:
         else:
             choice = "choice"
             options = ["info", "yes", "no", "skip"]
-            while choice not in options:
+            while choice.lower() not in options:
                 embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!",colour=self.bot.getcolour())
                 embed.add_field(name="Firstly - would you like to have pubquiz commands enabled?",value="Options: `Yes`, `No`, `Info`, `Skip`")
                 await ctx.channel.send(embed = embed)
