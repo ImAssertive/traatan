@@ -223,6 +223,8 @@ class adminCog:
                         elif choice.lower == "skip":
                             await ctx.channel.send("Got it! I've left your admin command settings as is!")
 
+                await ctx.channel.send("Thanks! You are all set up.")
+
 
 
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'])
