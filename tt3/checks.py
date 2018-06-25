@@ -31,7 +31,6 @@ def is_not_banned():
                 result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
                 if result:
                     return True
-
         return False
     return commands.check(predicate)
 

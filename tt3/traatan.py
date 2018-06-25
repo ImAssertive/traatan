@@ -34,7 +34,7 @@ async def run():
     gameDescription text);
     
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
-    guildID bigint references Guilds(guildID),
+    guildID bigint references Guilds(guildID) ON DELETE CASCADE ON UPDATE CASCADE,
     administrator boolean DEFAULT false,
     pqStart boolean DEFAULT false,
     pqEnd boolean DEFAULT false,
@@ -58,16 +58,16 @@ async def run():
     cute boolean DEFAULT true, 
     setMuteRole boolean DEFAULT false);
     
-    CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID),
-    guildID bigint references Guilds(guildID),
+    CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
+    guildID bigint references Guilds(guildID) ON DELETE CASCADE ON UPDATE CASCADE,
     pubquizScoreTotal integer DEFAULT 0,
     pubquizScoreWeekly integer DEFAULT 0,
     banned boolean DEFAULT false,
     PRIMARY KEY(userID, guildID));
     
     CREATE TABLE IF NOT EXISTS UserGameAccounts(accountID serial PRIMARY KEY,
-    userID bigint references Users(userID),
-    gameID serial references Games(gameID),
+    userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
+    gameID serial references Games(gameID) ON DELETE CASCADE ON UPDATE CASCADE,
     accountRank text,
     accountName text,
     accountRegion text,
