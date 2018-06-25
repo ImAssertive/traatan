@@ -281,7 +281,22 @@ class adminCog:
             query = "UPDATE Guilds SET leavetext = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, leavetext, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send("Done! Welcome text set to '" + leavetext + "'")
+        await ctx.channel.send("Done! Welcome text set to: ```" + leavetext + "```")
+
+
+    @commands.command()
+    async def gdpr(self, ctx):
+        embed = discord.Embed(title="Here is the data currently stored about you:", description="", colour=self.bot.getcolour())
+        query = "SELECT * FROM Users WHERE userID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        print(result)
+        query = "SELECT * FROM GuildUsers WHERE userID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        print(result)
+        query = "SELECT * FROM UserGameAccounts WHERE userID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        print(result)
+        ctx.author.send(embed = embed)
 
 
     @commands.command(name='botglobalunban', aliases=['bgub', 'wback'])
