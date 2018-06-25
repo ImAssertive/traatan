@@ -47,7 +47,6 @@ class adminCog:
                     elif choice.lower() == "info":
                         await ctx.channel.send("Info coming soon.")
                     elif choice.lower() == "skip":
-                    elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
             choice = "choice"
             while choice.lower() not in options and timeout == False:
