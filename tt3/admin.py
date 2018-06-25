@@ -247,7 +247,7 @@ class adminCog:
             query = "UPDATE Guilds SET leavechannel = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send("Done! Welcome Channel set here.")
+        await ctx.channel.send("Done! Farewell channel set here.")
 
     @commands.command()
     @checks.welcome_enabled()
@@ -258,7 +258,7 @@ class adminCog:
             query = "UPDATE Guilds SET welcomechannel = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send("Done! Welcome Channel set here.")
+        await ctx.channel.send("Done! Welcome channel set here.")
 
 
     @commands.command(name='botglobalunban', aliases=['bgub', 'wback'])
