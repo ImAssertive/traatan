@@ -8,7 +8,7 @@ class setupCog:
 
 
 
-    @commands.command()
+    @commands.command(hidden = True)
     @checks.justme()
     async def addmembers(self, ctx):
         connection = await self.bot.db.acquire()
@@ -23,7 +23,7 @@ class setupCog:
 
 
 
-    @commands.command()
+    @commands.command(hidden = True)
     @checks.justme()
     async def addguild(self, ctx):
         connection = await self.bot.db.acquire()
@@ -33,7 +33,7 @@ class setupCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
-    @commands.command()
+    @commands.command(hidden = True)
     @checks.justme()
     async def deletemember(self, ctx, member):
         memberid = int(useful.getid(member))

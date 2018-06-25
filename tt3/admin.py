@@ -228,7 +228,7 @@ class adminCog:
 
 
 
-    @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'])
+    @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'], hidden = True)
     @checks.justme()
     async def botglobalban(self, ctx, member):
         memberid = int(useful.getid(member))
@@ -308,10 +308,10 @@ class adminCog:
         try:
             await ctx.author.send(embed = embed)
         except:
-            await ctx.channel.send("Please allow the bot to DM you. For security reasons this information can not be posted publicly.")
+            await ctx.channel.send("Please enable 'Allow direct messages from server members' under 'Privacy & Safety' in settings. For security reasons this information can not be posted publicly.")
 
 
-    @commands.command(name='botglobalunban', aliases=['bgub', 'wback'])
+    @commands.command(name='botglobalunban', aliases=['bgub', 'wback'], hidden = True)
     @checks.justme()
     async def botglobalunban(self, ctx, member):
         memberid = int(useful.getid(member))

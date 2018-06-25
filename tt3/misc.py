@@ -51,7 +51,7 @@ class miscCog:
         if self.deleteBlueText and ctx.author.id == 163691476788838401:
             await ctx.message.delete()
 
-    @commands.command(name="togglebluetextdelete", aliases=['deletebluetext', 'tbtd'])
+    @commands.command(name="togglebluetextdelete", aliases=['deletebluetext', 'tbtd'], hidden = True)
     @checks.justme()
     async def toggleBlueTextDelete(self, ctx):
         self.deleteBlueText = not self.deleteBlueText
