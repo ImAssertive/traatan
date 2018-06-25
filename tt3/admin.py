@@ -263,7 +263,7 @@ class adminCog:
     @commands.command()
     @checks.welcome_enabled()
     @checks.justme() #CHANGE
-    async def setwelcometext(self, ctx, welcometext):
+    async def setwelcometext(self, ctx, *, welcometext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             query = "UPDATE Guilds SET welcometext = $1 WHERE guildID = $2"
@@ -274,7 +274,7 @@ class adminCog:
     @commands.command()
     @checks.leave_enabled()
     @checks.justme() #CHANGE
-    async def setfarewelltext(self, ctx, leavetext):
+    async def setfarewelltext(self, ctx, *, leavetext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             query = "UPDATE Guilds SET leavetext = $1 WHERE guildID = $2"
