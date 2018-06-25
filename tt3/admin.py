@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, useful, asyncpg, settingsFunctions
+import discord, asyncio, sys, traceback, checks, useful, asyncpg
 from discord.ext import commands
 
 
