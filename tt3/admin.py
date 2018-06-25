@@ -18,7 +18,7 @@ class adminCog:
                 embed.add_field(name="Firstly - would you like to have pubquiz commands enabled?",value="Options: `Yes`, `No`, `Info`, `Skip`")
                 await ctx.channel.send(embed = embed)
                 try:
-                    choice = await self.bot.wait_for('message', check=checks.setup_options1(ctx, options), timeout = 60.0)
+                    msg = await self.bot.wait_for('message', check=checks.setup_options1(ctx, options), timeout = 60.0)
                 except asyncio.TimeoutError:
                     try:
                         await ctx.channel.send(":no: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
@@ -27,23 +27,24 @@ class adminCog:
                         await ctx.channel.send(":no: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         break
                 else:
-                    if ctx.message.content.lower() == "yes":
+                    choice = ctx.message.content
+                    if choice.lower() == "yes":
                         connection = await self.bot.db.acquire()
                         async with connection.transaction():
                             query = "UPDATE Guilds SET pubquizEnabled = true WHERE guildID = $1"
                             await self.bot.db.execute(query, ctx.guild.id)
                         await self.bot.db.release(connection)
                         await ctx.channel.send("Got it! Pubquiz commands have been enabled.")
-                    elif ctx.message.content.lower() == "no":
+                    elif choice.lower() == "no":
                         connection = await self.bot.db.acquire()
                         async with connection.transaction():
                             query = "UPDATE Guilds SET pubquizEnabled = false WHERE guildID = $1"
                             await self.bot.db.execute(query, ctx.guild.id)
                         await self.bot.db.release(connection)
                         await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
-                    elif ctx.message.content.lower == "info":
+                    elif choice.lower == "info":
                         await ctx.channel.send("Info coming soon.")
-                    elif ctx.message.content.lower == "skip":
+                    elif choice.lower == "skip":
                         await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
     
 
