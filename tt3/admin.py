@@ -44,9 +44,10 @@ class adminCog:
                             await self.bot.db.execute(query, ctx.guild.id)
                         await self.bot.db.release(connection)
                         await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
-                    elif choice.lower == "info":
+                    elif choice.lower() == "info":
                         await ctx.channel.send("Info coming soon.")
-                    elif choice.lower == "skip":
+                    elif choice.lower() == "skip":
+                    elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
             choice = "choice"
             while choice.lower() not in options and timeout == False:
@@ -76,9 +77,9 @@ class adminCog:
                             await self.bot.db.execute(query, ctx.guild.id)
                         await self.bot.db.release(connection)
                         await ctx.channel.send("Got it! games commands have been disabled.")
-                    elif choice.lower == "info":
+                    elif choice.lower() == "info":
                         await ctx.channel.send("Info coming soon.")
-                    elif choice.lower == "skip":
+                    elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your games settings as is!")
             choice = "choice"
             while choice.lower() not in options and timeout == False:
@@ -108,9 +109,9 @@ class adminCog:
                             await self.bot.db.execute(query, ctx.guild.id)
                         await self.bot.db.release(connection)
                         await ctx.channel.send("Got it! Bluetext commands have been disabled.")
-                    elif choice.lower == "info":
+                    elif choice.lower() == "info":
                         await ctx.channel.send("Info coming soon.")
-                    elif choice.lower == "skip":
+                    elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your bluetext settings as is!")
 
                 choice = "choice"
@@ -141,9 +142,9 @@ class adminCog:
                                 await self.bot.db.execute(query, ctx.guild.id)
                             await self.bot.db.release(connection)
                             await ctx.channel.send("Got it! Welcome messages have been disabled.")
-                        elif choice.lower == "info":
+                        elif choice.lower() == "info":
                             await ctx.channel.send("Info coming soon.")
-                        elif choice.lower == "skip":
+                        elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your welcome message settings as is!")
 
                 choice = "choice"
@@ -174,9 +175,9 @@ class adminCog:
                                 await self.bot.db.execute(query, ctx.guild.id)
                             await self.bot.db.release(connection)
                             await ctx.channel.send("Got it! Welcome messages have been disabled.")
-                        elif choice.lower == "info":
+                        elif choice.lower() == "info":
                             await ctx.channel.send("Info coming soon.")
-                        elif choice.lower == "skip":
+                        elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your farewell message settings as is!")
 
                 choice = "choice"
@@ -207,9 +208,9 @@ class adminCog:
                                 await self.bot.db.execute(query, ctx.guild.id)
                             await self.bot.db.release(connection)
                             await ctx.channel.send("Got it! admin commands have been disabled.")
-                        elif choice.lower == "info":
+                        elif choice.lower() == "info":
                             await ctx.channel.send("Info coming soon.")
-                        elif choice.lower == "skip":
+                        elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your admin command settings as is!")
 
                 await ctx.channel.send("Thanks! You are all set up.")
