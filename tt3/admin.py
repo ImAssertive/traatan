@@ -18,7 +18,7 @@ class adminCog:
                 embed.add_field(name="Firstly - would you like to have pubquiz commands enabled?",value="Options: `Yes`, `No`, `Info`, `Skip`")
                 await ctx.channel.send(embed = embed)
                 try:
-                    choice = await self.bot.wait_for_message(self, check=checks.setup_options1(ctx, options), timeout = 60.0)
+                    choice = await self.bot.wait_for('message', check=checks.setup_options1(ctx, options), timeout = 60.0)
                 except asyncio.TimeoutError:
                     try:
                         await ctx.channel.send(":no: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
