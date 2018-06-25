@@ -307,7 +307,7 @@ class adminCog:
             embed.add_field(name="Im still working on this bit!", value="You should never see this! If you do, contact @Zootopia#0001 for this information.")
         try:
             await ctx.author.send(embed = embed)
-        except CommandInvokeError:
+        except:
             await ctx.channel.send("Please allow the bot to DM you. For security reasons this information can not be posted publicly.")
 
 
