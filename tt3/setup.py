@@ -36,7 +36,7 @@ class setupCog:
     @commands.command()
     @checks.justme()
     async def deletemember(self, member):
-        memberid = useful.getid(member)
+        memberid = int(useful.getid(member))
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             query = "DELETE FROM Users WHERE userID = $1"
