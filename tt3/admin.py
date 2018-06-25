@@ -296,6 +296,7 @@ class adminCog:
         query = "SELECT * FROM GuildUsers WHERE userID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.author.id)
         if result:
+            embed.add_field(name="For some reason this only works for 1 guild", value="Im working on a fix! Contact @Zootopia#0001 for other guilds if needed.")
             embed.add_field(name="You are currently in guild ID:", value=("{}".format(result["guildid"])))
             embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(result["pubquizscoretotal"])))
             embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(result["pubquizscoreweekly"])))
@@ -304,7 +305,10 @@ class adminCog:
         result = await ctx.bot.db.fetchrow(query, ctx.author.id)
         if result:
             embed.add_field(name="Im still working on this bit!", value="You should never see this! If you do, contact @Zootopia#0001 for this information.")
-        await ctx.author.send(embed = embed)
+        try:
+            await ctx.author.send(embed = embed)
+        except CommandInvokeError:
+            await ctx.channel.send("Please allow the bot to DM you. For security reasons this information can not be posted publicly.")
 
 
     @commands.command(name='botglobalunban', aliases=['bgub', 'wback'])
