@@ -56,10 +56,10 @@ class setupCog:
             await self.bot.db.execute(query, ctx.guild.id, ctx.id)
         await self.bot.db.release(connection)
         query = "SELECT * FROM Guilds WHERE guildID = $1 AND banned = false AND welcomeEnabled = true"
-        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        result = await self.bot.db.fetchrow(query, ctx.guild.id)
         if result:
             print(result)
-            
+
 
 
 
