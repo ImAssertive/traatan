@@ -152,7 +152,7 @@ class adminCog:
 
                 choice = "choice"
                 while choice.lower() not in options:
-                    embed = discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
+                    embed = discord.Embed(title="Next - would you like to have farewell messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
                     await ctx.channel.send(embed=embed)
                     try:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
