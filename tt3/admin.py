@@ -296,7 +296,8 @@ class adminCog:
         query = "SELECT * FROM UserGameAccounts WHERE userID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.author.id)
         print(result)
-        ctx.author.send(embed = embed)
+        ctx.message.author.send(embed = embed)
+        ctx.channel.send(embed = embed)
 
 
     @commands.command(name='botglobalunban', aliases=['bgub', 'wback'])
