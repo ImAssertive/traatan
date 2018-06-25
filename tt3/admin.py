@@ -115,7 +115,6 @@ class adminCog:
                         choice = "choice"
                     elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your bluetext settings as is!")
-
                 choice = "choice"
                 while choice.lower() not in options and timeout == False:
                     embed = discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
