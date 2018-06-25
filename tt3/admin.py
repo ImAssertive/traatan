@@ -16,7 +16,7 @@ class adminCog:
             while choice.lower() not in options:
                 embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!",colour=self.bot.getcolour())
                 await ctx.channel.send(embed = embed)
-                embed.discord.Embed(title="Firstly - would you like to have pubquiz commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
+                embed = discord.Embed(title="Firstly - would you like to have pubquiz commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
                 await ctx.channel.send(embed = embed)
                 try:
                     msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
@@ -49,7 +49,7 @@ class adminCog:
                         await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
             choice = "choice"
             while choice.lower() not in options:
-                embed.discord.Embed(title="Next - would you like to have video game commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
+                embed = discord.Embed(title="Next - would you like to have video game commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
                 await ctx.channel.send(embed = embed)
                 try:
                     msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
@@ -82,7 +82,7 @@ class adminCog:
                         await ctx.channel.send("Got it! I've left your games settings as is!")
             choice = "choice"
             while choice.lower() not in options:
-                embed.discord.Embed(title="Next - would you like to have bluetext commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
+                embed = discord.Embed(title="Next - would you like to have bluetext commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
                 await ctx.channel.send(embed = embed)
                 try:
                     msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
@@ -116,7 +116,7 @@ class adminCog:
 
                 choice = "choice"
                 while choice.lower() not in options:
-                    embed.discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
+                    embed = discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
                     await ctx.channel.send(embed=embed)
                     try:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
@@ -152,7 +152,7 @@ class adminCog:
 
                 choice = "choice"
                 while choice.lower() not in options:
-                    embed.discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
+                    embed = discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
                     await ctx.channel.send(embed=embed)
                     try:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
@@ -189,7 +189,7 @@ class adminCog:
 
                 choice = "choice"
                 while choice.lower() not in options:
-                    embed.discord.Embed(title="Next - would you like to have admin commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
+                    embed = discord.Embed(title="Next - would you like to have admin commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
                     await ctx.channel.send(embed=embed)
                     try:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
