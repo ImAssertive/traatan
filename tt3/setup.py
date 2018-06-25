@@ -54,7 +54,7 @@ class setupCog:
                 query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
                 await self.bot.db.execute(query, member.id)
                 query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1, $2) ON CONFLICT DO NOTHING"
-                await self.bot.db.execute(query, ctx.guild.id, member.id)
+                await self.bot.db.execute(query, ctx.id, member.id)
         await self.bot.db.release(connection)
 
     async def on_guild_remove(self, ctx):
