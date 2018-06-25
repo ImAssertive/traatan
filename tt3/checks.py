@@ -61,16 +61,29 @@ def pubquiz_enabled():
         return False
     return commands.check(predicate)
 
-def pubquiz_enabled():
+def welcome_enabled():
     async def predicate(ctx):
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND pubquizEnabled = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND welcomeEnabled = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
-        await ctx.channel.send(":no_good: Pubquiz commands are not enabled here!")
+        await ctx.channel.send(":no_good: Welcome commands are not enabled here!")
+        return False
+    return commands.check(predicate)
+
+def leave_enabled():
+    async def predicate(ctx):
+        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+            return True
+        else:
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND leaveEnabled = true"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if result:
+                return True
+        await ctx.channel.send(":no_good: Farewell commands are not enabled here!")
         return False
     return commands.check(predicate)
 
