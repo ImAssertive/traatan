@@ -49,7 +49,7 @@ class adminCog:
                     elif choice.lower == "skip":
                         await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
             choice = "choice"
-            while choice.lower() not in options:
+            while choice.lower() not in options and timeout == False:
                 embed = discord.Embed(title="Next - would you like to have video game commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
                 await ctx.channel.send(embed = embed)
                 try:
@@ -81,7 +81,7 @@ class adminCog:
                     elif choice.lower == "skip":
                         await ctx.channel.send("Got it! I've left your games settings as is!")
             choice = "choice"
-            while choice.lower() not in options:
+            while choice.lower() not in options and timeout == False:
                 embed = discord.Embed(title="Next - would you like to have bluetext commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
                 await ctx.channel.send(embed = embed)
                 try:
@@ -114,7 +114,7 @@ class adminCog:
                         await ctx.channel.send("Got it! I've left your bluetext settings as is!")
 
                 choice = "choice"
-                while choice.lower() not in options:
+                while choice.lower() not in options and timeout == False:
                     embed = discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
                     await ctx.channel.send(embed=embed)
                     try:
@@ -147,7 +147,7 @@ class adminCog:
                             await ctx.channel.send("Got it! I've left your welcome message settings as is!")
 
                 choice = "choice"
-                while choice.lower() not in options:
+                while choice.lower() not in options and timeout == False:
                     embed = discord.Embed(title="Next - would you like to have farewell messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
                     await ctx.channel.send(embed=embed)
                     try:
@@ -180,7 +180,7 @@ class adminCog:
                             await ctx.channel.send("Got it! I've left your farewell message settings as is!")
 
                 choice = "choice"
-                while choice.lower() not in options:
+                while choice.lower() not in options and timeout == False:
                     embed = discord.Embed(title="Next - would you like to have admin commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
                     await ctx.channel.send(embed=embed)
                     try:
