@@ -59,7 +59,7 @@ class setupCog:
         result = await self.bot.db.fetchrow(query, ctx.guild.id)
         if result:
             channelID = ("{}".format(result["welcomechannel"]))
-            welcometext = ("{}".format(result["welcometext"]))
+            welcometext = useful.formatText(ctx, ("{}".format(result["welcometext"])))
             await ctx.guild.get_channel(int(channelID)).send(welcometext)
 
 
