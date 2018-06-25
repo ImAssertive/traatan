@@ -26,24 +26,26 @@ class adminCog:
                     except TypeError:
                         await ctx.channel.send(":no: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         break
-                elif choice.lower() == "yes":
-                    connection = await self.bot.db.acquire()
-                    async with connection.transaction():
-                        query = "UPDATE Guilds SET pubquizEnabled = true WHERE guildID = $1"
-                        await self.bot.db.execute(query, ctx.guild.id)
-                    await self.bot.db.release(connection)
-                    await ctx.channel.send("Got it! Pubquiz commands have been enabled.")
-                elif choice.lower() == "no":
-                    connection = await self.bot.db.acquire()
-                    async with connection.transaction():
-                        query = "UPDATE Guilds SET pubquizEnabled = false WHERE guildID = $1"
-                        await self.bot.db.execute(query, ctx.guild.id)
-                    await self.bot.db.release(connection)
-                    await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
-                elif choice.lower == "info":
-                    await ctx.channel.send("Info coming soon.")
-                elif choice.lower == "skip":
-                    await ctx.channel.send("Got it!")
+                else:
+                    if choice.lower() == "yes":
+                        connection = await self.bot.db.acquire()
+                        async with connection.transaction():
+                            query = "UPDATE Guilds SET pubquizEnabled = true WHERE guildID = $1"
+                            await self.bot.db.execute(query, ctx.guild.id)
+                        await self.bot.db.release(connection)
+                        await ctx.channel.send("Got it! Pubquiz commands have been enabled.")
+                    elif choice.lower() == "no":
+                        connection = await self.bot.db.acquire()
+                        async with connection.transaction():
+                            query = "UPDATE Guilds SET pubquizEnabled = false WHERE guildID = $1"
+                            await self.bot.db.execute(query, ctx.guild.id)
+                        await self.bot.db.release(connection)
+                        await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
+                    elif choice.lower == "info":
+                        await ctx.channel.send("Info coming soon.")
+                    elif choice.lower == "skip":
+                        await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
+    
 
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'])
     @checks.justme()
