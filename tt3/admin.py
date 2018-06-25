@@ -6,7 +6,7 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='setup', aliases='botsetup', 'su')
+    @commands.command(name='setup', aliases=['botsetup', 'su'])
     async def setup(self, ctx):
         if not ctx.guild:
             await ctx.author.send(":no_good: | This command can not be used in DM!")
