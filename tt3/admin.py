@@ -12,9 +12,10 @@ class adminCog:
         if not ctx.guild:
             await ctx.author.send(":no_good: | This command can not be used in DM!")
         else:
+            timeout = False
             choice = "choice"
             options = ["info", "yes", "no", "skip"]
-            while choice.lower() not in options:
+            while choice.lower() not in options and timeout == False:
                 embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!",colour=self.bot.getcolour())
                 await ctx.channel.send(embed = embed)
                 embed = discord.Embed(title="Firstly - would you like to have pubquiz commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
@@ -24,10 +25,9 @@ class adminCog:
                 except asyncio.TimeoutError:
                     try:
                         await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        break
                     except TypeError:
                         await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        break
+                    timeout = True
                 else:
                     choice = msg.content
                     if choice.lower() == "yes":
@@ -57,10 +57,9 @@ class adminCog:
                 except asyncio.TimeoutError:
                     try:
                         await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        break
                     except TypeError:
                         await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        break
+                    timeout = True
                 else:
                     choice = msg.content
                     if choice.lower() == "yes":
@@ -90,10 +89,9 @@ class adminCog:
                 except asyncio.TimeoutError:
                     try:
                         await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        break
                     except TypeError:
                         await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        break
+                    timeout = True
                 else:
                     choice = msg.content
                     if choice.lower() == "yes":
@@ -123,13 +121,10 @@ class adminCog:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
                     except asyncio.TimeoutError:
                         try:
-                            await ctx.channel.send(
-                                ":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                            break
+                            await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         except TypeError:
-                            await ctx.channel.send(
-                                ":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                            break
+                            await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                        timeout = True
                     else:
                         choice = msg.content
                         if choice.lower() == "yes":
@@ -159,13 +154,10 @@ class adminCog:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
                     except asyncio.TimeoutError:
                         try:
-                            await ctx.channel.send(
-                                ":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                            break
+                            await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         except TypeError:
-                            await ctx.channel.send(
-                                ":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                            break
+                            await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                        timeout = True
                     else:
                         choice = msg.content
                         if choice.lower() == "yes":
@@ -174,8 +166,7 @@ class adminCog:
                                 query = "UPDATE Guilds SET leaveEnabled = true WHERE guildID = $1"
                                 await self.bot.db.execute(query, ctx.guild.id)
                             await self.bot.db.release(connection)
-                            await ctx.channel.send(
-                                "Got it! Farewell messages have been enabled. Please use tt!setfarewell to chose the channel to welcome new users!")
+                            await ctx.channel.send("Got it! Farewell messages have been enabled. Please use tt!setfarewell to chose the channel to welcome new users!")
                         elif choice.lower() == "no":
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
@@ -196,13 +187,10 @@ class adminCog:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
                     except asyncio.TimeoutError:
                         try:
-                            await ctx.channel.send(
-                                ":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                            break
+                            await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         except TypeError:
-                            await ctx.channel.send(
-                                ":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                            break
+                            await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                        timeout = True
                     else:
                         choice = msg.content
                         if choice.lower() == "yes":
