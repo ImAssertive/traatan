@@ -58,7 +58,7 @@ class setupCog:
         query = "SELECT * FROM Guilds WHERE guildID = $1 AND banned = false AND welcomeEnabled = true"
         result = await self.bot.db.fetchrow(query, ctx.guild.id)
         if result:
-            print("{}".format(row["welcomechannel"]))
+            print("{}".format(result["welcomechannel"]))
 
 
 
