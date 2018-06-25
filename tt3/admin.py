@@ -260,6 +260,28 @@ class adminCog:
         await self.bot.db.release(connection)
         await ctx.channel.send("Done! Welcome channel set here.")
 
+    @commands.command()
+    @checks.welcome_enabled()
+    @checks.justme() #CHANGE
+    async def setwelcometext(self, ctx, welcometext):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET welcometext = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, welcometext, ctx.guild.id)
+        await self.bot.db.release(connection)
+        await ctx.channel.send("Done! Welcome text set to '" + welcometext + "'")
+
+    @commands.command()
+    @checks.leave_enabled()
+    @checks.justme() #CHANGE
+    async def setfarewelltext(self, ctx, leavetext):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET leavetext = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, leavetext, ctx.guild.id)
+        await self.bot.db.release(connection)
+        await ctx.channel.send("Done! Welcome text set to '" + leavetext + "'")
+
 
     @commands.command(name='botglobalunban', aliases=['bgub', 'wback'])
     @checks.justme()
