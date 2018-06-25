@@ -46,6 +46,7 @@ class adminCog:
                         await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
                     elif choice.lower() == "info":
                         await ctx.channel.send("Info coming soon.")
+                        choice = "choice"
                     elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
             choice = "choice"
@@ -78,6 +79,7 @@ class adminCog:
                         await ctx.channel.send("Got it! games commands have been disabled.")
                     elif choice.lower() == "info":
                         await ctx.channel.send("Info coming soon.")
+                        choice = "choice"
                     elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your games settings as is!")
             choice = "choice"
@@ -110,6 +112,7 @@ class adminCog:
                         await ctx.channel.send("Got it! Bluetext commands have been disabled.")
                     elif choice.lower() == "info":
                         await ctx.channel.send("Info coming soon.")
+                        choice = "choice"
                     elif choice.lower() == "skip":
                         await ctx.channel.send("Got it! I've left your bluetext settings as is!")
 
@@ -143,6 +146,7 @@ class adminCog:
                             await ctx.channel.send("Got it! Welcome messages have been disabled.")
                         elif choice.lower() == "info":
                             await ctx.channel.send("Info coming soon.")
+                            choice = "choice"
                         elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your welcome message settings as is!")
 
@@ -176,6 +180,7 @@ class adminCog:
                             await ctx.channel.send("Got it! Welcome messages have been disabled.")
                         elif choice.lower() == "info":
                             await ctx.channel.send("Info coming soon.")
+                            choice = "choice"
                         elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your farewell message settings as is!")
 
@@ -209,6 +214,7 @@ class adminCog:
                             await ctx.channel.send("Got it! admin commands have been disabled.")
                         elif choice.lower() == "info":
                             await ctx.channel.send("Info coming soon.")
+                            choice = "choice"
                         elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your admin command settings as is!")
 
