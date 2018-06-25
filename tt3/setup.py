@@ -35,7 +35,7 @@ class setupCog:
 
     @commands.command()
     @checks.justme()
-    async def deletemember(self, member):
+    async def deletemember(self, ctx, member):
         memberid = int(useful.getid(member))
         connection = await self.bot.db.acquire()
         async with connection.transaction():
