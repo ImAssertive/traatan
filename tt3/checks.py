@@ -101,5 +101,6 @@ def games_enabled():
     return commands.check(predicate)
 
 def setup_options1(ctx, options):
-    return (ctx.content.lower() in options) and ctx.guild != None
+    print(ctx)
+    return (ctx.message.content.lower() in options) and ctx.guild != None
 
