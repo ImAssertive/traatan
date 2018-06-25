@@ -291,12 +291,12 @@ class adminCog:
         result = await ctx.bot.db.fetchrow(query, ctx.author.id)
         if result:
             embed.add_field(name="Your user ID is: ", value=("{}".format(result["userid"])))
-            embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(result["pubquizDM"])))
+            embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(result["pubquizdm"])))
             embed.add_field(name="Your global banned status is currently:", value=("{}".format(result["banned"])))
         query = "SELECT * FROM GuildUsers WHERE userID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.author.id)
         if result:
-            embed.add_field(name="You are currently in guild ID:", value=("{}".format(result["guildID"])))
+            embed.add_field(name="You are currently in guild ID:", value=("{}".format(result["guildid"])))
             embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(result["pubquizscoretotal"])))
             embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(result["pubquizscoreweekly"])))
             embed.add_field(name="Your banned status here is:", value=("{}".format(result["banned"])))
