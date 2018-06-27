@@ -221,7 +221,8 @@ class adminCog:
 
     @commands.command(hidden = True)
     @checks.justme()
-    async def restart(self, ctx):
+    async def exit(self, ctx):
+        await ctx.channel.send(":wave: Goodbye.")
         sys.exit()
 
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'], hidden = True)
