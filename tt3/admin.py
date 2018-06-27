@@ -216,8 +216,8 @@ class adminCog:
                             choice = "choice"
                         elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your admin command settings as is!")
-
-                await ctx.channel.send("Thanks! You are all set up.")
+                if timeout == False:
+                    await ctx.channel.send("Thanks! You are all set up.")
 
 
 
@@ -281,22 +281,24 @@ class adminCog:
     async def gdpr(self, ctx):
         embed = discord.Embed(title="Here is the data currently stored about you:", description="", colour=self.bot.getcolour())
         query = "SELECT * FROM Users WHERE userID = $1"
-        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
-        if result:
-            embed.add_field(name="Your user ID is: ", value=("{}".format(result["userid"])))
-            embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(result["pubquizdm"])))
-            embed.add_field(name="Your global banned status is currently:", value=("{}".format(result["banned"])))
+        results = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        if results:
+            embed.add_field(name="Your user ID is: ", value=("{}".format(results["userid"])))
+            embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(results["pubquizdm"])))
+            embed.add_field(name="Your global banned status is currently:", value=("{}".format(results["banned"])))
         query = "SELECT * FROM GuildUsers WHERE userID = $1"
-        result = await ctx.bot.db.fetch(query, ctx.author.id)
-        print(result)
-        if result:
-            embed.add_field(name="You are currently in guild ID:", value=("{}".format(result["guildid"])))
-            embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(result["pubquizscoretotal"])))
-            embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(result["pubquizscoreweekly"])))
-            embed.add_field(name="Your banned status here is:", value=("{}".format(result["banned"])))
+        results = await ctx.bot.db.fetch(query, ctx.author.id)
+        print(results)
+        if results:
+            for row in results:
+                currentRow = row
+                embed.add_field(name="You are currently in guild ID:", value=("{}".format(currentRow["guildid"])))
+                embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(currentRow["pubquizscoretotal"])))
+                embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(currentRow["pubquizscoreweekly"])))
+                embed.add_field(name="Your banned status here is:", value=("{}".format(currentRow["banned"])))
         query = "SELECT * FROM UserGameAccounts WHERE userID = $1"
-        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
-        if result:
+        results = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        if results:
             embed.add_field(name="Im still working on this bit!", value="You should never see this! If you do, contact @Zootopia#0001 for this information.")
         try:
             await ctx.author.send(embed = embed)
