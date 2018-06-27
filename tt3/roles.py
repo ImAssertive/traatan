@@ -110,7 +110,7 @@ class rolesCog:
                                            ["Next", "pq join", "pqjoin", "This means that users with this role can partake in the pub quiz section of the bot."],
                                            ["Next", "pq qmhelp", "pqqmhelp", "This command allows user to view the help commands for quizmasters."],
                                            ["Next", "bluetext", "bt", "This command causes the bot to echo text made of blue emojis."],
-                                           ["Next", "bluetextcode", "btc", "This command makes the bot post the code of text made out of blue emojis."]
+                                           ["Next", "bluetextcode", "btc", "This command makes the bot post the code of text made out of blue emojis."],
                                            ["Next", "setwelcome", "setwelcomechannel", "This command allows the user to set which channel the bot will post a welcome message too (if enabled)"],
                                            ["Next", "setwelcometext", "setwelcometext", "This commands allows the user to set the message sent upon a new user joining."],
                                            ["Next", "setfarewell", "setleavechannel", "This command allows the user to set which channel the bot will post a farewell message too (if enabled)"],
