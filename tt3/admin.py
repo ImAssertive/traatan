@@ -16,7 +16,7 @@ class adminCog:
             timeout = False
             choice = "choice"
             settings = [["Firstly", "Pub Quiz", "pubquizEnabled", "Allows the guild to run a weekly pub quiz complete with custom scoring! For full rules visit NOT DONE YET"],
-                        ["Secondly", "Video Game", "gamesEnabled", "Allows the guild to run a weekly pub quiz complete with custom scoring! For full rules visit NOT DONE YET"],
+                        ["Secondly", "Video Game", "gamesEnabled", "Allows users to attatch video game accounts to the bot to help with matchmaking."],
                         ["Next", "bluetext", "bluetextEnabled", "Enables a series of commands allowing members to use blue text emotes to construct sentences."],
                         ["Next", "welcome messages", "welcomeEnabled", "Enables a welcome message when users join the server. This can be set with tt!setwelcome and tt!setwelcometext commands"],
                         ["Next", "farewell messages", "leaveEnabled", "Enables a farewell message when the user leaves the server. This can be set with tt!setleave and tt!setleavetext commands"],
