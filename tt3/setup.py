@@ -50,6 +50,8 @@ class setupCog:
         async with connection.transaction():
             query = "INSERT INTO Guilds (guildID) VALUES($1) ON CONFLICT DO NOTHING"
             await self.bot.db.execute(query, ctx.id)
+            query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+            await self.bot.db.execute(query, ctx.guild.id, ctx.guild.id)
             for member in ctx.members:
                 query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
                 await self.bot.db.execute(query, member.id)
@@ -63,6 +65,8 @@ class setupCog:
             query = "DELETE FROM GuildUsers WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.id)
             query = "DELETE FROM Guilds WHERE guildID = $1"
+            await self.bot.db.execute(query, ctx.id)
+            query = "DELETE FROM Roles WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.id)
         await self.bot.db.release(connection)
 

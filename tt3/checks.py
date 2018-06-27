@@ -115,3 +115,5 @@ def games_enabled():
 def setup_options1(ctx):
     return (ctx.content.lower() in ["info", "yes", "no", "skip"]) and ctx.guild != None
 
+def roles_options1(ctx):
+    return (ctx.content.lower() in ["admin", "moderator", "quizmaster", "muted", "custom", "close"])and ctx.guild != None
