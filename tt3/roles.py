@@ -83,7 +83,7 @@ class rolesCog:
                             toeditTrue = []
                             toeditFalse = []
                             choice = msg.content.lower()
-                            embed = discord.Embed(title="Role saved with the following permissions", description = "", colour = self.bot.getcolour())
+                            embedRole = discord.Embed(title="Role saved with the following permissions", description = "", colour = self.bot.getcolour())
                             if choice == "admin":
                                 connection = await self.bot.db.acquire()
                                 async with connection.transaction():
@@ -142,16 +142,16 @@ class rolesCog:
                                             choice2 = msg.content.lower()
                                             if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
                                                 toeditTrue.append(setting[2])
-                                                embed.add_field(name=setting[1], value="enabled", inline=False)
+                                                embedRole.add_field(name=setting[1], value="enabled", inline=False)
                                                 await ctx.channel.send(":white_check_mark: | This role can now use the" + setting[1] + "command.")
                                             elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
                                                 toeditFalse.append(setting[2])
-                                                embed.add_field(name=setting[1], value="disabled", inline=False)
+                                                embedRole.add_field(name=setting[1], value="disabled", inline=False)
                                             elif choice2 == "info":
                                                 await ctx.channel.send(setting[3])
                                                 choice2 = "choice"
                                             elif choice2 == "skip":
-                                                embed.add_field(name=setting[1], value="skipped", inline=False)
+                                                embedRole.add_field(name=setting[1], value="skipped", inline=False)
                                                 await ctx.channel.send(":white_check_mark: | Setting skipped!")
                                             elif choice2 == "close":
                                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
