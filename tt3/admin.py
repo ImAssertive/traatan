@@ -219,7 +219,7 @@ class adminCog:
                 if timeout == False:
                     await ctx.channel.send("Thanks! You are all set up.")
 
-    @commands.command(hidden = True)
+    @commands.command(name = "exit", aliases =['quit'], hidden = True)
     @checks.justme()
     async def exit(self, ctx):
         await ctx.channel.send(":wave: Goodbye.")
