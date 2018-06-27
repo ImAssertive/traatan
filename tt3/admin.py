@@ -287,7 +287,8 @@ class adminCog:
             embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(result["pubquizdm"])))
             embed.add_field(name="Your global banned status is currently:", value=("{}".format(result["banned"])))
         query = "SELECT * FROM GuildUsers WHERE userID = $1"
-        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        result = await ctx.bot.db.fetch(query, ctx.author.id)
+        print(result)
         if result:
             embed.add_field(name="For some reason this only works for 1 guild", value="Im working on a fix! Contact @Zootopia#0001 for other guilds if needed.")
             embed.add_field(name="You are currently in guild ID:", value=("{}".format(result["guildid"])))
