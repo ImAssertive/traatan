@@ -140,7 +140,10 @@ class rolesCog:
                                             timeout2 = True
                                         else:
                                             choice2 = msg2.content.lower()
-                                            if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
+                                            print(choice2)
+                                            print(msg2.content)
+                                            print("i made it here")
+                                            if choice2 == "enabled" or choice2 == "enable" or choice2 == "true" or choice2 == "yes":
                                                 print(choice)
                                                 toeditTrue.append(setting[2])
                                                 embedRole.add_field(name=setting[1], value="enabled", inline=False)
@@ -177,7 +180,8 @@ class rolesCog:
                                         await self.bot.db.execute(query, role.id)
                             await self.bot.db.release(connection)
                             print("nyoom")
-                            await ctx.channel.send(embed = embedRole)
+                            if timeout2 == False:
+                                await ctx.channel.send(embed = embedRole)
 
 
 
