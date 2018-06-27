@@ -219,7 +219,7 @@ class adminCog:
                 if timeout == False:
                     await ctx.channel.send("Thanks! You are all set up.")
 
-    @commands.command()
+    @commands.command(hidden = True)
     @checks.justme()
     async def restart(self, ctx):
         sys.exit()
@@ -282,32 +282,45 @@ class adminCog:
 
     @commands.command()
     async def gdpr(self, ctx):
-        embed = discord.Embed(title="Here is the data currently stored about you:", description="", colour=self.bot.getcolour())
-        query = "SELECT * FROM Users WHERE userID = $1"
-        results = await ctx.bot.db.fetchrow(query, ctx.author.id)
-        if results:
-            embed.add_field(name="Your user ID is: ", value=("{}".format(results["userid"])))
-            embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(results["pubquizdm"])))
-            embed.add_field(name="Your global banned status is currently:", value=("{}".format(results["banned"])))
-        query = "SELECT * FROM GuildUsers WHERE userID = $1"
-        results = await ctx.bot.db.fetch(query, ctx.author.id)
-        print(results)
-        if results:
-            for row in results:
-                currentRow = row
-                embed.add_field(name="You are currently in guild ID:", value=("{}".format(currentRow["guildid"])))
-                embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(currentRow["pubquizscoretotal"])))
-                embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(currentRow["pubquizscoreweekly"])))
-                embed.add_field(name="Your banned status here is:", value=("{}".format(currentRow["banned"])))
-        query = "SELECT * FROM UserGameAccounts WHERE userID = $1"
-        results = await ctx.bot.db.fetchrow(query, ctx.author.id)
-        if results:
-            embed.add_field(name="Im still working on this bit!", value="You should never see this! If you do, contact @Zootopia#0001 for this information.")
-        try:
+        while finished == 0:
+            try:
+                await ctx.author.send("Here is the data currently stored about you:")
+            except:
+                await ctx.channel.send("Please enable 'Allow direct messages from server members' under 'Privacy & Safety' in settings. For security reasons this information can not be posted publicly.")
+                break
+            embed = discord.Embed(title="Global Data:", description="", colour=self.bot.getcolour())
+            query = "SELECT * FROM Users WHERE userID = $1"
+            results = await ctx.bot.db.fetchrow(query, ctx.author.id)
+            if results:
+                embed.add_field(name="Your user ID is: ", value=("{}".format(results["userid"])))
+                embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(results["pubquizdm"])))
+                embed.add_field(name="Your global banned status is currently:", value=("{}".format(results["banned"])))
+            else:
+                embed = discord.Embed(title="Global Data:", description="No data found!", colour=self.bot.getcolour())
+            await ctx.author.send(embed=embed)
+            query = "SELECT * FROM GuildUsers WHERE userID = $1"
+            results = await ctx.bot.db.fetch(query, ctx.author.id)
+            if results:
+                embed = discord.Embed(title="Server Data:", description="", colour=self.bot.getcolour())
+                for row in results:
+                    currentRow = row
+                    embed.add_field(name="You are currently in guild ID:", value=("{}".format(currentRow["guildid"])), inline=False)
+                    embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(currentRow["pubquizscoretotal"])), inline=False)
+                    embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(currentRow["pubquizscoreweekly"])), inline=False)
+                    embed.add_field(name="Your banned status here is:", value=("{}".format(currentRow["banned"])), inline=False)
+            else:
+                embed = discord.Embed(title="Server Data:", description="No data found!", colour=self.bot.getcolour())
+            await ctx.author.send(embed=embed)
+            query = "SELECT * FROM UserGameAccounts WHERE userID = $1"
+            results = await ctx.bot.db.fetch(query, ctx.author.id)
+            if results:
+                for row in results:
+                    currentRow = row
+                embed = discord.Embed(title="Im still working on this bit!", description="You should never see this! If you do, contact @Zootopia#0001 for this information.")
+            else:
+                embed = discord.Embed(title="Game account data:", description="No data found!")
             await ctx.author.send(embed = embed)
-        except:
-            await ctx.channel.send("Please enable 'Allow direct messages from server members' under 'Privacy & Safety' in settings. For security reasons this information can not be posted publicly.")
-
+            finished = 1
 
     @commands.command(name='botglobalunban', aliases=['bgub', 'wback'], hidden = True)
     @checks.justme()
