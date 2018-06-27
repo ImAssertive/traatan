@@ -43,15 +43,15 @@ class adminCog:
                         if choice.lower() == "yes":
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
-                                query = "UPDATE Guilds SET $1 = true WHERE guildID = $2"
-                                await self.bot.db.execute(query, setting[2], ctx.guild.id)
+                                query = "UPDATE Guilds SET "+ setting[2]+ " = true WHERE guildID = $1"
+                                await self.bot.db.execute(query, ctx.guild.id)
                             await self.bot.db.release(connection)
                             await ctx.channel.send("Got it! "+ setting[1] +" commands have been enabled.")
                         elif choice.lower() == "no":
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
-                                query = "UPDATE Guilds SET $1 = false WHERE guildID = $2"
-                                await self.bot.db.execute(query, setting[2], ctx.guild.id)
+                                query = "UPDATE Guilds SET "+ setting[2] +" = false WHERE guildID = $1"
+                                await self.bot.db.execute(query, ctx.guild.id)
                             await self.bot.db.release(connection)
                             await ctx.channel.send("Got it! "+ setting[1]+" commands have been disabled.")
                         elif choice.lower() == "info":

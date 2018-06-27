@@ -11,9 +11,9 @@ async def run():
     db = await asyncpg.create_pool(**credentials)
     await db.execute('''CREATE TABLE IF NOT EXISTS Users(userID bigint PRIMARY KEY,
     pubquizDM boolean DEFAULT false,
-    banned boolean DEFAULT false);''') #Users
-
-    await db.execute('''CREATE TABLE IF NOT EXISTS Guilds(guildID bigint PRIMARY KEY,
+    banned boolean DEFAULT false);
+    
+    CREATE TABLE IF NOT EXISTS Guilds(guildID bigint PRIMARY KEY,
     gamesEnabled boolean DEFAULT true,
     pubquizEnabled boolean DEFAULT true,
     bluetextEnabled boolean DEFAULT true,
