@@ -7,6 +7,7 @@ class adminCog:
         self.bot = bot
 
     @commands.command(name='setup', aliases=['botsetup', 'su'])
+    @checks.is_not_banned()
     @checks.justme() # change
     async def setup(self, ctx):
         if not ctx.guild:
@@ -238,6 +239,7 @@ class adminCog:
 
     @commands.command(name="setfarewell", aliases=['setleave'])
     @checks.leave_enabled()
+    @checks.is_not_banned()
     @checks.justme() #CHANGE
     async def setfarewell(self, ctx):
         connection = await self.bot.db.acquire()
@@ -248,6 +250,7 @@ class adminCog:
         await ctx.channel.send("Done! Farewell channel set here.")
 
     @commands.command()
+    @checks.is_not_banned()
     @checks.welcome_enabled()
     @checks.justme() #CHANGE
     async def setwelcome(self, ctx):
@@ -260,6 +263,7 @@ class adminCog:
 
     @commands.command()
     @checks.welcome_enabled()
+    @checks.is_not_banned()
     @checks.justme() #CHANGE
     async def setwelcometext(self, ctx, *, welcometext):
         connection = await self.bot.db.acquire()
@@ -271,6 +275,7 @@ class adminCog:
 
     @commands.command(name="setfarewelltext", aliases =['setleavetext'])
     @checks.leave_enabled()
+    @checks.is_not_banned()
     @checks.justme() #CHANGE
     async def setfarewelltext(self, ctx, *, leavetext):
         connection = await self.bot.db.acquire()
@@ -306,7 +311,7 @@ class adminCog:
                 embed = discord.Embed(title="Server Data:", description="", colour=self.bot.getcolour())
                 for row in results:
                     currentRow = row
-                    embed.add_field(name="You are currently in guild ID:", value=("{}".format(currentRow["guildid"])), inline=False)
+                    embed.add_field(name="The following information is for guild ID:", value=("{}".format(currentRow["guildid"])), inline=False)
                     embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(currentRow["pubquizscoretotal"])), inline=False)
                     embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(currentRow["pubquizscoreweekly"])), inline=False)
                     embed.add_field(name="Your banned status here is:", value=("{}".format(currentRow["banned"])), inline=False)
