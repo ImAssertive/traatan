@@ -290,7 +290,6 @@ class adminCog:
         result = await ctx.bot.db.fetch(query, ctx.author.id)
         print(result)
         if result:
-            embed.add_field(name="For some reason this only works for 1 guild", value="Im working on a fix! Contact @Zootopia#0001 for other guilds if needed.")
             embed.add_field(name="You are currently in guild ID:", value=("{}".format(result["guildid"])))
             embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(result["pubquizscoretotal"])))
             embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(result["pubquizscoreweekly"])))
