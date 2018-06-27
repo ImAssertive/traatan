@@ -119,4 +119,4 @@ def roles_options1(ctx):
     return (ctx.content.lower() in ["admin", "moderator", "quizmaster", "muted", "custom", "close", "quiz master"]) and ctx.guild != None
 
 def roles_options2(ctx):
-    return (ctx.content.lower() in ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no"]) and ctx.guild != None
+    return (ctx.content.lower() in ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no", "close"]) and ctx.guild != None

@@ -122,7 +122,7 @@ class rolesCog:
                                            ["Next", "mute", "mute", "Allows the user to assign the 'mute' role to the mentioned user."],
                                            ["Next", "cute", "cute", "Allows the user to call other users cute using bluetext command."],
                                            ["Finally", "setmuterole", "setmuterole", "Allows the user to set which role should be given to users when the mute command is invoked."]]
-                                options2 = ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no"]
+                                options2 = ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no", "close"]
                                 timeout2 = False
                                 for counter in range (0,len(settings)):
                                     setting = settings[counter]
