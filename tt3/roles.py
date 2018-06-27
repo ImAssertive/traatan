@@ -72,7 +72,7 @@ class rolesCog:
                         embed = discord.Embed(title="Role loaded! Would you like to use a preset value?", description="Options: Admin, Moderator, Quizmaster, Muted, Custom, Close, Info", colour=self.bot.getcolour())
                         await ctx.channel.send(embed = embed)
                         try:
-                            msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
+                            msg = await self.bot.wait_for('message', check=checks.roles_options1, timeout = 60.0)
                         except asyncio.TimeoutError:
                             try:
                                 await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!role edit again to restart the process.")
