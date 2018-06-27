@@ -67,6 +67,7 @@ class rolesCog:
                 else:
                     choice = "choice"
                     options = ["admin", "moderator", "quizmaster", "muted", "custom", "close"]
+                    timeout = False
                     while choice not in options and timeout == False:
                         embed = discord.Embed(title="Role loaded! Would you like to use a preset value?", description="Options: Admin, Moderator, Quizmaster, Muted, Custom, Close, Info", colour=self.bot.getcolour())
                         await ctx.channel.send(embed = embed)
