@@ -16,8 +16,7 @@ class rolesCog:
         if role is None:
             await ctx.channel.send("Role not found. Did you make an error?")
         else:
-            connection = await
-            self.bot.db.acquire()
+            connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
                 await self.bot.db.execute(query, role.id, ctx.guild.id)
