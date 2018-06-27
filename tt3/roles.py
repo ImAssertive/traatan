@@ -131,7 +131,7 @@ class rolesCog:
                                         embed = discord.Embed(title=(setting[0] + " - would you like this role to be able to use the " + setting[1] + " command?"), description="Options: `Yes`, `No`, `Info`, `Skip`, `Close`", colour=self.bot.getcolour())
                                         await ctx.channel.send(embed=embed)
                                         try:
-                                            msg = await self.bot.wait_for('message', check=checks.roles_options2, timeout=60.0)
+                                            msg2 = await self.bot.wait_for('message', check=checks.roles_options2, timeout=60.0)
                                         except asyncio.TimeoutError:
                                             try:
                                                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process. Settings **have not** been saved.")
@@ -139,7 +139,7 @@ class rolesCog:
                                                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process. Settings **have not** been saved.")
                                             timeout2 = True
                                         else:
-                                            choice2 = msg.content.lower()
+                                            choice2 = msg2.content.lower()
                                             if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
                                                 print(choice)
                                                 toeditTrue.append(setting[2])
