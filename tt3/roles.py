@@ -124,6 +124,7 @@ class rolesCog:
                                            ["Finally", "setmuterole", "setmuterole", "Allows the user to set which role should be given to users when the mute command is invoked."]]
                                 options2 = ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no", "close"]
                                 timeout2 = False
+                                displayMessage = False
                                 for counter in range (0,len(settings)):
                                     setting = settings[counter]
                                     choice2 = "choice"
@@ -147,13 +148,12 @@ class rolesCog:
                                                 print(choice)
                                                 toeditTrue.append(setting[2])
                                                 embedRole.add_field(name=setting[1], value="enabled", inline=False)
-                                                await ctx.channel.send(":white_check_mark: | This role can now use the" + setting[1] + "command.")
-                                                await ctx.channel.send(":white_check_mark: | Setting set to true!")
+                                                await ctx.channel.send(":white_check_mark: | This role can now use the " + setting[1] + " command.")
                                             elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
                                                 print(choice)
                                                 toeditFalse.append(setting[2])
                                                 embedRole.add_field(name=setting[1], value="disabled", inline=False)
-                                                await ctx.channel.send(":white_check_mark: | Setting set to false!")
+                                                await ctx.channel.send(":white_check_mark: | This role can no longer use the " + setting[1] + " command.")
                                             elif choice2 == "info":
                                                 print(choice)
                                                 await ctx.channel.send(setting[3])
@@ -166,6 +166,7 @@ class rolesCog:
                                                 print(choice)
                                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                                                 timeout2 = True
+                                                displayMessage = True
                                                 break
 
                             connection = await self.bot.db.acquire()
@@ -180,7 +181,7 @@ class rolesCog:
                                         await self.bot.db.execute(query, role.id)
                             await self.bot.db.release(connection)
                             print("nyoom")
-                            if timeout2 == False:
+                            if timeout2 == False or displayMessage == True:
                                 await ctx.channel.send(embed = embedRole)
 
 
