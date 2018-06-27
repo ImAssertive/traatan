@@ -144,9 +144,11 @@ class rolesCog:
                                                 toeditTrue.append(setting[2])
                                                 embedRole.add_field(name=setting[1], value="enabled", inline=False)
                                                 await ctx.channel.send(":white_check_mark: | This role can now use the" + setting[1] + "command.")
+                                                await ctx.channel.send(":white_check_mark: | Setting set to true!")
                                             elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
                                                 toeditFalse.append(setting[2])
                                                 embedRole.add_field(name=setting[1], value="disabled", inline=False)
+                                                await ctx.channel.send(":white_check_mark: | Setting set to false!")
                                             elif choice2 == "info":
                                                 await ctx.channel.send(setting[3])
                                                 choice2 = "choice"
@@ -157,7 +159,7 @@ class rolesCog:
                                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                                                 timeout2 = True
                                                 break
-                                                
+
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
                                 if toeditTrue != []:
@@ -169,7 +171,8 @@ class rolesCog:
                                         query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                                         await self.bot.db.execute(query, role.id)
                             await self.bot.db.release(connection)
-                            await ctx.channel.send(embed = embed2)
+                            print("nyoom")
+                            await ctx.channel.send(embed = embedRole)
 
 
 
