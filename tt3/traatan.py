@@ -43,7 +43,6 @@ async def run():
     pqOverride boolean DEFAULT false,
     pqSetTime boolean DEFAULT false,
     pqJoin boolean DEFAULT true,
-    pqHelp boolean DEFAULT true,
     pqQMHelp boolean DEFAULT false,
     bt boolean DEFAULT true,
     btc boolean DEFAULT true,

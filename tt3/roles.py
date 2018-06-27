@@ -80,6 +80,8 @@ class rolesCog:
                                 await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!role edit again to restart the process.")
                             timeout = True
                         else:
+                            toeditTrue = []
+                            toeditFalse = []
                             choice = msg.content.lower()
                             print(choice)
                             if choice == "admin":
@@ -88,29 +90,76 @@ class rolesCog:
                                     query = "UPDATE Roles SET administrator = true WHERE roleID = $1"
                                     await self.bot.db.execute(query, role.id)
                                 await self.bot.db.release(connection)
-                                await ctx.channel.send("Got it! This role has been set as an administrator. (All commands enabled)")
+                                await ctx.channel.send("Got it! This role has been set as an administrator. (All commands enabled regardless of other settings)")
                             elif choice == "moderator":
-                                connection = await self.bot.db.acquire()
-                                async with connection.transaction():
-                                    query = "UPDATE Roles SET (toggleraid, mute) = true WHERE roleID = $1"
-                                    await self.bot.db.execute(query, role.id)
-                                await self.bot.db.release(connection)
+                                toeditTrue = ["toggleraid, mute"]
                                 await ctx.channel.send("Got it! This role has been set as a moderator. Moderators can mute people and toggle serverwide raid mode.")
                             elif choice == "quizmaster" or choice == "quiz master":
-                                connection = await self.bot.db.acquire()
-                                async with connection.transaction():
-                                    query = "UPDATE Roles SET (pqstart, pqend, pqquestion, pqsuperquestion, pqoverride, pqsettime, pqqmhelp) = true WHERE roleID = $1"
-                                    await self.bot.db.execute(query, role.id)
-                                    query = "UPDATE Roles SET (pqjoin) = false WHERE roleID = $1"
-                                    await self.bot.db.execute(query, role.id)
-                                await self.bot.db.release(connection)
+                                toeditTrue = ["pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqqmhelp"]
+                                toeditFalse = ["pqjoin"]
                                 await ctx.channel.send("Got it! This role has been set as a quizmaster. Quizmasters can use every pub quiz command and are not considered when answers are been recorded.")
-
                             elif choice == "close":
                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
-
+                                break
                             elif choice == "custom":
                                 await ctx.channel.send("blep")
+                                settings = [["Firstly", "pq start", "pqstart", "This command starts the pub quiz section of the bot"],
+                                           ["Next", "pq end", "pqend", "This command ends any active pub quiz on the guild."],
+                                           ["Next", "pq question", "pqquestion", "This command asks a question for everyone when a pub quiz is active."],
+                                           ["Next", "pq superquestion", "pqsuperquestion", "This command asks a super question for everyone when a pub quiz is active."],
+                                           ["Next", "pq override", "pqoverride", "This command allows a user to update other users scores during the pub quiz. This is used in case scores are incorrectly added."],
+                                           ["Next", "pq settime", "pqsettime", "This command allows the user to change the amount of time the bot is open for answers during a pub quiz."],
+                                           ["Next", "pq join", "pqjoin", "This means that users with this role can partake in the pub quiz section of the bot."],
+                                           ["Next", "pq qmhelp", "pqqmhelp", "This command allows user to view the help commands for quizmasters."],
+                                           ["Next", "bluetext", "bt", "This command causes the bot to echo text made of blue emojis."],
+                                           ["Next", "bluetextcode", "btc", "This command makes the bot post the code of text made out of blue emojis."]
+                                           ["Next", "setwelcome", "setwelcomechannel", "This command allows the user to set which channel the bot will post a welcome message too (if enabled)"],
+                                           ["Next", "setwelcometext", "setwelcometext", "This commands allows the user to set the message sent upon a new user joining."],
+                                           ["Next", "setfarewell", "setleavechannel", "This command allows the user to set which channel the bot will post a farewell message too (if enabled)"],
+                                           ["Next", "setfarewelltext", "setleavetext", "This command allows the user to set the message sent upon a user leaving the server."],
+                                           ["Next", "toggleraid", "toggleraid", "This command allows the user to toggle a server wide raid mode (new users are automatically assigned a role and sent a message)"],
+                                           ["Next", "setraidrole", "setraidrole", "Allows the user to set the role that is assigned to new members during raidmode."],
+                                           ["Next", "setraidtext", "setraidtext", "Allows the user to set the text sent to new members during raid mode."],
+                                           ["Next", "mute", "mute", "Allows the user to assign the 'mute' role to the mentioned user."],
+                                           ["Next", "cute", "cute", "Allows the user to call other users cute using bluetext command."],
+                                           ["Finally", "setmuterole", "setmuterole", "Allows the user to set which role should be given to users when the mute command is invoked."]]
+                                options2 = ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no"]
+                                timeout2 = False
+                                for setting in settings:
+                                    choice2 = "choice"
+                                    while choice2.lower() not in options2 and timeout2 == False:
+                                        embed = discord.Embed(title=(setting[0] + " - would you like this role to be able to use the " + setting[1] + " command?"), description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
+                                        await ctx.channel.send(embed=embed)
+                                        try:
+                                            msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
+                                        except asyncio.TimeoutError:
+                                            try:
+                                                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                                            except TypeError:
+                                                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                                            timeout = True
+                                        else:
+                                            choice2 = msg.content.lower()
+                                            if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
+                                                toeditTrue.append(setting[2])
+                                            elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
+                                                toeditFalse.append(setting[2])
+                                            elif choice2 == "info":
+                                                await ctx.channel.send(setting[3])
+                                                choice = "choice"
+                                            elif choice2 == "skip":
+                                                await ctx.channel.send(":white_check_mark: | Setting skipped!")
+                            connection = await self.bot.db.acquire()
+                            async with connection.transaction():
+                                if toeditTrue != []:
+                                    for column in toeditTrue:
+                                        query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
+                                        await self.bot.db.execute(query, role.id)
+                                if toeditFalse != []:
+                                    for column in toeditFalse:
+                                        query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
+                                        await self.bot.db.execute(query, role.id)
+                            await self.bot.db.release(connection)
 
 
 
