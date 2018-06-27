@@ -117,4 +117,4 @@ def setup_options1(ctx):
 
 def roles_options1(ctx):
     print("test")
-    return (ctx.content.lower() in ["admin", "moderator", "quizmaster", "muted", "custom", "close"])and ctx.guild != None
+    return (ctx.content.lower() in ["admin", "moderator", "quizmaster", "muted", "custom", "close", "quiz master"])and ctx.guild != None

@@ -81,6 +81,7 @@ class rolesCog:
                             timeout = True
                         else:
                             choice = msg.content.lower()
+                            print(choice)
                             if choice == "admin":
                                 connection = await self.bot.db.acquire()
                                 async with connection.transaction():
@@ -95,8 +96,7 @@ class rolesCog:
                                     await self.bot.db.execute(query, role.id)
                                 await self.bot.db.release(connection)
                                 await ctx.channel.send("Got it! This role has been set as a moderator. Moderators can mute people and toggle serverwide raid mode.")
-
-                            elif choice == "quizmaster":
+                            elif choice == "quizmaster" or choice == "quiz master":
                                 connection = await self.bot.db.acquire()
                                 async with connection.transaction():
                                     query = "UPDATE Roles SET (pqstart, pqend, pqquestion, pqsuperquestion, pqoverride, pqsettime, pqqmhelp) = true WHERE roleID = $1"
