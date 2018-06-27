@@ -52,7 +52,7 @@ class rolesCog:
             await ctx.channel.send(":white_check_mark: | Role reset to default permissions!")
 
     @roles.command()
-    async def edit(self, ctx, *, roleName):
+    async def setup(self, ctx, *, roleName):
         if not ctx.guild:
             await ctx.author.send(":no_good: | This command can not be used in DM!")
         else:
@@ -134,21 +134,26 @@ class rolesCog:
                                             msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
                                         except asyncio.TimeoutError:
                                             try:
-                                                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                                                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process. Settings **have not** been saved.")
                                             except TypeError:
-                                                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                                                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process. Settings **have not** been saved.")
                                             timeout = True
                                         else:
                                             choice2 = msg.content.lower()
                                             if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
                                                 toeditTrue.append(setting[2])
+                                                await ct
                                             elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
                                                 toeditFalse.append(setting[2])
                                             elif choice2 == "info":
                                                 await ctx.channel.send(setting[3])
-                                                choice = "choice"
+                                                choice2 = "choice"
                                             elif choice2 == "skip":
                                                 await ctx.channel.send(":white_check_mark: | Setting skipped!")
+                                            elif choice2 == "close":
+                                                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                                                timeout2 = True
+                                                break
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
                                 if toeditTrue != []:
