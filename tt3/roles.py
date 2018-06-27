@@ -141,21 +141,26 @@ class rolesCog:
                                         else:
                                             choice2 = msg.content.lower()
                                             if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
+                                                print(choice)
                                                 toeditTrue.append(setting[2])
                                                 embedRole.add_field(name=setting[1], value="enabled", inline=False)
                                                 await ctx.channel.send(":white_check_mark: | This role can now use the" + setting[1] + "command.")
                                                 await ctx.channel.send(":white_check_mark: | Setting set to true!")
                                             elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
+                                                print(choice)
                                                 toeditFalse.append(setting[2])
                                                 embedRole.add_field(name=setting[1], value="disabled", inline=False)
                                                 await ctx.channel.send(":white_check_mark: | Setting set to false!")
                                             elif choice2 == "info":
+                                                print(choice)
                                                 await ctx.channel.send(setting[3])
                                                 choice2 = "choice"
                                             elif choice2 == "skip":
+                                                print(choice)
                                                 embedRole.add_field(name=setting[1], value="skipped", inline=False)
                                                 await ctx.channel.send(":white_check_mark: | Setting skipped!")
                                             elif choice2 == "close":
+                                                print(choice)
                                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                                                 timeout2 = True
                                                 break
