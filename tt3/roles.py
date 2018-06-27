@@ -157,6 +157,7 @@ class rolesCog:
                                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                                                 timeout2 = True
                                                 break
+                                                
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
                                 if toeditTrue != []:
@@ -168,7 +169,7 @@ class rolesCog:
                                         query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                                         await self.bot.db.execute(query, role.id)
                             await self.bot.db.release(connection)
-                            await ctx.channel.send(embed = embed)
+                            await ctx.channel.send(embed = embed2)
 
 
 
