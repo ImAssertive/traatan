@@ -83,6 +83,7 @@ class rolesCog:
                             toeditTrue = []
                             toeditFalse = []
                             choice = msg.content.lower()
+                            embed = discord.Embed(title="Role saved with the following permissions", description = "", colour = self.bot.getcolour())
                             if choice == "admin":
                                 connection = await self.bot.db.acquire()
                                 async with connection.transaction():
@@ -123,15 +124,14 @@ class rolesCog:
                                            ["Finally", "setmuterole", "setmuterole", "Allows the user to set which role should be given to users when the mute command is invoked."]]
                                 options2 = ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no"]
                                 timeout2 = False
-                                print("I made it here")
                                 for counter in range (0,len(settings)):
                                     setting = settings[counter]
                                     choice2 = "choice"
                                     while choice2.lower() not in options2 and timeout2 == False:
-                                        embed = discord.Embed(title=(setting[0] + " - would you like this role to be able to use the " + setting[1] + " command?"), description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
+                                        embed = discord.Embed(title=(setting[0] + " - would you like this role to be able to use the " + setting[1] + " command?"), description="Options: `Yes`, `No`, `Info`, `Skip`, `Close`", colour=self.bot.getcolour())
                                         await ctx.channel.send(embed=embed)
                                         try:
-                                            msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
+                                            msg = await self.bot.wait_for('message', check=checks.roles_options2, timeout=60.0)
                                         except asyncio.TimeoutError:
                                             try:
                                                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process. Settings **have not** been saved.")
@@ -142,13 +142,16 @@ class rolesCog:
                                             choice2 = msg.content.lower()
                                             if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
                                                 toeditTrue.append(setting[2])
-                                                await ct
+                                                embed.add_field(name=setting[1], value="enabled", inline=False)
+                                                await ctx.channel.send(":white_check_mark: | This role can now use the" + setting[1] + "command.")
                                             elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
                                                 toeditFalse.append(setting[2])
+                                                embed.add_field(name=setting[1], value="disabled", inline=False)
                                             elif choice2 == "info":
                                                 await ctx.channel.send(setting[3])
                                                 choice2 = "choice"
                                             elif choice2 == "skip":
+                                                embed.add_field(name=setting[1], value="skipped", inline=False)
                                                 await ctx.channel.send(":white_check_mark: | Setting skipped!")
                                             elif choice2 == "close":
                                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
@@ -165,6 +168,7 @@ class rolesCog:
                                         query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                                         await self.bot.db.execute(query, role.id)
                             await self.bot.db.release(connection)
+                            await ctx.channel.send(embed = embed)
 
 
 
