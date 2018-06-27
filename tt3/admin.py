@@ -219,7 +219,10 @@ class adminCog:
                 if timeout == False:
                     await ctx.channel.send("Thanks! You are all set up.")
 
-
+    @commands.command()
+    @checks.justme()
+    async def restart(self, ctx):
+        sys.exit()
 
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'], hidden = True)
     @checks.justme()
