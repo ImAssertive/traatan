@@ -15,210 +15,50 @@ class adminCog:
         else:
             timeout = False
             choice = "choice"
+            settings = [["Firstly", "Pub Quiz", "pubquizEnabled", "Allows the guild to run a weekly pub quiz complete with custom scoring! For full rules visit NOT DONE YET"],
+                        ["Secondly", "Video Game", "gamesEnabled", "Allows the guild to run a weekly pub quiz complete with custom scoring! For full rules visit NOT DONE YET"],
+                        ["Next", "bluetext", "bluetextEnabled", "Enables a series of commands allowing members to use blue text emotes to construct sentences."],
+                        ["Next", "welcome messages", "welcomeEnabled", "Enables a welcome message when users join the server. This can be set with tt!setwelcome and tt!setwelcometext commands"],
+                        ["Next", "farewell messages", "leaveEnabled", "Enables a farewell message when the user leaves the server. This can be set with tt!setleave and tt!setleavetext commands"],
+                        ["Finally", "admin", "adminEnabled", "Enables the bots administrator commands. For a list of commands please use UNDEFINED"]]
             options = ["info", "yes", "no", "skip"]
             embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!", colour=self.bot.getcolour())
             await ctx.channel.send(embed=embed)
-            while choice.lower() not in options and timeout == False:
-                embed = discord.Embed(title="Firstly - would you like to have pubquiz commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
-                await ctx.channel.send(embed = embed)
-                try:
-                    msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
-                except asyncio.TimeoutError:
-                    try:
-                        await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                    except TypeError:
-                        await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                    timeout = True
-                else:
-                    choice = msg.content
-                    if choice.lower() == "yes":
-                        connection = await self.bot.db.acquire()
-                        async with connection.transaction():
-                            query = "UPDATE Guilds SET pubquizEnabled = true WHERE guildID = $1"
-                            await self.bot.db.execute(query, ctx.guild.id)
-                        await self.bot.db.release(connection)
-                        await ctx.channel.send("Got it! Pubquiz commands have been enabled.")
-                    elif choice.lower() == "no":
-                        connection = await self.bot.db.acquire()
-                        async with connection.transaction():
-                            query = "UPDATE Guilds SET pubquizEnabled = false WHERE guildID = $1"
-                            await self.bot.db.execute(query, ctx.guild.id)
-                        await self.bot.db.release(connection)
-                        await ctx.channel.send("Got it! Pubquiz commands have been disabled.")
-                    elif choice.lower() == "info":
-                        await ctx.channel.send("Info coming soon.")
-                        choice = "choice"
-                    elif choice.lower() == "skip":
-                        await ctx.channel.send("Got it! I've left your pubquiz settings as is!")
-            choice = "choice"
-            while choice.lower() not in options and timeout == False:
-                embed = discord.Embed(title="Next - would you like to have video game commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
-                await ctx.channel.send(embed = embed)
-                try:
-                    msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
-                except asyncio.TimeoutError:
-                    try:
-                        await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                    except TypeError:
-                        await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                    timeout = True
-                else:
-                    choice = msg.content
-                    if choice.lower() == "yes":
-                        connection = await self.bot.db.acquire()
-                        async with connection.transaction():
-                            query = "UPDATE Guilds SET gamesEnabled = true WHERE guildID = $1"
-                            await self.bot.db.execute(query, ctx.guild.id)
-                        await self.bot.db.release(connection)
-                        await ctx.channel.send("Got it! Game commands have been enabled.")
-                    elif choice.lower() == "no":
-                        connection = await self.bot.db.acquire()
-                        async with connection.transaction():
-                            query = "UPDATE Guilds SET gamesEnabled = false WHERE guildID = $1"
-                            await self.bot.db.execute(query, ctx.guild.id)
-                        await self.bot.db.release(connection)
-                        await ctx.channel.send("Got it! games commands have been disabled.")
-                    elif choice.lower() == "info":
-                        await ctx.channel.send("Info coming soon.")
-                        choice = "choice"
-                    elif choice.lower() == "skip":
-                        await ctx.channel.send("Got it! I've left your games settings as is!")
-            choice = "choice"
-            while choice.lower() not in options and timeout == False:
-                embed = discord.Embed(title="Next - would you like to have bluetext commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
-                await ctx.channel.send(embed = embed)
-                try:
-                    msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
-                except asyncio.TimeoutError:
-                    try:
-                        await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                    except TypeError:
-                        await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                    timeout = True
-                else:
-                    choice = msg.content
-                    if choice.lower() == "yes":
-                        connection = await self.bot.db.acquire()
-                        async with connection.transaction():
-                            query = "UPDATE Guilds SET bluetextEnabled = true WHERE guildID = $1"
-                            await self.bot.db.execute(query, ctx.guild.id)
-                        await self.bot.db.release(connection)
-                        await ctx.channel.send("Got it! Bluetext commands have been enabled.")
-                    elif choice.lower() == "no":
-                        connection = await self.bot.db.acquire()
-                        async with connection.transaction():
-                            query = "UPDATE Guilds SET bluetextEnabled = false WHERE guildID = $1"
-                            await self.bot.db.execute(query, ctx.guild.id)
-                        await self.bot.db.release(connection)
-                        await ctx.channel.send("Got it! Bluetext commands have been disabled.")
-                    elif choice.lower() == "info":
-                        await ctx.channel.send("Info coming soon.")
-                        choice = "choice"
-                    elif choice.lower() == "skip":
-                        await ctx.channel.send("Got it! I've left your bluetext settings as is!")
+            for setting in settings:
                 choice = "choice"
                 while choice.lower() not in options and timeout == False:
-                    embed = discord.Embed(title="Next - would you like to have welcome messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
-                    await ctx.channel.send(embed=embed)
+                    embed = discord.Embed(title=(setting[0] + " - would you like to have " + settings[1] + " commands enabled?"), description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
+                    await ctx.channel.send(embed = embed)
                     try:
-                        msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
+                        msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
                     except asyncio.TimeoutError:
                         try:
-                            await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                            await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         except TypeError:
-                            await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                            await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
                         timeout = True
                     else:
                         choice = msg.content
                         if choice.lower() == "yes":
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
-                                query = "UPDATE Guilds SET welcomeEnabled = true WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
+                                query = "UPDATE Guilds SET $1 = true WHERE guildID = $2"
+                                await self.bot.db.execute(query, setting[2], ctx.guild.id)
                             await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! Welcome messages have been enabled. Please use tt!setwelcome to chose the channel to welcome new users!")
+                            await ctx.channel.send("Got it! "+ setting[1] +" commands have been enabled.")
                         elif choice.lower() == "no":
                             connection = await self.bot.db.acquire()
                             async with connection.transaction():
-                                query = "UPDATE Guilds SET adminEnabled = false WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
+                                query = "UPDATE Guilds SET $1 = false WHERE guildID = $2"
+                                await self.bot.db.execute(query, setting[2], ctx.guild.id)
                             await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! Welcome messages have been disabled.")
+                            await ctx.channel.send("Got it! "+ setting[1]+" commands have been disabled.")
                         elif choice.lower() == "info":
-                            await ctx.channel.send("Info coming soon.")
+                            await ctx.channel.send(setting[3])
                             choice = "choice"
                         elif choice.lower() == "skip":
-                            await ctx.channel.send("Got it! I've left your welcome message settings as is!")
-
-                choice = "choice"
-                while choice.lower() not in options and timeout == False:
-                    embed = discord.Embed(title="Next - would you like to have farewell messages enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
-                    await ctx.channel.send(embed=embed)
-                    try:
-                        msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
-                    except asyncio.TimeoutError:
-                        try:
-                            await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        except TypeError:
-                            await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        timeout = True
-                    else:
-                        choice = msg.content
-                        if choice.lower() == "yes":
-                            connection = await self.bot.db.acquire()
-                            async with connection.transaction():
-                                query = "UPDATE Guilds SET leaveEnabled = true WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
-                            await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! Farewell messages have been enabled. Please use tt!setfarewell to chose the channel to welcome new users!")
-                        elif choice.lower() == "no":
-                            connection = await self.bot.db.acquire()
-                            async with connection.transaction():
-                                query = "UPDATE Guilds SET leaveEnabled = false WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
-                            await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! Welcome messages have been disabled.")
-                        elif choice.lower() == "info":
-                            await ctx.channel.send("Info coming soon.")
-                            choice = "choice"
-                        elif choice.lower() == "skip":
-                            await ctx.channel.send("Got it! I've left your farewell message settings as is!")
-
-                choice = "choice"
-                while choice.lower() not in options and timeout == False:
-                    embed = discord.Embed(title="Next - would you like to have admin commands enabled?", description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
-                    await ctx.channel.send(embed=embed)
-                    try:
-                        msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout=60.0)
-                    except asyncio.TimeoutError:
-                        try:
-                            await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        except TypeError:
-                            await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        timeout = True
-                    else:
-                        choice = msg.content
-                        if choice.lower() == "yes":
-                            connection = await self.bot.db.acquire()
-                            async with connection.transaction():
-                                query = "UPDATE Guilds SET adminEnabled = true WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
-                            await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! Admin commands have been enabled.")
-                        elif choice.lower() == "no":
-                            connection = await self.bot.db.acquire()
-                            async with connection.transaction():
-                                query = "UPDATE Guilds SET adminEnabled = false WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
-                            await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! admin commands have been disabled.")
-                        elif choice.lower() == "info":
-                            await ctx.channel.send("Info coming soon.")
-                            choice = "choice"
-                        elif choice.lower() == "skip":
-                            await ctx.channel.send("Got it! I've left your admin command settings as is!")
-                if timeout == False:
-                    await ctx.channel.send("Thanks! You are all set up.")
+                            await ctx.channel.send("Got it! I've left your " + setting[1] + " settings as is!")
+            await ctx.channel.send("Thanks! You are all set up.")
 
     @commands.command(name = "exit", aliases =['quit'], hidden = True)
     @checks.justme()
