@@ -75,9 +75,9 @@ class rolesCog:
                             msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
                         except asyncio.TimeoutError:
                             try:
-                                await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                                await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!role edit again to restart the process.")
                             except TypeError:
-                                await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+                                await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!role edit again to restart the process.")
                             timeout = True
                         else:
                             choice = msg.content.lower()
