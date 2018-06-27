@@ -83,7 +83,6 @@ class rolesCog:
                             toeditTrue = []
                             toeditFalse = []
                             choice = msg.content.lower()
-                            print(choice)
                             if choice == "admin":
                                 connection = await self.bot.db.acquire()
                                 async with connection.transaction():
@@ -102,7 +101,6 @@ class rolesCog:
                                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                                 break
                             elif choice == "custom":
-                                await ctx.channel.send("blep")
                                 settings = [["Firstly", "pq start", "pqstart", "This command starts the pub quiz section of the bot"],
                                            ["Next", "pq end", "pqend", "This command ends any active pub quiz on the guild."],
                                            ["Next", "pq question", "pqquestion", "This command asks a question for everyone when a pub quiz is active."],
@@ -125,7 +123,9 @@ class rolesCog:
                                            ["Finally", "setmuterole", "setmuterole", "Allows the user to set which role should be given to users when the mute command is invoked."]]
                                 options2 = ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no"]
                                 timeout2 = False
-                                for setting in settings:
+                                print("I made it here")
+                                for counter in range (0,len(settings)):
+                                    setting = settings[counter]
                                     choice2 = "choice"
                                     while choice2.lower() not in options2 and timeout2 == False:
                                         embed = discord.Embed(title=(setting[0] + " - would you like this role to be able to use the " + setting[1] + " command?"), description="Options: `Yes`, `No`, `Info`, `Skip`", colour=self.bot.getcolour())
