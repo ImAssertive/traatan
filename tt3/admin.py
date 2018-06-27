@@ -283,6 +283,7 @@ class adminCog:
 
     @commands.command()
     async def gdpr(self, ctx):
+        finished = 0
         while finished == 0:
             try:
                 await ctx.author.send("Here is the data currently stored about you:")
