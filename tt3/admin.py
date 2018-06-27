@@ -26,10 +26,9 @@ class adminCog:
             await ctx.channel.send(embed=embed)
             for setting in settings:
                 print(setting)
-                print(str(setting[1]))
                 choice = "choice"
                 while choice.lower() not in options and timeout == False:
-                    embed = discord.Embed(title=(setting[0] + " - would you like to have " + settings[1] + " commands enabled?"), description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
+                    embed = discord.Embed(title=(setting[0] + " - would you like to have " + setting[1] + " commands enabled?"), description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
                     await ctx.channel.send(embed = embed)
                     try:
                         msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
