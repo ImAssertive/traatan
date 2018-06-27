@@ -137,7 +137,7 @@ class rolesCog:
                                                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process. Settings **have not** been saved.")
                                             except TypeError:
                                                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process. Settings **have not** been saved.")
-                                            timeout = True
+                                            timeout2 = True
                                         else:
                                             choice2 = msg.content.lower()
                                             if choice2 == "enabled" or choice2 == "enable" or choice == "true" or choice == "yes":
