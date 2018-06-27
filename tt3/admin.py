@@ -59,7 +59,8 @@ class adminCog:
                             choice = "choice"
                         elif choice.lower() == "skip":
                             await ctx.channel.send("Got it! I've left your " + setting[1] + " settings as is!")
-            await ctx.channel.send("Thanks! You are all set up.")
+            if timeout == False:
+                await ctx.channel.send("Thanks! You are all set up.")
 
     @commands.command(name = "exit", aliases =['quit'], hidden = True)
     @checks.justme()
