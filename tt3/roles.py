@@ -5,7 +5,7 @@ class rolesCog:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.group(pass_context=True)
+    @commands.group(pass_context=True, aliases=["role"])
     async def roles(self, ctx):
         if ctx.invoked_subcommand is None:
             await ctx.channel.send(":no_good: | Please enter a valid command. For a list of commands use: tt!roles help")
@@ -13,8 +13,16 @@ class rolesCog:
     @roles.command()
     async def add(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
-        print(role)
-        print(role.mention)
+        if role is None:
+            await ctx.channel.send("Role not found. Did you make an error?")
+        else:
+            connection = await
+            self.bot.db.acquire()
+            async with connection.transaction():
+                query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+                await self.bot.db.execute(query, role.id, ctx.guild.id)
+            await self.bot.db.release(connection)
+            await ctx.channel.send(":white_check_mark: | Role added!")
 
     @roles.command()
     @checks.is_not_banned()
