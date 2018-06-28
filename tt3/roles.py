@@ -147,12 +147,12 @@ class rolesCog:
                                             if choice2 == "enabled" or choice2 == "enable" or choice2 == "true" or choice2 == "yes":
                                                 print(choice)
                                                 toeditTrue.append(setting[2])
-                                                embedRole.add_field(name=setting[1], value="enabled", inline=False)
+                                                embedRole.add_field(name=setting[1], value="enabled")
                                                 await ctx.channel.send(":white_check_mark: | This role can now use the " + setting[1] + " command.")
                                             elif choice2 == "disabled" or choice2 == "disable" or choice2 == "false" or choice2 == "no":
                                                 print(choice)
                                                 toeditFalse.append(setting[2])
-                                                embedRole.add_field(name=setting[1], value="disabled", inline=False)
+                                                embedRole.add_field(name=setting[1], value="disabled")
                                                 await ctx.channel.send(":white_check_mark: | This role can no longer use the " + setting[1] + " command.")
                                             elif choice2 == "info":
                                                 print(choice)
@@ -160,7 +160,7 @@ class rolesCog:
                                                 choice2 = "choice"
                                             elif choice2 == "skip":
                                                 print(choice)
-                                                embedRole.add_field(name=setting[1], value="skipped", inline=False)
+                                                embedRole.add_field(name=setting[1], value="skipped")
                                                 await ctx.channel.send(":white_check_mark: | Setting skipped!")
                                             elif choice2 == "close":
                                                 print(choice)
@@ -180,10 +180,12 @@ class rolesCog:
                                         query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                                         await self.bot.db.execute(query, role.id)
                             await self.bot.db.release(connection)
-                            print("nyoom")
                             if timeout2 == False or displayMessage == True:
+                                embedRole.add_field(name="For a full list of this roles permissions please use tt!role view rolename.", value="", inline=Truez)
                                 await ctx.channel.send(embed = embedRole)
-
+    @roles.command()
+    async def view(self, ctx, *, roleName):
+        await ctx.channel.send("coming soon")
 
 
     @roles.command()

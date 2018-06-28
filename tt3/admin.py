@@ -182,5 +182,10 @@ class adminCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
+
+    @commands.command()
+    async def help(self, ctx):
+        await ctx.channel.send("Under construction!")
+        
 def setup(bot):
     bot.add_cog(adminCog(bot))
