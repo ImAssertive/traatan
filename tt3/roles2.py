@@ -10,9 +10,7 @@ class rolesCog:
         if ctx.invoked_subcommand is None:
             await ctx.channel.send(":no_entry: | Please enter a valid command. For a list of commands use: tt!roles help")
 
-    async def rolesMainMenu(self, ctx, menuMessage, role):
-        menu = menuMessage
-        roleName = role
+    async def rolesMainMenu(self, ctx, menuMessage, roleName):
         embed = discord.Embed(title="Role " + roleName + " loaded! Which Permissions would you like to edit?", description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
         await menu.edit(embed=embed)
 
@@ -33,11 +31,11 @@ class rolesCog:
 
 
             embed = discord.Embed(title="Menu Loading", description="Please stand by.", colour=self.bot.getcolour())
-            menu = await ctx.channel.send(embed = embed)
+            menuMessage = await ctx.channel.send(embed = embed)
             emojis = useful.getMenuEmoji(5)
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji][1])
-            await self.rolesMainMenu(ctx, menu, roleName)
+            #await self.rolesMainMenu(ctx, menuMessage, roleName)
 
     @roles.command()
     async def view(self, ctx, *, roleName):
