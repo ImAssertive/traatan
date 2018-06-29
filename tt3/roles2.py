@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, inflect, useful, emoji
+import discord, asyncio, sys, traceback, checks, inflect, useful
 from discord.ext import commands
 
 class rolesCog:
