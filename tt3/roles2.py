@@ -32,7 +32,7 @@ class rolesCog:
 
 
             embed = discord.Embed(title="Menu Loading", description="Please stand by.", colour=self.bot.getcolour())
-            menuMessage = await ctx.channel.send(embed = embed)
+            menu = await ctx.channel.send(embed = embed)
             emojis = useful.getMenuEmoji(5)
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji][1])
