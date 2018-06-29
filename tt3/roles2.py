@@ -30,9 +30,10 @@ class rolesCog:
             except TypeError:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
         else:
-            nextMenuOptions = {"1": "await self.test(ctx)"}
-            print(nextMenuOptions[str(options.index(str(reaction.emoji))+1)])
-            eval(nextMenuOptions[str(options.index(str(reaction.emoji))+1)])
+            await self.test(ctx)
+            # nextMenuOptions = {"1": "await self.test(ctx)"}
+            # print(nextMenuOptions[str(options.index(str(reaction.emoji))+1)])
+            # eval(nextMenuOptions[str(options.index(str(reaction.emoji))+1)])
 
 
     @roles.command(name="editrole", aliases=["edit"])
