@@ -25,9 +25,9 @@ class rolesCog:
                     query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
                     await self.bot.db.execute(query, role.id, ctx.guild.id)
                 await self.bot.db.release(connection)
-            embed = discord.Embed(title="Role "+ roleName + " loaded! Which Permissions would you like to edit?", description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level", colour=self.bot.getcolour())
-            menu = await ctx.channel.send(embed = embed)
-            emojis = useful.getMenuEmoji(5  )
+            menuEmbed = discord.Embed(title="Role "+ roleName + " loaded! Which Permissions would you like to edit?", description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level\n❌: Closes Menu", colour=self.bot.getcolour())
+            menu = await ctx.channel.send(embed = menuEmbed)
+            emojis = useful.getMenuEmoji(5)
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji][1])
 
