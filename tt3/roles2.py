@@ -29,7 +29,7 @@ class rolesCog:
             menu = await ctx.channel.send(embed = embed)
             emojis = useful.getMenuEmoji()
             for emoji in range(0,len(emojis)):
-                menu.add_reaction('\U000026D4')
+                await menu.add_reaction(emojis[emoji][1])
 
     @roles.command()
     async def view(self, ctx, *, roleName):
