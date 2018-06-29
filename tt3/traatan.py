@@ -109,5 +109,15 @@ class Bot(commands.Bot):
         if self.currentColour ==  len(colours) - 1:
             self.currentColour = 0
         return discord.Colour(int(colours[self.currentColour], 16))
+
+    def conchcolour(self, number):
+        if number < 10 and number > -1:
+            return discord.Colour(int("00FF00", 16))
+        elif number > 9 and number < 15:
+            return discord.Colour(int("FFFF00", 16))
+        else:
+            return discord.Colour(int("FF0000", 16))
+
+
 loop = asyncio.get_event_loop()
 loop.run_until_complete(run())

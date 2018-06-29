@@ -69,7 +69,7 @@ class miscCog:
                     "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
         randomNumber = random.randint(0,19)
         toOutput = ("**" ctx.author.name + "** | The conch says:")
-        embed = discord.Embed(colour=self.bot.getcolour())
+        embed = discord.Embed(colour=self.bot.conchcolour(randomNumber))
         embed.add_field(name=toOutput, value = outcomes[randomNumber])
         embed.set_thumbnail("https://media1.tenor.com/images/0181e2d7787313c7de0b8acab72dde7f/tenor.gif?itemid=3541653")
         embed.set_footer(text="THE SHELL HAS SPOKEN")
