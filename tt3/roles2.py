@@ -31,7 +31,7 @@ class rolesCog:
             print(emojis)
             print(len(emojis))
             for emoji in range(0,len(emojis)):
-                print(emojis[emoji])
+                print(emojis[emoji][1])
                 print("made it here")
                 menu.add_reaction(emojis[emoji][1])
 
