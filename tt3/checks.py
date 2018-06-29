@@ -122,9 +122,5 @@ def roles_options2(ctx):
     print (ctx.content.lower() in ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no", "close"]) and ctx.guild != None
     return (ctx.content.lower() in ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no", "close"]) and ctx.guild != None
 
-def roles_emojis1(reaction, user):
-    try:
-        print(ctx)
-    except:
-        print("error")
-    return user == ctx.author and (str(reaction.emoji) in ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3", "8\u20e3", "9\u20e3", "\U0001f51f"])
+def roles_emojis1(reaction):
+    return (str(reaction.emoji) in ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3", "8\u20e3", "9\u20e3", "\U0001f51f"])
