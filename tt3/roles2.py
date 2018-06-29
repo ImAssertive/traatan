@@ -19,10 +19,9 @@ class rolesCog:
             try:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
             except TypeError:
-                await tx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
-            else:
-                print(str(react.emoji))
-                print(react)
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+        else:
+            print(str(reaction.emoji))
 
     @roles.command(name="editrole", aliases=["edit"])
     async def editrole(self, ctx, *, roleName):
