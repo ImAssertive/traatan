@@ -26,7 +26,7 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
         else:
             print(reaction)
-            print(options.index(reaction))
+            print(options.index(str(reaction.emoji)))
 
 
     @roles.command(name="editrole", aliases=["edit"])
