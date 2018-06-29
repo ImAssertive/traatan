@@ -34,10 +34,8 @@ class rolesCog:
             emojis = useful.getMenuEmoji(5)
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji][1])
-            try:
-                self.test(ctx)
-            except:
-                await self.test(ctx)
+
+            await self.test(ctx)
 
     @roles.command()
     async def view(self, ctx, *, roleName):
