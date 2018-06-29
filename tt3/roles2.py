@@ -29,8 +29,10 @@ class rolesCog:
             menu = await ctx.channel.send(embed = embed)
             emojis = useful.getMenuEmoji()
             print(emojis)
+            print(len(emojis))
             for emoji in range(0,len(emojis)):
                 print(emojis[emoji])
+                print("made it here")
                 menu.add_reaction(emojis[emoji][1])
 
     @roles.command()
