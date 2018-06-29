@@ -124,5 +124,5 @@ def roles_options2(ctx):
 
 def roles_emojis1(ctx, reaction):
     print(reaction)
-    print(reaction == ctx.author)
+    print(ctx)
     return str(ctx.emoji) in ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3", "8\u20e3", "9\u20e3", "\U0001f51f"]
