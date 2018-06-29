@@ -11,8 +11,18 @@ class rolesCog:
             await ctx.channel.send(":no_entry: | Please enter a valid command. For a list of commands use: tt!roles help")
 
     async def rolesMainMenu(self, ctx, menu, roleName):
-        embed = discord.Embed(title="Role " + roleName + " loaded! Which Permissions would you like to edit?", description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Role "' + roleName + '"loaded. Which Permissions would you like to edit?'', description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
         await menu.edit(embed=embed)
+        try:
+            react = await self.bot.wait_for('reaction_add', check=checks.roles_emojis1, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            except TypeError:
+                await tx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            else:
+                print(str(reaction.emoji))
+                print(react)
 
     @roles.command(name="editrole", aliases=["edit"])
     async def editrole(self, ctx, *, roleName):
@@ -33,7 +43,7 @@ class rolesCog:
             menu = await ctx.channel.send(embed = embed)
             emojis = useful.getMenuEmoji(5)
             for emoji in range(0,len(emojis)):
-                await menu.add_reaction(emojis[emoji][1])
+                await menu.add_reaction(emojis[emoji])
             await self.rolesMainMenu(ctx, menu, roleName)
 
     @roles.command()
