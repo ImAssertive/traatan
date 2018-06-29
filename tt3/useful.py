@@ -6,5 +6,5 @@ def formatText(ctx, text):
     return text.replace("%user%", ctx.mention)
 
 def getMenuEmoji():
-    emojis = [["one", "1️"],["no_entry", "⛔"]]
+    emojis = [["one", "1️⃣"],["no_entry", "⛔"]]
     return emojis
