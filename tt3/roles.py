@@ -51,6 +51,10 @@ class rolesCog:
             await self.bot.db.release(connection)
             await ctx.channel.send(":white_check_mark: | Role reset to default permissions!")
 
+    @commands.command()
+    async def roleadd(self, ctx, *, roleName):
+        await add(self, ctx, *, roleName)
+
     @roles.command()
     async def setup(self, ctx, *, roleName):
         if not ctx.guild:
