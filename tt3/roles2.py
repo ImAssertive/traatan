@@ -34,7 +34,7 @@ class rolesCog:
             emojis = useful.getMenuEmoji(5)
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji][1])
-            #await self.rolesMainMenu(ctx, menu, roleName)
+            await self.rolesMainMenu(ctx, menu, roleName)
 
     @roles.command()
     async def view(self, ctx, *, roleName):
