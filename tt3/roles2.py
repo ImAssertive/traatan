@@ -14,7 +14,7 @@ class rolesCog:
         embed = discord.Embed(title='Role "' + roleName + '"loaded. Which Permissions would you like to edit?', description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
         await menu.edit(embed=embed)
         try:
-            react = await self.bot.wait_for('reaction_add', check=checks.roles_emojis1, timeout=60.0)
+            reaction, user = await self.bot.wait_for('reaction_add', check=checks.roles_emojis1, timeout=60.0)
         except asyncio.TimeoutError:
             try:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
