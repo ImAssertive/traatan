@@ -73,6 +73,7 @@ class miscCog:
         embed.add_field(name=toOutput, value = outcomes[randomNumber])
         embed.set_thumbnail("https://media1.tenor.com/images/0181e2d7787313c7de0b8acab72dde7f/tenor.gif?itemid=3541653")
         embed.set_footer(text="THE SHELL HAS SPOKEN")
+        await ctx.channel.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(miscCog(bot))
