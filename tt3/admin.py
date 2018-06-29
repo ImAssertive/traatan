@@ -66,6 +66,8 @@ class adminCog:
     @checks.justme()
     async def exit(self, ctx):
         await ctx.channel.send(":wave: Goodbye.")
+        await db.close()
+        await bot.logout()
         sys.exit()
 
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'], hidden = True)
