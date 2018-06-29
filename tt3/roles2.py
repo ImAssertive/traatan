@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, inflect, useful
+import discord, asyncio, sys, traceback, checks, inflect, useful, emoji
 from discord.ext import commands
 
 class rolesCog:
@@ -25,9 +25,11 @@ class rolesCog:
                     query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
                     await self.bot.db.execute(query, role.id, ctx.guild.id)
                 await self.bot.db.release(connection)
-            embed = discord.Embed(title="Role "+ roleName + " loaded! Which Permissions would you like to edit?", description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n 4: Miscellaneous\n 5: Set role to preset permission level", colour=self.bot.getcolour())
-            test = await ctx.channel.send(embed = embed)
-            print(test)
+            embed = discord.Embed(title="Role "+ roleName + " loaded! Which Permissions would you like to edit?", description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level", colour=self.bot.getcolour())
+            menu = await ctx.channel.send(embed = embed)
+            emojis = useful.getMenuEmoji()
+            for emoji in emojis:
+                self.bot.add_reaction(menu, emoji=emojis[emoji])
 
     @roles.command()
     async def view(self, ctx, *, roleName):
