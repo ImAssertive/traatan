@@ -68,11 +68,11 @@ class miscCog:
                     "Cannot predict now", "Concentrate and ask again", "Don't count on it",
                     "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
         randomNumber = random.randint(0,19)
-        toOutput = ("**" +ctx.author.name + "** | The conch says:")
+        conchName = ("**" +ctx.author.name + "** | The conch says:")
+        conchValue = ('"'+outcomes[randomNumber]+ '."')
         embed = discord.Embed(colour=self.bot.conchcolour(randomNumber))
-        embed.add_field(name=toOutput, value = outcomes[randomNumber])
-        conchURL = "https://media1.tenor.com/images/0181e2d7787313c7de0b8acab72dde7f/tenor.gif?itemid=3541653"
-        embed.set_image(url=conchURL)
+        embed.add_field(name=conchName, value = conchValue)
+        embed.set_image(url="https://media1.tenor.com/images/0181e2d7787313c7de0b8acab72dde7f/tenor.gif?itemid=3541653")
         embed.set_footer(text="THE SHELL HAS SPOKEN")
         await ctx.channel.send(embed = embed)
 
