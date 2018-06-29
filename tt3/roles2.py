@@ -18,7 +18,7 @@ class rolesCog:
             return (user == ctx.author) and (str(reaction.emoji) in ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f"])
 
         try:
-            reaction = await self.bot.wait_for('reaction_add', check=roles_emojis1, timeout=60.0)
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis1, timeout=60.0)
         except asyncio.TimeoutError:
             try:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
