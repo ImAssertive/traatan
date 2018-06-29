@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, inflect, useful
+import discord, asyncio, sys, traceback, checks, inflect, useful, random
 from discord.ext import commands
 
 class miscCog:
@@ -60,6 +60,19 @@ class miscCog:
         else:
             await ctx.channel.send(":white_check_mark: | No longer hiding bluetext commands!")
 
+    @commands.command()
+    async def conch(self, ctx):
+        outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely", "You may rely on it",
+                    "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes",
+                    "Reply hazy, try again", "Ask again later", "Better not tell you now",
+                    "Cannot predict now", "Concentrate and ask again", "Don't count on it",
+                    "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
+        randomNumber = random.randint(0,19)
+        toOutput = ("**" ctx.author.name + "** | The conch says:")
+        embed = discord.Embed(colour=self.bot.getcolour())
+        embed.add_field(name=toOutput, value = outcomes[randomNumber])
+        embed.set_thumbnail("https://media1.tenor.com/images/0181e2d7787313c7de0b8acab72dde7f/tenor.gif?itemid=3541653")
+        embed.set_footer(text="THE SHELL HAS SPOKEN")
 
 def setup(bot):
     bot.add_cog(miscCog(bot))
