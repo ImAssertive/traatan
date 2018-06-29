@@ -9,7 +9,7 @@ class rolesCog:
     async def test(self, ctx):
         await ctx.channel.send("test")
 
-    
+
     @commands.group(pass_context=True, aliases=["role"])
     async def roles(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -32,7 +32,7 @@ class rolesCog:
         else:
             nextMenuOptions = {"1": "await test(ctx)"}
             print(options.index(str(reaction.emoji)))
-            eval(nextMenuOptions[options.index(str(reaction.emoji))+1])
+            eval(nextMenuOptions[str(options.index(str(reaction.emoji))+1)])
 
 
     @roles.command(name="editrole", aliases=["edit"])
