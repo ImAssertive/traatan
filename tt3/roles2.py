@@ -10,7 +10,7 @@ class rolesCog:
         if ctx.invoked_subcommand is None:
             await ctx.channel.send(":no_entry: | Please enter a valid command. For a list of commands use: tt!roles help")
 
-    async def test(self, ctx):
+    def test(self, ctx):
         await ctx.channel.send("test")
 
     @roles.command(name="editrole", aliases=["edit"])
@@ -35,7 +35,7 @@ class rolesCog:
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji][1])
 
-            await self.test(ctx)
+            self.test(ctx)
 
     @roles.command()
     async def view(self, ctx, *, roleName):
