@@ -28,8 +28,9 @@ class rolesCog:
             embed = discord.Embed(title="Role "+ roleName + " loaded! Which Permissions would you like to edit?", description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level", colour=self.bot.getcolour())
             menu = await ctx.channel.send(embed = embed)
             emojis = useful.getMenuEmoji()
-            for emoji in emojis:
-                menu.add_reaction(emojis[emoji])
+            for emoji in range(0,len(emojis)):
+                print(emojis[emoji])
+                menu.add_reaction(emojis[emoji][1])
 
     @roles.command()
     async def view(self, ctx, *, roleName):
