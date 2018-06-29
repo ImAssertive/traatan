@@ -5,6 +5,11 @@ class rolesCog:
     def __init__(self, bot):
         self.bot = bot
 
+
+    async def test(self, ctx):
+        await ctx.channel.send("test")
+
+    
     @commands.group(pass_context=True, aliases=["role"])
     async def roles(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -25,8 +30,9 @@ class rolesCog:
             except TypeError:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
         else:
-            print(reaction)
+            nextMenuOptions = {"1": "await test(ctx)"}
             print(options.index(str(reaction.emoji)))
+            eval(nextMenuOptions[options.index(str(reaction.emoji))+1])
 
 
     @roles.command(name="editrole", aliases=["edit"])
