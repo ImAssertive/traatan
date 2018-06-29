@@ -23,6 +23,7 @@ class rolesCog:
         else:
             print(reaction)
             reaction = reaction[0]
+            print(reaction)
 
 
     @roles.command(name="editrole", aliases=["edit"])
