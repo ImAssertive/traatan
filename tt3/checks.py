@@ -112,15 +112,3 @@ def games_enabled():
         return False
     return commands.check(predicate)
 
-def setup_options1(ctx):
-    return (ctx.content.lower() in ["info", "yes", "no", "skip"]) and ctx.guild != None
-
-def roles_options1(ctx):
-    return (ctx.content.lower() in ["admin", "moderator", "quizmaster", "muted", "custom", "close", "quiz master"]) and ctx.guild != None
-
-def roles_options2(ctx):
-    print (ctx.content.lower() in ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no", "close"]) and ctx.guild != None
-    return (ctx.content.lower() in ["enabled", "disabled", "enable", "disable", "true", "false", "info", "skip", "yes", "no", "close"]) and ctx.guild != None
-
-def roles_emojis1(ctx, reaction):
-    return str(ctx.emoji) in ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3", "8\u20e3", "9\u20e3", "\U0001f51f"]

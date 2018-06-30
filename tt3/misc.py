@@ -60,7 +60,7 @@ class miscCog:
         else:
             await ctx.channel.send(":white_check_mark: | No longer hiding bluetext commands!")
 
-    @commands.command()
+    @commands.command(name="conch", aliases=['shell'])
     async def conch(self, ctx):
         outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely", "You may rely on it",
                     "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes",

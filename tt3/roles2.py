@@ -30,24 +30,36 @@ class rolesCog:
             except TypeError:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
         else:
+            await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "1\u20e3":
-                #await menu.remove_reaction(reaction, user)
-                await menu.remove_reaction(reaction.emoji, user)
-                #await menu.remove_reaction(str(reaction.emoji), user)
-                print("test")
+                await self.rolesAdminMenu(ctx, menu, roleName)
             elif str(reaction.emoji) == "2\u20e3":
-                print("te")
+                await self.rolesModMenu(ctx, menu, roleName)
             elif str(reaction.emoji) == "3\u20e3":
-                print("q")
+                await self.rolesPubQuizMenu(ctx, menu, roleName)
             elif str(reaction.emoji) == "4\u20e3":
-                print("q")
+                await self.rolesMiscMenu(ctx, menu, roleName)
             elif str(reaction.emoji) == "5\u20e3":
-                print("q")
+                await self.rolesPresetMenu(ctx, menu, roleName)
             elif str(reaction.emoji) == "\U0001f51f":
-                print("q")
+                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
 
+    async def rolesAdminMenu(self, ctx, menu, roleName):
+        print("wew")
 
+    async def rolesModMenu(self, ctx, menu, roleName):
+        print("wew")
 
+    async def rolesPubQuizMenu(self, ctx, menu, roleName):
+        print("wew")
+
+    async def rolesMiscMenu(self, ctx, menu, roleName):
+        print("wew")
+
+    async def rolesPresetMenu(self, ctx, menu, roleName):
+        print("wew")
+    
     @roles.command(name="editrole", aliases=["edit"])
     async def editrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
