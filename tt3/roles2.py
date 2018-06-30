@@ -20,11 +20,11 @@ class rolesCog:
         await menu.edit(embed=embed)
         #options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f", "❌"]
         options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "❌"]
-        def roles_emojis1(reaction, user):
+        def roles_emojis_main_menu(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
 
         try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis1, timeout=60.0)
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis_main_menu, timeout=60.0)
         except asyncio.TimeoutError:
             try:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
@@ -47,7 +47,31 @@ class rolesCog:
                 await menu.delete()
 
     async def rolesAdminMenu(self, ctx, menu, roleName):
-        print("wew")
+        embed = discord.Embed(title='Role "' + roleName + '"loaded. Admin permission options', description="The administrator permission allows the role to access all bot commands regardless of other permission levels.\n\nOptions:\n1: Enable\n2: Disable\n3: Back\nx: Closes Menu", colour=self.bot.getcolour())
+        await menu.edit(embed=embed)
+        options = ["1\u20e3", "2\u20e3", "3\u20e3", "❌"]
+        def roles_emojis_admin_menu(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojisadmin_menu, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+        else:
+            if str(reaction.emoji) == "1\u20e3":
+                print("mew")
+            elif str(reaction.emoji) == "2\u20e3":
+                print("mew")
+            elif str(reaction.emoji) == "3\u20e3":
+                await self.rolesMainMenu(ctx, menu, roleName)
+            elif str(reaction.emoji) == "❌":
+                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+
+
 
     async def rolesModMenu(self, ctx, menu, roleName):
         print("wew")
