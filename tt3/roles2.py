@@ -31,7 +31,8 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
         else:
             if str(reaction.emoji) == "1\u20e3":
-                print("test ")
+                await menue.remove_reaction(reaction.emoji, user)
+                print("test")
             elif str(reaction.emoji) == "2\u20e3":
                 print("te")
             elif str(reaction.emoji) == "3\u20e3":
