@@ -18,7 +18,8 @@ class rolesCog:
     async def rolesMainMenu(self, ctx, menu, roleName):
         embed = discord.Embed(title='Role "' + roleName + '"loaded. Which Permissions would you like to edit?', description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
         await menu.edit(embed=embed)
-        options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f"]
+        #options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f", "❌"]
+        options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "❌"]
         def roles_emojis1(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
 
@@ -41,7 +42,7 @@ class rolesCog:
                 await self.rolesMiscMenu(ctx, menu, roleName)
             elif str(reaction.emoji) == "5\u20e3":
                 await self.rolesPresetMenu(ctx, menu, roleName)
-            elif str(reaction.emoji) == "\U0001f51f":
+            elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
@@ -77,7 +78,7 @@ class rolesCog:
 
             embed = discord.Embed(title="Menu Loading...", description="Please stand by.", colour=self.bot.getcolour())
             menu = await ctx.channel.send(embed = embed)
-            emojis = useful.getMenuEmoji(5)
+            emojis = useful.getMenuEmoji(10)
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji])
             await self.rolesMainMenu(ctx, menu, roleName)
