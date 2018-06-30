@@ -32,9 +32,17 @@ class rolesCog:
         else:
             if str(reaction.emoji) == "1\u20e3":
                 print("test ")
-            # nextMenuOptions = {"1": 'await self.test(ctx)'}
-            # print(nextMenuOptions[str(options.index(str(reaction.emoji))+1)])
-            # eval(nextMenuOptions[str(options.index(str(reaction.emoji))+1)])
+            elif str(reaction.emoji) == "2\u20e3":
+                print("te")
+            elif str(reaction.emoji) == "3\u20e3":
+                print("q")
+            elif str(reaction.emoji) == "4\u20e3":
+                print("q")
+            elif str(reaction.emoji) == "5\u20e3":
+                print("q")
+            elif str(reaction.emoji) == "\U0001f51f":
+                print("q")
+
 
 
     @roles.command(name="editrole", aliases=["edit"])
@@ -52,7 +60,7 @@ class rolesCog:
                     await self.bot.db.execute(query, role.id, ctx.guild.id)
                 await self.bot.db.release(connection)
 
-            embed = discord.Embed(title="Menu Loading", description="Please stand by.", colour=self.bot.getcolour())
+            embed = discord.Embed(title="Menu Loading...", description="Please stand by.", colour=self.bot.getcolour())
             menu = await ctx.channel.send(embed = embed)
             emojis = useful.getMenuEmoji(5)
             for emoji in range(0,len(emojis)):
