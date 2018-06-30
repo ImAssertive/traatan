@@ -54,7 +54,7 @@ class rolesCog:
             return (user == ctx.author) and (str(reaction.emoji) in options)
 
         try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojisadmin_menu, timeout=60.0)
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis_admin_menu, timeout=60.0)
         except asyncio.TimeoutError:
             try:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
