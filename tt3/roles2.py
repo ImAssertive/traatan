@@ -20,7 +20,7 @@ class rolesCog:
         embed.set_footer(text="Current role: "+ role.name +"  ID: "+ str(role.id))
         await menu.edit(embed=embed)
         #options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f", "❌"]
-        options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "❌"]
+        options = ["0\u20e3", "1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "❌"]
         def roles_emojis_main_menu(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
 
