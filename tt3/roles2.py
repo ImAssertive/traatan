@@ -435,7 +435,7 @@ class rolesCog:
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolePresetDefault(ctx, menu, role)
 
-            elif str(reaction.emoji) == "4\u20e3":
+            elif str(reaction.emoji) == "3\u20e3":
                 await self.roleQuizMaster(ctx, menu, role)
 
             elif str(reaction.emoji) == "5\u20e3":
