@@ -60,12 +60,16 @@ class rolesCog:
         else:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
-                print("mew")
+                toeditTrue = ["administrator"]
+                toeditFalse = []
+                await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                await ctx.channel.send(':white_check_mark: | Administrator permission granted to role `'+role.name+'`')
+                await self.rolesAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
                 toeditTrue = []
                 toeditFalse = ["administrator"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                await ctx.channel.send(':white_check_mark: | Administrator permission removed from `'+role.name+'`')
+                await ctx.channel.send(':white_check_mark: | Administrator permission removed from role `'+role.name+'`')
                 await self.rolesAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
