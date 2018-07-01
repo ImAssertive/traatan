@@ -74,9 +74,9 @@ class miscCog:
         @commands.command(name="eightball", aliases=['8ball'])
         async def eightball(self, ctx):
             randomNumber = random.randint(0, 19)
-            8ballName = ("**" + ctx.author.name + "** | The 8ball says:")
-            8ballValue = ('"' + self.bot.outcomes[randomNumber] + '."')
-            await ctx.channel.send(":8ball: | "+8ballName + " " + 8ballValue)
+            eightballName = ("**" + ctx.author.name + "** | The 8ball says:")
+            eightballValue = ('"' + self.bot.outcomes[randomNumber] + '."')
+            await ctx.channel.send(":8ball: | "+eightballName + " " + eightballValue)
 
 def setup(bot):
     bot.add_cog(miscCog(bot))
