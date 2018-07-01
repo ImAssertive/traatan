@@ -32,6 +32,7 @@ class rolesCog:
             if str(reaction.emoji) == "0\u20e3":
                 await self.roleAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
+                print("wew")
                 #await self.rolesNSFWMenu(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolesPubQuizMenu(ctx, menu, role)
