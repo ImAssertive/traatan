@@ -285,6 +285,7 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
             await menu.delete()
         else:
+            await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
                 permissionToEdit = "pqjoin"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
