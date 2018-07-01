@@ -73,7 +73,7 @@ class rolesCog:
                 await ctx.channel.send(':white_check_mark: | Administrator permission removed from role `'+role.name+'`')
                 await self.roleAdminCommand(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
-                await self.rolesAdminMenu(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
