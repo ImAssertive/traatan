@@ -94,7 +94,7 @@ class rolesCog:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditFalse = ', '.join(toeditFalse)
-                await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + (toeditFalse, end=" "))
+                await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + toeditFalse)
 
         await ctx.channel.send(embed=embed)
         await self.bot.db.release(connection)
