@@ -5,19 +5,6 @@ class rolesCog:
     def __init__(self, bot):
         self.bot = bot
 
-    async def editRolePermissions(self, ctx, menu, role, toeditTrue, toeditFalse):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            if toeditTrue != []:
-                for column in toeditTrue:
-                    query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
-                    await self.bot.db.execute(query, role.id)
-            if toeditFalse != []:
-                for column in toeditFalse:
-                    query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
-                    await self.bot.db.execute(query, role.id)
-        await self.bot.db.release(connection)
-
     @commands.group(pass_context=True, aliases=["role"])
     async def roles(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -77,7 +64,7 @@ class rolesCog:
             elif str(reaction.emoji) == "1\u20e3":
                 toeditTrue = []
                 toeditFalse = ["administrator"]
-                await editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 confirmation = await ctx.channel.send(':white_check_mark | Administrator permission removed from "'+role.name+'"')
                 await self.rolesAdminMenu(ctx, menu, role)
                 await asyncio.sleep(1)
@@ -88,7 +75,18 @@ class rolesCog:
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
-
+    async def editRolePermissions(self, ctx, menu, role, toeditTrue, toeditFalse):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            if toeditTrue != []:
+                for column in toeditTrue:
+                    query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
+                    await self.bot.db.execute(query, role.id)
+            if toeditFalse != []:
+                for column in toeditFalse:
+                    query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
+                    await self.bot.db.execute(query, role.id)
+        await self.bot.db.release(connection)
 
     async def rolesModMenu(self, ctx, menu, role):
         print("wew")
