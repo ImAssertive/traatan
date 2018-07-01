@@ -17,7 +17,7 @@ class rolesCog:
 
     async def rolesMainMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Role Permission Main Menu', description="Options:\n0: Admin\n1: Moderation\n2: Pub Quiz\n3: Miscellaneous\n4: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Current role: "+ role.name +"  ID: "+ role.id)
+        embed.set_footer(text="Current role: "+ role.name +"  ID: "+ str(role.id))
         await menu.edit(embed=embed)
         #options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f", "❌"]
         options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "❌"]
@@ -49,7 +49,7 @@ class rolesCog:
 
     async def rolesAdminMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Admin Permission options', description="The administrator permission allows the role to access all bot commands regardless of other permission levels.\n\nOptions:\n0: Enable\n1: Disable\n2: Back\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Current role: "+ role.name + "  ID: "+ role.id)
+        embed.set_footer(text="Current role: "+ role.name + "  ID: "+ str(role.id))
         await menu.edit(embed=embed)
         options = ["0\u20e3", "1\u20e3", "2\u20e3", "❌"]
         def roles_emojis_admin_menu(reaction, user):
