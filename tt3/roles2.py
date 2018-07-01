@@ -95,8 +95,6 @@ class rolesCog:
                     await self.bot.db.execute(query, role.id)
                 toeditFalse = ', '.join(toeditFalse)
                 await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + toeditFalse)
-
-        await ctx.channel.send(embed=embed)
         await self.bot.db.release(connection)
 
     async def roleAdminMenu(self, ctx, menu, role):
