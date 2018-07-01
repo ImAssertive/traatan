@@ -62,19 +62,21 @@ class miscCog:
 
     @commands.command(name="conch", aliases=['shell'])
     async def conch(self, ctx):
-        outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely", "You may rely on it",
-                    "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes",
-                    "Reply hazy, try again", "Ask again later", "Better not tell you now",
-                    "Cannot predict now", "Concentrate and ask again", "Don't count on it",
-                    "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
         randomNumber = random.randint(0,19)
         conchName = ("**" +ctx.author.name + "** | The conch says:")
-        conchValue = ('"'+outcomes[randomNumber]+ '."')
+        conchValue = ('"'+self.bot.outcomes[randomNumber]+ '."')
         embed = discord.Embed(colour=self.bot.conchcolour(randomNumber))
         embed.add_field(name=conchName, value = conchValue)
         embed.set_image(url="https://media1.tenor.com/images/0181e2d7787313c7de0b8acab72dde7f/tenor.gif?itemid=3541653")
         embed.set_footer(text="THE SHELL HAS SPOKEN")
         await ctx.channel.send(embed = embed)
+
+        @commands.command(name="conch", aliases=['shell'])
+        async def 8ball(self, ctx):
+            randomNumber = random.randint(0, 19)
+            8ballName = ("**" + ctx.author.name + "** | The 8ball says:")
+            8ballValue = ('"' + self.bot.outcomes[randomNumber] + '."')
+            await ctx.channel.send(":8ball: | "+8ballName + " " + 8ballValue)
 
 def setup(bot):
     bot.add_cog(miscCog(bot))

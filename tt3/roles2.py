@@ -14,7 +14,6 @@ class rolesCog:
         embed = discord.Embed(title='Role Permission Main Menu', description="Options:\n0: Admin\n1: NSFW\n2: Pub Quiz\n3: Miscellaneous\n4: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
-        #options = ["0\u20e3", "1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "❌"]
         options = useful.getMenuEmoji(5)
         def roles_emojis_main_menu(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
@@ -247,6 +246,7 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
             await menu.delete()
         else:
+            await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
                 toeditTrue = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp"]
                 toeditFalse = []
@@ -337,8 +337,57 @@ class rolesCog:
                 await menu.delete()
 
 
-    async def rolesMiscMenu(self, ctx, menu, role):
-        print("wew")
+    async def roleMiscMenu(self, ctx, menu, role):
+        embed = discord.Embed(title='Pub Quiz Permission options', description="These commands are mostly for fun.\n\nOptions:\n0: bluetext\n1: bluetextcode\n2: cute\n3: conch\n4: 8ball\n5: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(6)
+        def roles_emojis_admin_menu(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis_admin_menu, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            await menu.delete()
+        else:
+            await menu.remove_reaction(reaction.emoji, user)
+            if str(reaction.emoji) == "0\u20e3":
+                permissionToEdit = "bluetext"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleMisdMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "1\u20e3":
+                permissionToEdit = "bluetextcode"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleMiscMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "2\u20e3":
+                permissionToEdit = "cute"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleMiscMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "3\u20e3":
+                permissionToEdit = "conch"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleMiscMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "4\u20e3":
+                permissionToEdit = "8ball"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleMiscMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "5\u20e3":
+                await self.rolesMainMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "❌":
+                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+
+
+
 
     async def rolesPresetMenu(self, ctx, menu, role):
         print("wew")

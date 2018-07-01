@@ -44,8 +44,8 @@ async def run():
     pqSetTime boolean DEFAULT false,
     pqJoin boolean DEFAULT true,
     pqQMHelp boolean DEFAULT false,
-    bt boolean DEFAULT true,
-    btc boolean DEFAULT true,
+    bluetext boolean DEFAULT true,
+    bluetextcode boolean DEFAULT true,
     setWelcomeChannel boolean DEFAULT false,
     setWelcomeText boolean DEFAULT false,
     setLeaveChannel boolean DEFAULT false,
@@ -55,7 +55,9 @@ async def run():
     setRaidText boolean DEFAULT false,
     mute boolean DEFAULT false,
     cute boolean DEFAULT true,
-    editrole boolean DEFAULT false, 
+    editrole boolean DEFAULT false,
+    conch boolean DEFAULT true,
+    8ball boolean DEFAULT true, 
     setMuteRole boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -100,6 +102,12 @@ class Bot(commands.Bot):
 
         self.db = kwargs.pop("db")
         self.currentColour = -1
+        self.outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely",
+                    "You may rely on it",
+                    "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes",
+                    "Reply hazy, try again", "Ask again later", "Better not tell you now",
+                    "Cannot predict now", "Concentrate and ask again", "Don't count on it",
+                    "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
 
     async def on_ready(self):
         print("Username: {0}\nID: {0.id}".format(self.user))
