@@ -79,7 +79,6 @@ class rolesCog:
                 await menu.delete()
 
     async def editRolePermissions(self, ctx, menu, role, toeditTrue, toeditFalse):
-        embed = discord.Embed(title='The following permissions were changed for role: ' + role.name +'(' +str(role.id)+')')
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             if toeditTrue != []:
@@ -87,12 +86,14 @@ class rolesCog:
                     query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                     embed.add_field(name=column, value="Enabled.")
+                await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + (toeditTrue, end=" "))
 
             if toeditFalse != []:
                 for column in toeditFalse:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
-                    embed.add_field(name=column, value="Disabled.")
+                await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + (toeditFalse, end=" "))
+
         await ctx.channel.send(embed=embed)
         await self.bot.db.release(connection)
 
@@ -191,12 +192,10 @@ class rolesCog:
             toeditTrue = []
             toeditFalse = [permissionToEdit]
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-            await ctx.channel.send(':white_check_mark: | '+permissionToEdit+' permission removed from role `' + role.name + '`')
         else:
             toeditTrue = [permissionToEdit]
             toeditFalse = []
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-            await ctx.channel.send(':white_check_mark: | '+permissionToEdit+' permission granted to role `' + role.name + '`')
 
     async def rolesPubQuizMenu(self, ctx, menu, role):
         print("wew")
