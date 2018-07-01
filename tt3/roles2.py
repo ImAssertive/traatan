@@ -338,7 +338,7 @@ class rolesCog:
 
 
     async def roleMiscMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Pub Quiz Permission options', description="These commands are mostly for fun.\n\nOptions:\n0: bluetext\n1: bluetextcode\n2: cute\n3: conch\n4: 8ball\n5: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Pub Quiz Permission options', description="These commands are mostly for fun.\n\nOptions:\n0: bluetext\n1: bluetextcode\n2: cute\n3: conch\n4: eightball\n5: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(6)
@@ -375,7 +375,7 @@ class rolesCog:
                 await self.roleMiscMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "4\u20e3":
-                permissionToEdit = "8ball"
+                permissionToEdit = "eightball"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
                 await self.roleMiscMenu(ctx, menu, role)
 
