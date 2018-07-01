@@ -79,7 +79,7 @@ class rolesCog:
                 await menu.delete()
 
     async def editRolePermissions(self, ctx, menu, role, toeditTrue, toeditFalse):
-        embed = discord.Embed(title='The following permissions were changed for role: ' + role.name +'(' +role.id+')')
+        embed = discord.Embed(title='The following permissions were changed for role: ' + role.name +'(' +str(role.id)+')')
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             if toeditTrue != []:
