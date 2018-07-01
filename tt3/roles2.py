@@ -145,15 +145,15 @@ class rolesCog:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
                 permissionToEdit = "setmuterole"
-                await self.roleToggleFunction(ctx, role, permissionToEdit)
+                await self.roleToggleFunction(ctx, role, menu,permissionToEdit)
 
             elif str(reaction.emoji) == "1\u20e3":
                 permissionToEdit = "mute"
-                await self.roleToggleFunction(ctx, role, permissionToEdit)
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
 
             elif str(reaction.emoji) == "2\u20e3":
                 permissionToEdit = "editrole"
-                await self.roleToggleFunction(ctx, role, permissionToEdit)
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
 
             elif str(reaction.emoji) == "3\u20e3":
                 toeditTrue = ["setmuterole", "mute", "editrole", "setwelcome", "setwelcometext", "setleave", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
@@ -171,7 +171,7 @@ class rolesCog:
                 await menu.delete()
 
 
-    async def roleToggleFunction(self, ctx, role, permissionToEdit):
+    async def roleToggleFunction(self, ctx, role, menu, permissionToEdit):
         query = "SELECT * FROM Roles WHERE roleID = $1 AND "+ permissionToEdit +" = true"
         result = await ctx.bot.db.fetchrow(query, role.id)
         if result:
