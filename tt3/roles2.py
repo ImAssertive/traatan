@@ -35,7 +35,7 @@ class rolesCog:
                 print("wew")
                 #await self.rolesNSFWMenu(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
-                await self.rolesPubQuizMenu(ctx, menu, role)
+                await self.rolePubQuizMenu(ctx, menu, role)
             elif str(reaction.emoji) == "3\u20e3":
                 await self.rolesMiscMenu(ctx, menu, role)
             elif str(reaction.emoji) == "4\u20e3":
@@ -231,7 +231,7 @@ class rolesCog:
             toeditFalse = []
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
 
-    async def rolesPubQuizMenuPage2(self, ctx, mennu, roles):
+    async def rolePubQuizMenuPage2(self, ctx, mennu, roles):
         embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: Enable all quizmaster commands\n1: Disable all quizmaster commands\n2: Previous page\n3: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
@@ -251,12 +251,12 @@ class rolesCog:
                 toeditTrue = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                await self.rolesPubQuizMenuPage2(ctx, menu, role)
+                await self.rolePubQuizMenuPage2(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
                 toeditTrue = []
                 toeditFalse = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                await self.rolesPubQuizMenuPage2(ctx, menu, role)
+                await self.rolePubQuizMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolePubQuizMenu(ctx, menu, role)
@@ -269,7 +269,7 @@ class rolesCog:
                 await menu.delete()
 
 
-    async def rolesPubQuizMenu(self, ctx, menu, role):
+    async def rolePubQuizMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqjoin\n1: pqstart\n2: pqend\n3: pqquestion\n4: pqsuperquestion\n5: pqoverride\n6: pqsettime\n7: pqqmhelp\n8: Next page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
@@ -327,7 +327,7 @@ class rolesCog:
                 await self.rolePubQuizMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "8\u20e3":
-                await self.rolesPubQuizMenuPage2(ctx, menu, role)
+                await self.rolePubQuizMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "9\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
