@@ -357,7 +357,7 @@ class rolesCog:
             if str(reaction.emoji) == "0\u20e3":
                 permissionToEdit = "bluetext"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleMisdMenu(ctx, menu, role)
+                await self.roleMiscMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "1\u20e3":
                 permissionToEdit = "bluetextcode"
