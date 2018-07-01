@@ -173,10 +173,8 @@ class rolesCog:
         if result:
             toeditTrue = []
             toeditFalse = [permissionToEdit]
-            await
-            self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-            await
-            ctx.channel.send(':white_check_mark: | '+permissionToEdit' permission removed from role `' + role.name + '`')
+            await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+            await ctx.channel.send(':white_check_mark: | '+permissionToEdit' permission removed from role `' + role.name + '`')
         else:
             toeditTrue = [permissionToEdit]
             toeditFalse = []
