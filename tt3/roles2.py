@@ -86,13 +86,13 @@ class rolesCog:
                 for column in toeditTrue:
                     query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
-                    embed.add_field(name="", value=column + " was enabled.")
+                    embed.add_field(name=column, value="Enabled.")
 
             if toeditFalse != []:
                 for column in toeditFalse:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
-                    embed.add_field(name="", value=column + " was disabled.")
+                    embed.add_field(name=column, value="Disabled.")
         await ctx.channel.send(embed=embed)
         await self.bot.db.release(connection)
 
