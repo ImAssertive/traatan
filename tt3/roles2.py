@@ -65,9 +65,11 @@ class rolesCog:
                 toeditTrue = []
                 toeditFalse = ["administrator"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                confirmation = await ctx.channel.send(':white_check_mark: | Administrator permission removed from `'+role.name+'`')
-                await asyncio.sleep(1)
-                await confirmation.delete()
+                await ctx.channel.send(':white_check_mark: | Administrator permission removed from `'+role.name+'`')
+                await menu.delete()
+                embed = discord.Embed(title='Admin Permission options', description="The administrator permission allows the role to access all bot commands regardless of other permission levels.\n\nOptions:\n0: Enable\n1: Disable\n2: Back\nx: Closes Menu", colour=self.bot.getcolour())
+                embed.set_footer(text="Current role: " + role.name + "(" + str(role.id) + ")")
+                menu = await ctx.channel.send(embed = embed)
                 await self.rolesAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
