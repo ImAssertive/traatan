@@ -17,10 +17,10 @@ class rolesCog:
 
     async def rolesMainMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Role Permission Main Menu', description="Options:\n0: Admin\n1: Moderation\n2: Pub Quiz\n3: Miscellaneous\n4: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Current role: "+ role.name +"  ID: "+ str(role.id))
+        embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         #options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f", "❌"]
-        options = ["0\u20e3", "1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "❌"]
+        options = ["0 \u20e3", "1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "❌"]
         def roles_emojis_main_menu(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
 
@@ -34,7 +34,6 @@ class rolesCog:
         else:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
-                print("wew")
                 await self.rolesAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
                 await self.rolesModMenu(ctx, menu, role)
@@ -49,9 +48,8 @@ class rolesCog:
                 await menu.delete()
 
     async def rolesAdminMenu(self, ctx, menu, role):
-        print("yay")
         embed = discord.Embed(title='Admin Permission options', description="The administrator permission allows the role to access all bot commands regardless of other permission levels.\n\nOptions:\n0: Enable\n1: Disable\n2: Back\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Current role: "+ role.name + "\nID: "+ str(role.id))
+        embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = ["0\u20e3", "1\u20e3", "2\u20e3", "❌"]
         def roles_emojis_admin_menu(reaction, user):
@@ -69,7 +67,13 @@ class rolesCog:
             if str(reaction.emoji) == "0\u20e3":
                 print("mew")
             elif str(reaction.emoji) == "1\u20e3":
-                print("mew")
+                toeditTrue = []
+                toeditFalse = ["administrator"]
+                await editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                confirmation = await ctx.channel.send(':white_check_mark | Administrator permission removed from "'+role.name+'"')
+                await self.rolesAdminMenu(ctx, menu, role)
+                await asyncio.sleep(1)
+                await confirmation.delete()
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
             elif str(reaction.emoji) == "❌":
@@ -89,7 +93,20 @@ class rolesCog:
 
     async def rolesPresetMenu(self, ctx, menu, role):
         print("wew")
-    
+
+    async def editRolePermissions(self, ctx, menu, role, toeditTrue, toeditFalse):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            if toeditTrue != []:
+                for column in toeditTrue:
+                    query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
+                    await self.bot.db.execute(query, role.id)
+            if toeditFalse != []:
+                for column in toeditFalse:
+                    query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
+                    await self.bot.db.execute(query, role.id)
+        await self.bot.db.release(connection)
+
     @roles.command(name="editrole", aliases=["edit"])
     async def editrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
