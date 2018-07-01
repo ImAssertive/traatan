@@ -97,7 +97,7 @@ class rolesCog:
         await self.bot.db.release(connection)
 
     async def roleAdminMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions:\n0: Administrator (All commands)\n1: setwelcome\n2: setwelcometext\n3: setleave\n4: setleavetext\n5: toggleraid\n6: setraidrole\n7: setraidtext\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions:\n0: Administrator (All commands)\n1: setwelcomechannel\n2: setwelcometext\n3: setleave\n4: setleavetext\n5: toggleraid\n6: setraidrole\n7: setraidtext\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(10)
@@ -162,13 +162,13 @@ class rolesCog:
 
 
             elif str(reaction.emoji) == "3\u20e3":
-                toeditTrue = ["setmuterole", "mute", "editrole", "setwelcome", "setwelcometext", "setleave", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
+                toeditTrue = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "4\u20e3":
-                toeditFalse = ["setmuterole", "mute", "editrole", "setwelcome", "setwelcometext", "setleave", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
+                toeditFalse = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
                 toeditTrue = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)

@@ -81,7 +81,7 @@ class adminCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
-    @commands.command(name="setfarewell", aliases=['setleave'])
+    @commands.command(name="setfarewell", aliases=['setleave', 'setleavechannel', 'setfarewellchannel'])
     @checks.leave_enabled()
     @checks.is_not_banned()
     @checks.justme() #CHANGE
@@ -93,7 +93,7 @@ class adminCog:
         await self.bot.db.release(connection)
         await ctx.channel.send("Done! Farewell channel set here.")
 
-    @commands.command()
+    @commands.command(name="setwelcome", aliases=['setwelcomechannel'])
     @checks.is_not_banned()
     @checks.welcome_enabled()
     @checks.justme() #CHANGE
