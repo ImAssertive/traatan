@@ -69,12 +69,12 @@ class miscCog:
         embed.add_field(name=conchName, value = conchValue)
         embed.set_image(url="https://media1.tenor.com/images/0181e2d7787313c7de0b8acab72dde7f/tenor.gif?itemid=3541653")
         embed.set_footer(text="THE SHELL HAS SPOKEN")
-        await ctx.channel.send(embed = embed)
+        await ctx.chan  nel.send(embed = embed)
 
     @commands.command(name="eightball", aliases=['8ball'])
     async def eightball(self, ctx):
         randomNumber = random.randint(0, 19)
-        eightballName = ("**" + ctx.author.name + "** | The 8ball says:")
+        eightballName = ("**" + ctx.author.name + "** - The 8ball says:")
         eightballValue = ('"' + self.bot.outcomes[randomNumber] + '."')
         await ctx.channel.send(":8ball: | "+eightballName + " " + eightballValue)
 

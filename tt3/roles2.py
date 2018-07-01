@@ -36,7 +36,7 @@ class rolesCog:
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolePubQuizMenu(ctx, menu, role)
             elif str(reaction.emoji) == "3\u20e3":
-                await self.rolesMiscMenu(ctx, menu, role)
+                await self.roleMiscMenu(ctx, menu, role)
             elif str(reaction.emoji) == "4\u20e3":
                 await self.rolesPresetMenu(ctx, menu, role)
             elif str(reaction.emoji) == "❌":
