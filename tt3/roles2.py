@@ -151,7 +151,7 @@ class rolesCog:
                 await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "8\u20e3":
-                await self.roleAdminMenu(ctx, menu, role)
+                await self.roleAdminMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "9\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
