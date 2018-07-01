@@ -426,6 +426,9 @@ class rolesCog:
             if str(reaction.emoji) == "0\u20e3":
                 await self.rolePresetAdmin(ctx, menu, role)
 
+            if str(reaction.emoji) == "1\u20e3":
+                await self.rolePresetModerator(ctx, menu, role)
+
             elif str(reaction.emoji) == "5\u20e3":
                 await self.rolePresetJailed(ctx, menu, role)
 
@@ -492,6 +495,36 @@ class rolesCog:
             elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
+
+
+    async def rolePresetModerator(self, ctx, menu, role):
+        embed = discord.Embed(title='Moderator preset options', description="This preset will enable all moderator commands. This should only be given to moderators. Are you sure you wish to proceed?\n\nOptions:\n0: Yes\n1: Back\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(3)
+        def roles_emojis_admin_menu(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis_admin_menu, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            await menu.delete()
+        else:
+            await menu.remove_reaction(reaction.emoji, user)
+            if str(reaction.emoji) == "0\u20e3":
+                toeditTrue = ["bluetext", "bluetextcode", "toggleraid", "mute", "cute", "conch",  "pqjoin"]
+                toeditFalse = ["administrator", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqqmhelp", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "setraidrole", "setraidtext", "editrole", "setmuterole"
+                await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                await self.rolePresetMenu(ctx, menu, role)
+            elif str(reaction.emoji) == "1\u20e3":
+                await self.rolePresetMenu(ctx, menu, role)
+            elif str(reaction.emoji) == "❌":
+                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+
     @roles.command(name="editrole", aliases=["edit"])
     async def editrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
