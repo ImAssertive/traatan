@@ -91,7 +91,7 @@ class rolesCog:
                     await self.bot.db.execute(query, role.id)
         await self.bot.db.release(connection)
 
-    async def rolesAdminMenu(self, ctx, menu, role):
+    async def roleAdminMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions:\n0: Administrator (All commands)\n1: setwelcome\n2: setwelcometext\n3: setleave\n4: setleavetext\n5:toggleraid\n6: setraidrole\n7: setraidtext\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
