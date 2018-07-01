@@ -422,6 +422,8 @@ class rolesCog:
             await menu.delete()
         else:
             await menu.remove_reaction(reaction.emoji, user)
+            if str(reaction.emoji) == "0\u20e3":
+                print("wew")
 
             elif str(reaction.emoji) == "5\u20e3":
                 await self.rolePresetJailed(ctx, menu, role)
