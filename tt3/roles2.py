@@ -406,7 +406,7 @@ class rolesCog:
 
 
     async def rolePresetMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Preset Permission options', description="This menu allows you to change this role to a preset permission level.\n\nOptions:\n0: Administrator\n1: Moderator\n2: Default\n3: @everyone\n4: Quiz Master\n5: Jailed\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Preset Permission options', description="This menu allows you to change this role to a preset permission level.\n\nOptions:\n0: Administrator\n1: Moderator\n2: Default\n3: Quiz Master\n4: Jailed\n5: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(7)
@@ -429,14 +429,16 @@ class rolesCog:
             elif str(reaction.emoji) == "1\u20e3":
                 await self.rolePresetModerator(ctx, menu, role)
 
-            elif str(reaction.emoji) == "5\u20e3":
+            elif str(reaction.emoji) == "4\u20e3":
                 await self.rolePresetJailed(ctx, menu, role)
 
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolePresetDefault(ctx, menu, role)
 
+            elif str(reaction.emoji) == "4\u20e3":
+                await self.roleQuizMaster(ctx, menu, role)
 
-            elif str(reaction.emoji) == "6\u20e3":
+            elif str(reaction.emoji) == "5\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "❌":
@@ -548,6 +550,34 @@ class rolesCog:
             if str(reaction.emoji) == "0\u20e3":
                 toeditTrue = ["bluetext", "bluetextcode", "cute", "conch",  "pqjoin"]
                 toeditFalse = ["administrator", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqqmhelp", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "setraidrole", "setraidtext", "editrole", "setmuterole", "mute","toggleraid"]
+                await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                await self.rolePresetMenu(ctx, menu, role)
+            elif str(reaction.emoji) == "1\u20e3":
+                await self.rolePresetMenu(ctx, menu, role)
+            elif str(reaction.emoji) == "❌":
+                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+
+    async def rolePresetQuizMaster(self, ctx, menu, role):
+        embed = discord.Embed(title='Quiz Master preset options', description="This will make this role have quiz master permissions. Are you sure you wish to proceed?\n\nOptions:\n0: Yes\n1: Back\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(3)
+        def roles_emojis_admin_menu(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis_admin_menu, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            await menu.delete()
+        else:
+            await menu.remove_reaction(reaction.emoji, user)
+            if str(reaction.emoji) == "0\u20e3":
+                toeditTrue = ["bluetext", "bluetextcode", "cute", "conch", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqqmhelp"]
+                toeditFalse = ["administrator", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "setraidrole", "setraidtext", "editrole", "setmuterole", "mute","toggleraid", "pqjoin"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePresetMenu(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
