@@ -34,6 +34,7 @@ class rolesCog:
         else:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
+                print("wew")
                 await self.rolesAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
                 await self.rolesModMenu(ctx, menu, role)
@@ -48,8 +49,9 @@ class rolesCog:
                 await menu.delete()
 
     async def rolesAdminMenu(self, ctx, menu, role):
+        print("yay")
         embed = discord.Embed(title='Admin Permission options', description="The administrator permission allows the role to access all bot commands regardless of other permission levels.\n\nOptions:\n0: Enable\n1: Disable\n2: Back\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Current role: "+ role.name + "  ID: "+ str(role.id))
+        embed.set_footer(text="Current role: "+ role.name + "\nID: "+ str(role.id))
         await menu.edit(embed=embed)
         options = ["0\u20e3", "1\u20e3", "2\u20e3", "❌"]
         def roles_emojis_admin_menu(reaction, user):
