@@ -15,8 +15,9 @@ class rolesCog:
         if ctx.invoked_subcommand is None:
             await ctx.channel.send(":no_entry: | Please enter a valid command. For a list of commands use: tt!roles help")
 
-    async def rolesMainMenu(self, ctx, menu, roleName):
-        embed = discord.Embed(title='Role "' + roleName + '"loaded. Which Permissions would you like to edit?', description="Options:\n1: Admin\n2: Moderation\n3: Pub Quiz\n4: Miscellaneous\n5: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
+    async def rolesMainMenu(self, ctx, menu, role):
+        embed = discord.Embed(title='Role Permission Main Menu', description="Options:\n0: Admin\n1: Moderation\n2: Pub Quiz\n3: Miscellaneous\n4: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current role: "+ role.name "  ID: "+ role.id)
         await menu.edit(embed=embed)
         #options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "6\u20e3", "7\u20e3","8\u20e3", "9\u20e3", "\U0001f51f", "❌"]
         options = ["1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "5\u20e3", "❌"]
@@ -32,24 +33,25 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
         else:
             await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "1\u20e3":
-                await self.rolesAdminMenu(ctx, menu, roleName)
+            if str(reaction.emoji) == "0\u20e3":
+                await self.rolesAdminMenu(ctx, menu, role)
+            elif str(reaction.emoji) == "1\u20e3":
+                await self.rolesModMenu(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
-                await self.rolesModMenu(ctx, menu, roleName)
+                await self.rolesPubQuizMenu(ctx, menu, role)
             elif str(reaction.emoji) == "3\u20e3":
-                await self.rolesPubQuizMenu(ctx, menu, roleName)
+                await self.rolesMiscMenu(ctx, menu, role)
             elif str(reaction.emoji) == "4\u20e3":
-                await self.rolesMiscMenu(ctx, menu, roleName)
-            elif str(reaction.emoji) == "5\u20e3":
-                await self.rolesPresetMenu(ctx, menu, roleName)
+                await self.rolesPresetMenu(ctx, menu, role)
             elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
-    async def rolesAdminMenu(self, ctx, menu, roleName):
-        embed = discord.Embed(title='Role "' + roleName + '"loaded. Admin permission options', description="The administrator permission allows the role to access all bot commands regardless of other permission levels.\n\nOptions:\n1: Enable\n2: Disable\n3: Back\nx: Closes Menu", colour=self.bot.getcolour())
+    async def rolesAdminMenu(self, ctx, menu, role):
+        embed = discord.Embed(title='Admin Permission options', description="The administrator permission allows the role to access all bot commands regardless of other permission levels.\n\nOptions:\n0: Enable\n1: Disable\n2: Back\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current role: "+ role.name "  ID: "+ role.id)
         await menu.edit(embed=embed)
-        options = ["1\u20e3", "2\u20e3", "3\u20e3", "❌"]
+        options = ["0\u20e3", "1\u20e3", "2\u20e3", "❌"]
         def roles_emojis_admin_menu(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
 
@@ -62,28 +64,28 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
         else:
             await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "1\u20e3":
+            if str(reaction.emoji) == "0\u20e3":
+                print("mew")
+            elif str(reaction.emoji) == "1\u20e3":
                 print("mew")
             elif str(reaction.emoji) == "2\u20e3":
-                print("mew")
-            elif str(reaction.emoji) == "3\u20e3":
-                await self.rolesMainMenu(ctx, menu, roleName)
+                await self.rolesMainMenu(ctx, menu, role)
             elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
 
 
-    async def rolesModMenu(self, ctx, menu, roleName):
+    async def rolesModMenu(self, ctx, menu, role):
         print("wew")
 
-    async def rolesPubQuizMenu(self, ctx, menu, roleName):
+    async def rolesPubQuizMenu(self, ctx, menu, role):
         print("wew")
 
-    async def rolesMiscMenu(self, ctx, menu, roleName):
+    async def rolesMiscMenu(self, ctx, menu, role):
         print("wew")
 
-    async def rolesPresetMenu(self, ctx, menu, roleName):
+    async def rolesPresetMenu(self, ctx, menu, role):
         print("wew")
     
     @roles.command(name="editrole", aliases=["edit"])
@@ -106,10 +108,10 @@ class rolesCog:
             emojis = useful.getMenuEmoji(10)
             for emoji in range(0,len(emojis)):
                 await menu.add_reaction(emojis[emoji])
-            await self.rolesMainMenu(ctx, menu, roleName)
+            await self.rolesMainMenu(ctx, menu, role)
 
     @roles.command()
-    async def view(self, ctx, *, roleName):
+    async def view(self, ctx, *, role):
         await ctx.channel.send("coming soon")
 
 
