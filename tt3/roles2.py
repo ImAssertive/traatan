@@ -217,7 +217,6 @@ class rolesCog:
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
-
     async def roleToggleFunction(self, ctx, role, menu, permissionToEdit):
         query = "SELECT * FROM Roles WHERE roleID = $1 AND "+ permissionToEdit +" = true"
         result = await ctx.bot.db.fetchrow(query, role.id)
@@ -267,7 +266,6 @@ class rolesCog:
             elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
-
 
     async def rolePubQuizMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqjoin\n1: pqstart\n2: pqend\n3: pqquestion\n4: pqsuperquestion\n5: pqoverride\n6: pqsettime\n7: pqqmhelp\n8: Next page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
@@ -336,7 +334,6 @@ class rolesCog:
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
-
     async def roleMiscMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Misc Permission options', description="These commands are mostly for fun.\n\nOptions:\n0: bluetext\n1: bluetextcode\n2: cute\n3: conch\n4: eightball\n5: Enable all\n6: Disable all\n7: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
@@ -401,10 +398,6 @@ class rolesCog:
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
-
-
-
-
     async def rolePresetMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Preset Permission options', description="This menu allows you to change this role to a preset permission level.\n\nOptions:\n0: Administrator\n1: Moderator\n2: Default\n3: Quiz Master\n4: Jailed\n5: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
@@ -444,7 +437,6 @@ class rolesCog:
             elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
-
 
     async def rolePresetJailed(self, ctx, menu, role):
         embed = discord.Embed(title='Jailed preset options', description="This preset will disable all bot commands. Are you sure you wish to proceed?\n\nOptions:\n0: Yes\n1: Back\nx: Closes Menu", colour=self.bot.getcolour())
