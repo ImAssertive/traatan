@@ -11,7 +11,7 @@ class rolesCog:
             await ctx.channel.send(":no_entry: | Please enter a valid command. For a list of commands use: tt!roles help")
 
     async def rolesMainMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Role Permission Main Menu', description="Options:\n0: Admin\n1: Moderation\n2: Pub Quiz\n3: Miscellaneous\n4: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Role Permission Main Menu', description="Options:\n0: Admin\n1: NSFW\n2: Pub Quiz\n3: Miscellaneous\n4: Set role to preset permission level\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         #options = ["0\u20e3", "1\u20e3", "2\u20e3", "3\u20e3", "4\u20e3", "❌"]
@@ -32,7 +32,7 @@ class rolesCog:
             if str(reaction.emoji) == "0\u20e3":
                 await self.roleAdminMenu(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
-                await self.rolesModMenu(ctx, menu, role)
+                #await self.rolesNSFWMenu(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
                 await self.rolesPubQuizMenu(ctx, menu, role)
             elif str(reaction.emoji) == "3\u20e3":
@@ -84,14 +84,14 @@ class rolesCog:
                     query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditTrue = ', '.join(toeditTrue)
-                await ctx.channel.send(":white_check_mark: | The following commands were enabled: `" + toeditTrue + "`.")
+                await ctx.channel.send(":white_check_mark: | The following permissions were granted: `" + toeditTrue + "`.")
 
             if toeditFalse != []:
                 for column in toeditFalse:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditFalse = ', '.join(toeditFalse)
-                await ctx.channel.send(":white_check_mark: | The following commands were disabled: `" + toeditFalse + "`.")
+                await ctx.channel.send(":white_check_mark: | The following permissions were revoked: `" + toeditFalse + "`.")
 
         await self.bot.db.release(connection)
 
@@ -230,8 +230,110 @@ class rolesCog:
             toeditFalse = []
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
 
+    async def rolesPubQuizMenuPage2(self, ctx, mennu, roles):
+        embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: Enable all quizmaster commands\n1: Disable all quizmaster commands\n2: Previous page\n3: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(4)
+        def roles_emojis_admin_menu(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis_admin_menu, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            await menu.delete()
+        else:
+            if str(reaction.emoji) == "0\u20e3":
+                toeditTrue = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp"]
+                toeditFalse = []
+                await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                await self.rolesPubQuizMenuPage2(ctx, menu, role)
+            elif str(reaction.emoji) == "1\u20e3":
+                toeditTrue = []
+                toeditFalse = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp"]
+                await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                await self.rolesPubQuizMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "2\u20e3":
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "3\u20e3":
+                await self.rolesMainMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "❌":
+                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+
+
     async def rolesPubQuizMenu(self, ctx, menu, role):
-        print("wew")
+        embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqjoin\n1: pqstart\n2: pqend\n3: pqquestion\n4: pqsuperquestion\n5: pqoverride\n6: pqsettime\n7: pqqmhelp\n8: Next page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(10)
+        def roles_emojis_admin_menu(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=roles_emojis_admin_menu, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the editrole command to restart the process.")
+            await menu.delete()
+        else:
+            if str(reaction.emoji) == "0\u20e3":
+                permissionToEdit = "pqjoin"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "1\u20e3":
+                permissionToEdit = "pqstart"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "2\u20e3":
+                permissionToEdit = "pqend"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "3\u20e3":
+                permissionToEdit = "pqquestion"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "4\u20e3":
+                permissionToEdit = "pqsuperquestion"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "5\u20e3":
+                permissionToEdit = "pqoverride"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "6\u20e3":
+                permissionToEdit = "pqsettime"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "7\u20e3":
+                permissionToEdit = "pqqmhelp"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "8\u20e3":
+                await self.rolesPubQuizMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "9\u20e3":
+                await self.rolesMainMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "❌":
+                await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+
 
     async def rolesMiscMenu(self, ctx, menu, role):
         print("wew")
