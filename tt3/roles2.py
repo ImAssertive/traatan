@@ -85,7 +85,6 @@ class rolesCog:
                 for column in toeditTrue:
                     query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
-                    embed.add_field(name=column, value="Enabled.")
                 toeditTrue = ', '.join(toeditTrue)
                 await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + toeditTrue)
 
