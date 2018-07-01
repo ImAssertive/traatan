@@ -38,7 +38,7 @@ class rolesCog:
             elif str(reaction.emoji) == "3\u20e3":
                 await self.roleMiscMenu(ctx, menu, role)
             elif str(reaction.emoji) == "4\u20e3":
-                await self.rolesPresetMenu(ctx, menu, role)
+                await self.rolePresetMenu(ctx, menu, role)
             elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
