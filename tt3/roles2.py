@@ -516,7 +516,7 @@ class rolesCog:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
                 toeditTrue = ["bluetext", "bluetextcode", "toggleraid", "mute", "cute", "conch",  "pqjoin"]
-                toeditFalse = ["administrator", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqqmhelp", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "setraidrole", "setraidtext", "editrole", "setmuterole"
+                toeditFalse = ["administrator", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqqmhelp", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "setraidrole", "setraidtext", "editrole", "setmuterole"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePresetMenu(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
