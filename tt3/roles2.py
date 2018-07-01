@@ -91,7 +91,7 @@ class rolesCog:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditFalse = ', '.join(toeditFalse)
-                await ctx.channel.send(":white_check_mark: | The following commands were enabled: `" + toeditFalse + "`.")
+                await ctx.channel.send(":white_check_mark: | The following commands were disabled: `" + toeditFalse + "`.")
 
         await self.bot.db.release(connection)
 
@@ -118,40 +118,40 @@ class rolesCog:
             elif str(reaction.emoji) == "1\u20e3":
                 permissionToEdit = "setwelcomechannel"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "2\u20e3":
                 permissionToEdit = "setwelcometext"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "3\u20e3":
                 permissionToEdit = "setleavechannel"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "4\u20e3":
                 permissionToEdit = "setleavetext"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "5\u20e3":
                 permissionToEdit = "toggleraid"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "6\u20e3":
                 permissionToEdit = "setraidrole"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "7\u20e3":
                 permissionToEdit = "setraidtext"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "8\u20e3":
-                await self.roleAdminMenuPage2(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "9\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
