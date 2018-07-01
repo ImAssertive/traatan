@@ -64,13 +64,11 @@ class rolesCog:
                 toeditTrue = ["administrator"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                await ctx.channel.send(':white_check_mark: | Administrator permission granted to role `'+role.name+'`')
                 await self.roleAdminCommand(ctx, menu, role)
             elif str(reaction.emoji) == "1\u20e3":
                 toeditTrue = []
                 toeditFalse = ["administrator"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                await ctx.channel.send(':white_check_mark: | Administrator permission removed from role `'+role.name+'`')
                 await self.roleAdminCommand(ctx, menu, role)
             elif str(reaction.emoji) == "2\u20e3":
                 await self.roleAdminMenu(ctx, menu, role)
@@ -86,18 +84,19 @@ class rolesCog:
                     query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditTrue = ', '.join(toeditTrue)
-                await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + toeditTrue)
+                await ctx.channel.send(":white_check_mark: | The following commands were enabled: `" + toeditTrue + "`.")
 
             if toeditFalse != []:
                 for column in toeditFalse:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditFalse = ', '.join(toeditFalse)
-                await ctx.channel.send(":white_check_mark: | The following commands were enabled:" + toeditFalse)
+                await ctx.channel.send(":white_check_mark: | The following commands were enabled: `" + toeditFalse + "`.")
+
         await self.bot.db.release(connection)
 
     async def roleAdminMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions:\n0: Administrator (All commands)\n1: setwelcomechannel\n2: setwelcometext\n3: setleave\n4: setleavetext\n5: toggleraid\n6: setraidrole\n7: setraidtext\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions:\n0: Administrator (All commands)\n1: setwelcomechannel\n2: setwelcometext\n3: setleavechannel\n4: setleavetext\n5: toggleraid\n6: setraidrole\n7: setraidtext\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(10)
@@ -115,6 +114,41 @@ class rolesCog:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
                 await self.roleAdminCommand(ctx, menu, role)
+
+            elif str(reaction.emoji) == "1\u20e3":
+                permissionToEdit = "setwelcomechannel"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "2\u20e3":
+                permissionToEdit = "setwelcometext"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "3\u20e3":
+                permissionToEdit = "setleavechannel"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "4\u20e3":
+                permissionToEdit = "setleavetext"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "5\u20e3":
+                permissionToEdit = "toggleraid"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "6\u20e3":
+                permissionToEdit = "setraidrole"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "7\u20e3":
+                permissionToEdit = "setraidtext"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "8\u20e3":
                 await self.roleAdminMenuPage2(ctx, menu, role)
