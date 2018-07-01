@@ -54,7 +54,8 @@ async def run():
     setRaidRole boolean DEFAULT false,
     setRaidText boolean DEFAULT false,
     mute boolean DEFAULT false,
-    cute boolean DEFAULT true, 
+    cute boolean DEFAULT true,
+    editrole boolean DEFAULT false, 
     setMuteRole boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,

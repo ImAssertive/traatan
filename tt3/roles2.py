@@ -175,7 +175,7 @@ class rolesCog:
 
             elif str(reaction.emoji) == "5\u20e3":
                 await self.rolesAdminMenu(ctx, menu, role)
-                
+
             elif str(reaction.emoji) == "6\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
 
