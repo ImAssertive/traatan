@@ -71,8 +71,8 @@ class miscCog:
         embed.set_footer(text="THE SHELL HAS SPOKEN")
         await ctx.channel.send(embed = embed)
 
-        @commands.command(name="8ball", aliases=['eightball'])
-        async def 8ball(self, ctx):
+        @commands.command(name="eightball", aliases=['8ball'])
+        async def eightball(self, ctx):
             randomNumber = random.randint(0, 19)
             8ballName = ("**" + ctx.author.name + "** | The 8ball says:")
             8ballValue = ('"' + self.bot.outcomes[randomNumber] + '."')
