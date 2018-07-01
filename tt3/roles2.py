@@ -423,7 +423,7 @@ class rolesCog:
         else:
             await menu.remove_reaction(reaction.emoji, user)
 
-            if str(reaction.emoji) == "\u20e3":
+            if str(reaction.emoji) == "0\u20e3":
                 await self.rolePresetAdmin(ctx, menu, role)
 
             elif str(reaction.emoji) == "5\u20e3":
