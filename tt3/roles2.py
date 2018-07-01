@@ -5,10 +5,18 @@ class rolesCog:
     def __init__(self, bot):
         self.bot = bot
 
-
-    async def test(self, ctx):
-        await ctx.channel.send("test")
-
+    async def editRolePermissions(self, ctx, menu, role, toeditTrue, toeditFalse):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            if toeditTrue != []:
+                for column in toeditTrue:
+                    query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
+                    await self.bot.db.execute(query, role.id)
+            if toeditFalse != []:
+                for column in toeditFalse:
+                    query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
+                    await self.bot.db.execute(query, role.id)
+        await self.bot.db.release(connection)
 
     @commands.group(pass_context=True, aliases=["role"])
     async def roles(self, ctx):
@@ -94,18 +102,6 @@ class rolesCog:
     async def rolesPresetMenu(self, ctx, menu, role):
         print("wew")
 
-    async def editRolePermissions(self, ctx, menu, role, toeditTrue, toeditFalse):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            if toeditTrue != []:
-                for column in toeditTrue:
-                    query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
-                    await self.bot.db.execute(query, role.id)
-            if toeditFalse != []:
-                for column in toeditFalse:
-                    query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
-                    await self.bot.db.execute(query, role.id)
-        await self.bot.db.release(connection)
 
     @roles.command(name="editrole", aliases=["edit"])
     async def editrole(self, ctx, *, roleName):
