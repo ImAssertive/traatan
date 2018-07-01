@@ -146,27 +146,40 @@ class rolesCog:
             if str(reaction.emoji) == "0\u20e3":
                 permissionToEdit = "setmuterole"
                 await self.roleToggleFunction(ctx, role, menu,permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
 
             elif str(reaction.emoji) == "1\u20e3":
                 permissionToEdit = "mute"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
 
             elif str(reaction.emoji) == "2\u20e3":
                 permissionToEdit = "editrole"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
 
             elif str(reaction.emoji) == "3\u20e3":
                 toeditTrue = ["setmuterole", "mute", "editrole", "setwelcome", "setwelcometext", "setleave", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                await ctx.channel.send(':white_check_mark: | setmuterole permission granted to role `' + role.name + '`')
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "4\u20e3":
+                toeditFalse = ["setmuterole", "mute", "editrole", "setwelcome", "setwelcometext", "setleave", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
+                toeditTrue = []
+                await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
+                await self.roleAdminMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "5\u20e3":
                 await self.rolesAdminMenu(ctx, menu, role)
+                
             elif str(reaction.emoji) == "6\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
-            elif str(reaction.emoji) == "❌":
 
+            elif str(reaction.emoji) == "❌":
                 await ctx.channel.send(":white_check_mark: | Menu closed!")
                 await menu.delete()
 
