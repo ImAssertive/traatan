@@ -65,7 +65,7 @@ class rolesCog:
                 toeditTrue = []
                 toeditFalse = ["administrator"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
-                confirmation = await ctx.channel.send(':white_check_mark | Administrator permission removed from "'+role.name+'"')
+                confirmation = await ctx.channel.send(':white_check_mark: | Administrator permission removed from `'+role.name+'`')
                 await self.rolesAdminMenu(ctx, menu, role)
                 await asyncio.sleep(1)
                 await confirmation.delete()
