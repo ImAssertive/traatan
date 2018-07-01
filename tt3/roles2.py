@@ -231,7 +231,7 @@ class rolesCog:
             toeditFalse = []
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
 
-    async def rolePubQuizMenuPage2(self, ctx, mennu, roles):
+    async def rolePubQuizMenuPage2(self, ctx, menu, role):
         embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: Enable all quizmaster commands\n1: Disable all quizmaster commands\n2: Previous page\n3: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
