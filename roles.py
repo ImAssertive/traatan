@@ -90,7 +90,7 @@ class rolesCog:
                 print(len(toeditTrue))
                 if len(toeditTrue) > 1:
                     toeditTrue = ', '.join(toeditTrue)
-                await ctx.channel.send(":white_check_mark: | The following permissions were granted to role "+str(role.name)+": `" + toeditTrue + "`.")
+                await ctx.channel.send(":white_check_mark: | The following permissions were granted to role "+role.name+": `" + str(toeditTrue) + "`.")
 
             if toeditFalse != []:
                 for column in toeditFalse:
@@ -98,7 +98,7 @@ class rolesCog:
                     await self.bot.db.execute(query, role.id)
                 if len(toeditFalse) > 1:
                     toeditFalse = ', '.join(toeditFalse)
-                await ctx.channel.send(":white_check_mark: | The following permissions were revoked from role  "+str(role.name)+": `" + toeditTrue + "`.")
+                await ctx.channel.send(":white_check_mark: | The following permissions were revoked from role  "+role.name+": `" + str(toeditTrue) + "`.")
 
         await self.bot.db.release(connection)
 
