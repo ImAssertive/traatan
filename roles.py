@@ -100,7 +100,7 @@ class rolesCog:
         await self.bot.db.release(connection)
 
     async def roleAdminMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions:\n0: Administrator (All commands)\n1: setwelcomechannel\n2: setwelcometext\n3: setleavechannel\n4: setleavetext\n5: toggleraid\n6: setraidrole\n7: setraidtext\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Administrator Permission options (1/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions:\n0: Administrator (All commands)\n1: setwelcomechannel\n2: setwelcometext\n3: setleavechannel\n4: setleavetext\n5: toggleraid\n6: setraidrole\n7: setraidtext\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(10)
@@ -167,7 +167,7 @@ class rolesCog:
                 await closed.delete()
 
     async def roleAdminMenuPage2(self, ctx, menu, role):
-        embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: editrole\n3: Enable All\n4: Disable All\n5: Previous Page\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Administrator Permission options (2/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: editrole\n3: Enable All\n4: Disable All\n5: Previous Page\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(7)
@@ -214,7 +214,7 @@ class rolesCog:
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "5\u20e3":
-                await self.rolesAdminMenu(ctx, menu, role)
+                await self.roleAdminMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "6\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
@@ -238,7 +238,7 @@ class rolesCog:
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
 
     async def rolePubQuizMenuPage2(self, ctx, menu, role):
-        embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: Enable all quizmaster commands\n1: Disable all quizmaster commands\n2: Previous page\n3: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Pub Quiz Permission options (2/2)', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: Enable all quizmaster commands\n1: Disable all quizmaster commands\n2: Previous page\n3: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(4)
@@ -278,7 +278,7 @@ class rolesCog:
                 await closed.delete()
 
     async def rolePubQuizMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Pub Quiz Permission options', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqjoin\n1: pqstart\n2: pqend\n3: pqquestion\n4: pqsuperquestion\n5: pqoverride\n6: pqsettime\n7: pqqmhelp\n8: Next page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Pub Quiz Permission options (1/2)', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqjoin\n1: pqstart\n2: pqend\n3: pqquestion\n4: pqsuperquestion\n5: pqoverride\n6: pqsettime\n7: pqqmhelp\n8: Next page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(10)
