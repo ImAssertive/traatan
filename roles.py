@@ -88,14 +88,14 @@ class rolesCog:
                     query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditTrue = ', '.join(toeditTrue)
-                await ctx.channel.send(":white_check_mark: | The following permissions were granted to role "+role.name+": `" + toeditTrue + "`.")
+                await ctx.channel.send(":white_check_mark: | The following permissions were granted to role "+role.name+": `" + str(toeditTrue) + "`.")
 
             if toeditFalse != []:
                 for column in toeditFalse:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
                 toeditFalse = ', '.join(toeditFalse)
-                await ctx.channel.send(":white_check_mark: | The following permissions were revoked from role  "+role.name+": `" + toeditTrue + "`.")
+                await ctx.channel.send(":white_check_mark: | The following permissions were revoked from role  "+role.name+": `" + str(toeditTrue) + "`.")
 
         await self.bot.db.release(connection)
 
@@ -165,6 +165,7 @@ class rolesCog:
                 await menu.delete()
                 await asyncio.sleep(1)
                 await closed.delete()
+
     async def roleAdminMenuPage2(self, ctx, menu, role):
         embed = discord.Embed(title='Administrator Permission options', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: editrole\n3: Enable All\n4: Disable All\n5: Previous Page\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
