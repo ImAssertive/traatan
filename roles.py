@@ -87,7 +87,7 @@ class rolesCog:
                 for column in toeditTrue:
                     query = "UPDATE Roles SET " + column + " = true WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
-                if len(toeditTrue > 1):
+                if len(toeditTrue) > 1:
                     toeditTrue = ', '.join(toeditTrue)
                 await ctx.channel.send(":white_check_mark: | The following permissions were granted to role "+role.name+": `" + toeditTrue + "`.")
 
@@ -95,7 +95,7 @@ class rolesCog:
                 for column in toeditFalse:
                     query = "UPDATE Roles SET " + column + " = false WHERE roleID = $1"
                     await self.bot.db.execute(query, role.id)
-                if len(toeditFalse > 1):
+                if len(toeditFalse) > 1:
                     toeditFalse = ', '.join(toeditFalse)
                 await ctx.channel.send(":white_check_mark: | The following permissions were revoked from role  "+role.name+": `" + toeditTrue + "`.")
 
