@@ -6,6 +6,12 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command(hidden= True)
+    @checks.justme()
+    async def sperg(ctx, member):
+        memberid = int("".join(each for each in member if each.isdigit()))
+        await ctx.guild.get_member(memberid).add_roles(discord.utils.get(ctx.guild.roles, name="Part of the Crew part of the server"))
+
     @commands.command(name='setup', aliases=['botsetup', 'su'])
     @checks.is_not_banned()
     @checks.justme() # change

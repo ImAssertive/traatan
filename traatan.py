@@ -36,6 +36,7 @@ async def run():
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
     guildID bigint references Guilds(guildID) ON DELETE CASCADE ON UPDATE CASCADE,
     administrator boolean DEFAULT false,
+    muted boolean DEFAULT false,
     pqStart boolean DEFAULT false,
     pqEnd boolean DEFAULT false,
     pqQuestion boolean DEFAULT false,

@@ -606,6 +606,7 @@ class rolesCog:
                 await closed.delete()
 
     @roles.command(name="editrole", aliases=["edit"])
+    @checks.is_not_banned()
     async def editrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
@@ -650,7 +651,7 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | You do not have permission for {} here.".format(ctx.command))
             except:
                 pass
-        
+
 
 
 def setup(bot):
