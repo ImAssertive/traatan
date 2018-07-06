@@ -92,19 +92,19 @@ def admin_enabled():
         return False
     return commands.check(predicate)
 
-def owner_or_rolepermission:
-    if ctx.author.id  == 163691476788838401 or ctx.author.id == 447089705691906048 or ctx.author.id == ctx.guild.owner_id:
-        return true
-    else:
-        roleIDs = []
-        rolesdata = []
-        for role in ctx.author.roles:
-            roleIDs.append(role.id)
-        for id in roleIDs:
-            query = "SELECT * FROM Roles WHERE roleID = $1 AND"
-            result = await ctx.bot.db.fetchrow(query, id)
-            rolesdata.append(result)
-        print(rolesdata)
+# def owner_or_rolepermission:
+#     if ctx.author.id  == 163691476788838401 or ctx.author.id == 447089705691906048 or ctx.author.id == ctx.guild.owner_id:
+#         return true
+#     else:
+#         roleIDs = []
+#         rolesdata = []
+#         for role in ctx.author.roles:
+#             roleIDs.append(role.id)
+#         for id in roleIDs:
+#             query = "SELECT * FROM Roles WHERE roleID = $1 AND"
+#             result = await ctx.bot.db.fetchrow(query, id)
+#             rolesdata.append(result)
+#         print(rolesdata)
 
 
 
