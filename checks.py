@@ -6,7 +6,6 @@ def has_role(*arg):
         for counter in range (0,len(arg)):
             if discord.utils.get(ctx.guild.roles, name=str(arg[counter])) in ctx.author.roles:
                 return True
-        await ctx.channel.send(":no_good: You do not have permission for that!")
         return False
     return commands.check(predicate)
 
@@ -15,7 +14,6 @@ def justme():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            await ctx.channel.send(":no_good: You do not have permission for that!")
             return False
     return commands.check(predicate)
 
@@ -43,7 +41,6 @@ def bluetext_enabled():
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
-        await ctx.channel.send(":no_good: Bluetext commands are not enabled here!")
         return False
     return commands.check(predicate)
 
@@ -56,7 +53,6 @@ def pubquiz_enabled():
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
-        await ctx.channel.send(":no_good: Pubquiz commands are not enabled here!")
         return False
     return commands.check(predicate)
 
@@ -69,7 +65,6 @@ def welcome_enabled():
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
-        await ctx.channel.send(":no_good: Welcome commands are not enabled here!")
         return False
     return commands.check(predicate)
 
@@ -82,7 +77,6 @@ def leave_enabled():
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
-        await ctx.channel.send(":no_good: Farewell commands are not enabled here!")
         return False
     return commands.check(predicate)
 
@@ -95,7 +89,6 @@ def admin_enabled():
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
-        await ctx.channel.send(":no_good: Admin commands are not enabled here!")
         return False
     return commands.check(predicate)
 
@@ -108,7 +101,6 @@ def games_enabled():
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
-        await ctx.channel.send(":no_good: Games commands are not enabled here!")
         return False
     return commands.check(predicate)
 

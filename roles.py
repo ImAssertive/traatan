@@ -642,7 +642,15 @@ class rolesCog:
         embed.add_field(name="Edit", value="Edits the custom permissions for the specified role.", inline=False)
         await ctx.channel.send(embed=embed)
 
-
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            return
+        elif isinstance(error, commands.CheckFailure):
+            try:
+                await ctx.channel.send(":no_entry: | You do not have permission for {} here.".format(ctx.command))
+            except:
+                pass
+        
 
 
 def setup(bot):
