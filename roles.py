@@ -167,7 +167,7 @@ class rolesCog:
                 await closed.delete()
 
     async def roleAdminMenuPage2(self, ctx, menu, role):
-        embed = discord.Embed(title='Administrator Permission options (2/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: editrole\n3: muted (disables all commands)\n4: Enable All\n5: Disable All\n6: Previous Page\n7: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Administrator Permission options (2/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: muted (disables all commands)\n3: Enable All\n4: Disable All\n5: Previous Page\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(7)
@@ -194,33 +194,27 @@ class rolesCog:
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-
             elif str(reaction.emoji) == "2\u20e3":
-                permissionToEdit = "editrole"
-                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
-                await self.roleAdminMenuPage2(ctx, menu, role)
-
-            elif str(reaction.emoji) == "3\u20e3":
                 permissionToEdit = "muted"
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "4\u20e3":
+            elif str(reaction.emoji) == "3\u20e3":
                 toeditTrue = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "5\u20e3":
+            elif str(reaction.emoji) == "4\u20e3":
                 toeditFalse = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
                 toeditTrue = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "6\u20e3":
+            elif str(reaction.emoji) == "5\u20e3":
                 await self.roleAdminMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "7\u20e3":
+            elif str(reaction.emoji) == "6\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "❌":
@@ -614,7 +608,7 @@ class rolesCog:
 
     @roles.command(name="editrole", aliases=["edit"])
     @checks.is_not_banned()
-    @checks.owner_or_rolepermission()
+    @checks.owner_or_admin()
     async def editrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
@@ -652,7 +646,23 @@ class rolesCog:
         await ctx.channel.send(embed=embed)
 
 
-
+    @commands.command()
+    @checks.is_not_banned()
+    async def iam(self, ctx, *, roleName):
+        role = discord.utils.get(ctx.guild.roles, name=roleName)
+        if role is None:
+            await ctx.channel.send(":no_entry: | Role not found.")
+        else:
+            query = "SELECT * FROM Roles WHERE roleID = $1"
+            result = await ctx.bot.db.fetchrow(query, role.id)
+            if role["selfassignable"] == True:
+                if role in ctx.author.roles:
+                    await ctx.channel.send(":no_entry: | You already have this role!")
+                else:
+                    await ctx.author.add_roles(role)
+                    await ctx.channel.send(":white_check_mark: | **"+ctx.author.name+ "** You now have the **" + role.name + "** role.")
+            else:
+                await ctx.channel.send(":no_entry: | This role is not self assignable!")
 
 
 def setup(bot):

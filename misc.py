@@ -22,6 +22,7 @@ class miscCog:
     @commands.command(name="bluetext", aliases=['bt'])
     @checks.is_not_banned()
     @checks.bluetext_enabled()
+    @checks.rolescheck("bluetext")
     async def bluetext(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, False)
         await ctx.channel.send(toOutput)
@@ -31,6 +32,7 @@ class miscCog:
     @commands.command(name="bluetextcode", aliases=['bluetextmarkup', 'btc', 'btmu'])
     @checks.is_not_banned()
     @checks.bluetext_enabled()
+    @checks.rolescheck("bluetextcode")
     async def bluetextcode(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, True)
         await ctx.channel.send("Here's your code:")
@@ -41,6 +43,7 @@ class miscCog:
     @commands.command()
     @checks.is_not_banned()
     @checks.bluetext_enabled()
+    @checks.rolescheck("cute")
     async def cute(self, ctx, member):
         memberID = useful.getid(member)
         try:
@@ -73,6 +76,7 @@ class miscCog:
         await ctx.channel.send(embed = embed)
 
     @commands.command(name="eightball", aliases=['8ball'])
+    @checks.rolescheck("eightball")
     async def eightball(self, ctx):
         randomNumber = random.randint(0, 19)
         eightballName = ("**" + ctx.author.name + "** - The 8ball says:")

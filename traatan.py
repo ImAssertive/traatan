@@ -56,7 +56,6 @@ async def run():
     setRaidText boolean DEFAULT false,
     mute boolean DEFAULT false,
     cute boolean DEFAULT true,
-    editrole boolean DEFAULT false,
     conch boolean DEFAULT true,
     eightball boolean DEFAULT true, 
     setMuteRole boolean DEFAULT false,

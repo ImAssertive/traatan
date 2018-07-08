@@ -8,8 +8,8 @@ class adminCog:
 
     @commands.command(name='setup', aliases=['botsetup', 'su'])
     @checks.is_not_banned()
-    @checks.justme() # change
-    async def setup(self, ctx):
+    @checks.owner_or_admin()
+    async def setup(self, ctx):z`
         if not ctx.guild:
             await ctx.author.send(":no_good: | This command can not be used in DM!")
         else:
@@ -84,7 +84,7 @@ class adminCog:
     @commands.command(name="setfarewell", aliases=['setleave', 'setleavechannel', 'setfarewellchannel'])
     @checks.leave_enabled()
     @checks.is_not_banned()
-    @checks.justme() #CHANGE
+    @checks.rolescheck("setleavechannel")
     async def setfarewell(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -96,7 +96,7 @@ class adminCog:
     @commands.command(name="setwelcome", aliases=['setwelcomechannel'])
     @checks.is_not_banned()
     @checks.welcome_enabled()
-    @checks.justme() #CHANGE
+    @checks.rolescheck("setwelcomechannel")
     async def setwelcome(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -108,7 +108,7 @@ class adminCog:
     @commands.command()
     @checks.welcome_enabled()
     @checks.is_not_banned()
-    @checks.justme() #CHANGE
+    @checks.rolescheck("setwelcometext")
     async def setwelcometext(self, ctx, *, welcometext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -120,7 +120,7 @@ class adminCog:
     @commands.command(name="setfarewelltext", aliases =['setleavetext'])
     @checks.leave_enabled()
     @checks.is_not_banned()
-    @checks.justme() #CHANGE
+    @checks.rolescheck("setleavetext")
     async def setfarewelltext(self, ctx, *, leavetext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():

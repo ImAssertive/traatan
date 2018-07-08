@@ -89,7 +89,7 @@ def admin_enabled():
         return False
     return commands.check(predicate)
 
-def owner_or_rolepermission():
+def owner_or_admin():
     async def predicate(ctx):
         if ctx.author.id == ctx.guild.owner_id:
             return True
@@ -102,8 +102,7 @@ def owner_or_rolepermission():
                     return True
                 elif role[3] == True:
                     return False
-                elif role[23] == True:
-                    return True
+
             return False
     return commands.check(predicate)
 
@@ -138,12 +137,11 @@ def rolescheck(command):
         else:
             rolesData = await getRolePerms(ctx)
             for role in rolesData:
-                print(role[command])
                 if role[2] == True:
                     return True
                 elif role[3] == True:
                     return False
-                elif role[23] == True:
+                elif role[command] == True:
                     return True
             return False
     return commands.check(predicate)
