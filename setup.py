@@ -49,7 +49,7 @@ class setupCog:
             query = "INSERT INTO Guilds (guildID) VALUES($1) ON CONFLICT DO NOTHING"
             await self.bot.db.execute(query, ctx.id)
             query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.guild.id, ctx.guild.id)
+            await self.bot.db.execute(query, ctx.id, ctx.id)
             for member in ctx.members:
                 query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
                 await self.bot.db.execute(query, member.id)
