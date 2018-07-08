@@ -91,32 +91,30 @@ def admin_enabled():
 
 def owner_or_rolepermission():
     async def predicate(ctx):
-        if ctx.author.id == ctx.guild.owner_id:
+        if ctx.author.id == ctx.guild.owner_id or ctx.author.id  == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
-        # elif ctx.author.id  == 163691476788838401 or ctx.author.id == 447089705691906048:
-        #     return True
         else:
-            roleIDs = []
-            rolesdata = []
-            print(ctx.author.roles)
-            for role in ctx.author.roles:
-                roleIDs.append(role.id)
-            print(roleIDs)
-            for i in range(0,len(roleIDs)):
-                query = "SELECT * FROM Roles WHERE roleID = $1"
-                result = await ctx.bot.db.fetchrow(query, int(roleIDs[i]))
-                rolesdata.append(result)
-                print(rolesdata)
-            for role in rolesdata:
-                if role[3] == True:
+            rolesData = getRolePerms(ctx)
+            for role in rolesData:
+                if role[2] == True:
+                    return True
+                elif role[3] == True:
                     return False
                 elif role[23] == True:
                     return True
             return False
     return commands.check(predicate)
 
-
-
+def getRolePerms(ctx):
+    roleIDs = []
+    rolesdata = []
+    for role in ctx.author.roles:
+        roleIDs.append(role.id)
+    for i in range(0, len(roleIDs)):
+        query = "SELECT * FROM Roles WHERE roleID = $1"
+        result = await ctx.bot.db.fetchrow(query, int(roleIDs[i]))
+        rolesdata.append(result)
+    return rolesdata
 
 
 def games_enabled():
