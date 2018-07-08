@@ -26,8 +26,9 @@ class setupCog:
     async def addroles(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.id, ctx.guild.id)
+            for role in ctx.guild.roles:
+                query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+                await self.bot.db.execute(query, role.id, ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
