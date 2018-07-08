@@ -614,6 +614,7 @@ class rolesCog:
 
     @roles.command(name="editrole", aliases=["edit"])
     @checks.is_not_banned()
+    @checks.owner_or_rolepermission()
     async def editrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
@@ -636,7 +637,6 @@ class rolesCog:
             await self.rolesMainMenu(ctx, menu, role)
 
     @roles.command()
-    @checks.owner_or_rolepermission()
     async def view(self, ctx, *, role):
         await ctx.channel.send("coming soon")
 
