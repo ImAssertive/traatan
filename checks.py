@@ -98,10 +98,12 @@ def owner_or_rolepermission():
         else:
             roleIDs = []
             rolesdata = []
+            print(ctx.author.roles)
             for role in ctx.author.roles:
                 if role.id:
                     roleIDs.append(role.id)
                 else:
+                    print("test")
                     roleIDs.append(ctx.guild.id)
             for i in range(0,len(roleIDs)):
                 query = "SELECT * FROM Roles WHERE roleID = $1"
