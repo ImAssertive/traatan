@@ -9,7 +9,7 @@ class adminCog:
     @commands.command(name='setup', aliases=['botsetup', 'su'])
     @checks.is_not_banned()
     @checks.owner_or_admin()
-    async def setup(self, ctx):z`
+    async def setup(self, ctx):
         if not ctx.guild:
             await ctx.author.send(":no_good: | This command can not be used in DM!")
         else:
