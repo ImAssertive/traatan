@@ -106,7 +106,7 @@ def owner_or_rolepermission():
                 result = await ctx.bot.db.fetchrow(query, int(roleIDs[i]))
                 rolesdata.append(result)
             print(rolesdata)
-    return command.check(predicate)
+    return commands.check(predicate)
 
 
 
