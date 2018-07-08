@@ -99,7 +99,10 @@ def owner_or_rolepermission():
             roleIDs = []
             rolesdata = []
             for role in ctx.author.roles:
-                roleIDs.append(role.id)
+                if role.id:
+                    roleIDs.append(role.id)
+                else:
+                    roleIDs.append(ctx.guild.id)
             for i in range(0,len(roleIDs)):
                 query = "SELECT * FROM Roles WHERE roleID = $1"
                 result = await ctx.bot.db.fetchrow(query, int(roleIDs[i]))
