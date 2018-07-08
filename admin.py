@@ -6,12 +6,6 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(hidden= True)
-    @checks.justme()
-    async def sperg(ctx, member):
-        memberid = int("".join(each for each in member if each.isdigit()))
-        await ctx.guild.get_member(memberid).add_roles(discord.utils.get(ctx.guild.roles, name="Part of the Crew part of the server"))
-
     @commands.command(name='setup', aliases=['botsetup', 'su'])
     @checks.is_not_banned()
     @checks.justme() # change
@@ -139,11 +133,13 @@ class adminCog:
     @commands.command()
     async def gdpr(self, ctx):
         finished = 0
+        successful = True
         while finished == 0:
             try:
                 await ctx.author.send("Here is the data currently stored about you:")
             except:
                 await ctx.channel.send("Please enable 'Allow direct messages from server members' under 'Privacy & Safety' in settings. For security reasons this information can not be posted publicly.")
+                successful = False
                 break
             embed = discord.Embed(title="Global Data:", description="", colour=self.bot.getcolour())
             query = "SELECT * FROM Users WHERE userID = $1"
@@ -178,6 +174,8 @@ class adminCog:
                 embed = discord.Embed(title="Game account data:", description="No data found!")
             await ctx.author.send(embed = embed)
             finished = 1
+        if successful:
+            await ctx.channel.send(":white_check_mark: | Information sent to DM!")
 
     @commands.command(name='botglobalunban', aliases=['bgub', 'wback'], hidden = True)
     @checks.justme()

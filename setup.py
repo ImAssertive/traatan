@@ -21,8 +21,6 @@ class setupCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
-
-
     @commands.command(hidden = True)
     @checks.justme()
     async def addguild(self, ctx):
@@ -100,9 +98,14 @@ class setupCog:
             await ctx.guild.get_channel(int(channelID)).send(welcometext)
 
 
-
-
-
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            return
+        elif isinstance(error, commands.CheckFailure):
+            try:
+                await ctx.channel.send(":no_entry: | You do not have permission for {} here.".format(ctx.command))
+            except:
+                pass
 
 
 
