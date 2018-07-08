@@ -137,8 +137,8 @@ def rolescheck(command):
             return True
         else:
             rolesData = await getRolePerms(ctx)
-            print(role.index(command))
             for role in rolesData:
+                print(role.index(command))
                 if role[2] == True:
                     return True
                 elif role[3] == True:
