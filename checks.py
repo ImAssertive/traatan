@@ -92,7 +92,7 @@ def admin_enabled():
         return False
     return commands.check(predicate)
 
-def owner_or_rolepermission:
+def owner_or_rolepermission():
     async def predicate(ctx):
         if ctx.author.id  == 163691476788838401 or ctx.author.id == 447089705691906048 or ctx.author.id == ctx.guild.owner_id:
             return true
