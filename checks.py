@@ -94,7 +94,7 @@ def owner_or_rolepermission():
         if ctx.author.id == ctx.guild.owner_id or ctx.author.id  == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            rolesData = getRolePerms(ctx)
+            rolesData = await getRolePerms(ctx)
             for role in rolesData:
                 if role[2] == True:
                     return True
@@ -105,7 +105,7 @@ def owner_or_rolepermission():
             return False
     return commands.check(predicate)
 
-def getRolePerms(ctx):
+async def getRolePerms(ctx):
     roleIDs = []
     rolesdata = []
     for role in ctx.author.roles:
