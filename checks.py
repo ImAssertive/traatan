@@ -91,8 +91,10 @@ def admin_enabled():
 
 def owner_or_rolepermission():
     async def predicate(ctx):
-        if ctx.author.id == ctx.guild.owner_id or ctx.author.id  == 163691476788838401 or ctx.author.id == 447089705691906048:
+        if ctx.author.id == ctx.guild.owner_id:
             return True
+        # elif ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+        #     return True
         else:
             rolesData = await getRolePerms(ctx)
             for role in rolesData:
