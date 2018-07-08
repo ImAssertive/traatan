@@ -66,7 +66,6 @@ async def run():
     guildID bigint references Guilds(guildID) ON DELETE CASCADE ON UPDATE CASCADE,
     pubquizScoreTotal integer DEFAULT 0,
     pubquizScoreWeekly integer DEFAULT 0,
-    banned boolean DEFAULT false,
     PRIMARY KEY(userID, guildID));
     
     CREATE TABLE IF NOT EXISTS UserGameAccounts(accountID serial PRIMARY KEY,

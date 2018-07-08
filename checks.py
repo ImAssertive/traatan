@@ -22,13 +22,10 @@ def is_not_banned():
         query = "SELECT * FROM Users WHERE userID = $1 AND banned = false"
         result = await ctx.bot.db.fetchrow(query, ctx.author.id)
         if result:
-            query = "SELECT * FROM GuildUsers WHERE guildID = $1 AND userID = $2 AND banned = false"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id, ctx.author.id)
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND banned = false"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
-                query = "SELECT * FROM Guilds WHERE guildID = $1 AND banned = false"
-                result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-                if result:
-                    return True
+                return True
         return False
     return commands.check(predicate)
 
@@ -108,6 +105,9 @@ def owner_or_rolepermission():
                 result = await ctx.bot.db.fetchrow(query, int(roleIDs[i]))
                 rolesdata.append(result)
             print(rolesdata)
+            for role in rolesdata:
+                print(role[3])
+                print(role[23])
     return commands.check(predicate)
 
 
