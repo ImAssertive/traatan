@@ -133,8 +133,8 @@ def games_enabled():
 
 def rolescheck(command):
     async def predicate(ctx):
-         if ctx.author.id == 163691476788838401:
-             return True
+        if ctx.author.id == 163691476788838401:
+            return True
         else:
             rolesData = await getRolePerms(ctx)
             print(role.index(command))
