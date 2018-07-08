@@ -167,7 +167,7 @@ class rolesCog:
                 await closed.delete()
 
     async def roleAdminMenuPage2(self, ctx, menu, role):
-        embed = discord.Embed(title='Administrator Permission options (2/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: editrole\n3: Enable All\n4: Disable All\n5: Previous Page\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Administrator Permission options (2/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: editrole\n3: muted (disables all commands)\n4: Enable All\n5: Disable All\n6: Previous Page\n7: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(7)
@@ -200,23 +200,27 @@ class rolesCog:
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-
             elif str(reaction.emoji) == "3\u20e3":
+                permissionToEdit = "muted"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "4\u20e3":
                 toeditTrue = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "4\u20e3":
+            elif str(reaction.emoji) == "5\u20e3":
                 toeditFalse = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
                 toeditTrue = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "5\u20e3":
+            elif str(reaction.emoji) == "6\u20e3":
                 await self.roleAdminMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "6\u20e3":
+            elif str(reaction.emoji) == "7\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "❌":
@@ -347,7 +351,7 @@ class rolesCog:
                 await closed.delete()
 
     async def roleMiscMenu(self, ctx, menu, role):
-        embed = discord.Embed(title='Misc Permission options', description="These commands are mostly for fun.\n\nOptions:\n0: bluetext\n1: bluetextcode\n2: cute\n3: conch\n4: eightball\n5: Enable all\n6: Disable all\n7: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Misc Permission options', description="These commands are mostly for fun.\n\nOptions:\n0: bluetext\n1: bluetextcode\n2: cute\n3: conch\n4: eightball\n5:selfassignable\n6: Enable all\n7: Disable all\n8: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(8)
@@ -388,23 +392,26 @@ class rolesCog:
                 await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
                 await self.roleMiscMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "7\u20e3":
-                await self.rolesMainMenu(ctx, menu, role)
-
             elif str(reaction.emoji) == "5\u20e3":
+                permissionToEdit = "selfassignable"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleMiscMenu(ctx, menu, role)
+
+            elif str(reaction.emoji) == "6\u20e3":
                 toeditTrue = ["bluetext", "bluetextcode", "eightball", "cute", "conch"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleMiscMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "6\u20e3":
+            elif str(reaction.emoji) == "7\u20e3":
                 toeditTrue = []
                 toeditFalse = ["bluetext", "bluetextcode", "eightball", "cute", "conch"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleMiscMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "7\u20e3":
+            elif str(reaction.emoji) == "8\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
+
 
             elif str(reaction.emoji) == "❌":
                 closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
@@ -472,7 +479,7 @@ class rolesCog:
         else:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
-                toeditTrue = []
+                toeditTrue = ["muted"]
                 toeditFalse = ["administrator", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqjoin", "pqqmhelp", "bluetext", "bluetextcode", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext", "mute", "cute", "editrole", "conch", "setmuterole"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePresetMenu(ctx, menu, role)
@@ -629,6 +636,7 @@ class rolesCog:
             await self.rolesMainMenu(ctx, menu, role)
 
     @roles.command()
+    @checks.owner_or_rolepermission()
     async def view(self, ctx, *, role):
         await ctx.channel.send("coming soon")
 
