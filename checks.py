@@ -104,7 +104,7 @@ def owner_or_rolepermission():
             for role in ctx.author.roles:
                 roleIDs.append(role.id)
             for i in range(0,len(roleIDs)):
-                query = "SELECT * FROM Roles WHERE roleID = $1 AND"
+                query = "SELECT * FROM Roles WHERE roleID = $1"
                 result = await ctx.bot.db.fetchrow(query, int(roleIDs[i]))
                 rolesdata.append(result)
             print(rolesdata)
