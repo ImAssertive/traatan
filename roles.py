@@ -655,7 +655,7 @@ class rolesCog:
         else:
             query = "SELECT * FROM Roles WHERE roleID = $1"
             result = await ctx.bot.db.fetchrow(query, role.id)
-            if role["selfassignable"] == True:
+            if result["selfassignable"] == True:
                 if role in ctx.author.roles:
                     await ctx.channel.send(":no_entry: | You already have this role!")
                 else:
