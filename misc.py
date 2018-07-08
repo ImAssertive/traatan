@@ -61,6 +61,7 @@ class miscCog:
             await ctx.channel.send(":white_check_mark: | No longer hiding bluetext commands!")
 
     @commands.command(name="conch", aliases=['shell'])
+    @checks.rolescheck("conch")
     async def conch(self, ctx):
         randomNumber = random.randint(0,19)
         conchName = ("**" +ctx.author.name + "** | The conch says:")
