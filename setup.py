@@ -21,6 +21,17 @@ class setupCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
+    @commands.command(hidden= True)
+    @checks.justme()
+    async def addroles(self, ctx):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+            await self.bot.db.execute(query, ctx.id, ctx.guild.id)
+        await self.bot.db.release(connection)
+        await ctx.channel.send(":white_check_mark: | Done!")
+
+
     @commands.command(hidden = True)
     @checks.justme()
     async def addguild(self, ctx):
@@ -55,6 +66,24 @@ class setupCog:
                 await self.bot.db.execute(query, member.id)
                 query = "INSERT INTO GuildUsers (guildID, userID) VALUES($1, $2) ON CONFLICT DO NOTHING"
                 await self.bot.db.execute(query, ctx.id, member.id)
+            for role in ctx.roles:
+                query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+                await self.bot.db.execute(query, role.id, ctx.id)
+        await self.bot.db.release(connection)
+
+
+    async def on_guild_role_create(self, ctx):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+            await self.bot.db.execute(query, ctx.id, ctx.guild.id)
+        await self.bot.db.release(connection)
+
+    async def on_guild_role_delete(self, ctx):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "DELETE FROM Roles WHERE roleID = $1"
+            await self.bot.db.execute(query, ctx.id)
         await self.bot.db.release(connection)
 
     async def on_guild_remove(self, ctx):

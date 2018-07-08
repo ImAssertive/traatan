@@ -108,8 +108,11 @@ def owner_or_rolepermission():
                 rolesdata.append(result)
                 print(rolesdata)
             for role in rolesdata:
-                print(role[3])
-                print(role[23])
+                if role[3] == True:
+                    return False
+                elif role[23] == True:
+                    return True
+            return False
     return commands.check(predicate)
 
 
