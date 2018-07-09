@@ -31,7 +31,7 @@ class pubquizCog:
             query = "UPDATE Guilds SET pubquizendtext = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, pubquizendtext,ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send(":white_check_mark: | Pub quiz text set to `"+pubquizendtext+"`!")
+        await ctx.channel.send(":white_check_mark: | Pub quiz end text set to `"+pubquizendtext+"`!")
 
 
     @pubquiz.command()
