@@ -39,7 +39,7 @@ class pubquizCog:
                 await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
             await self.bot.db.release(connection)
             query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquiztext IS NOT NULL"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if results:
                 pubquiztext = ("{}".format(results["pubquiztext"]))
                 await ctx.channel.send(pubquiztext)
