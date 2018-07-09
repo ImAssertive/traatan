@@ -96,6 +96,7 @@ class pubquizCog:
             await self.bot.db.release(connection)
 
     async def leaderboard(self, ctx):
+        print("mew")
         query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
         for row in result:
