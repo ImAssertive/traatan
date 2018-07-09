@@ -123,19 +123,16 @@ class pubquizCog:
         print(result)
         resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range (0,len(result)):
-            resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them "+ inflect.engine().ordinal(row + 1) + ". ("+str(result[row]["pubquizscoretotal"])+" total points)", inline=False)
+            resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them **"+ inflect.engine().ordinal(row + 1) + "**. ("+str(result[row]["pubquizscoretotal"])+" total points)", inline=False)
         return resultsEmbed
 
     async def totalleaderboardFunction(self, ctx):
-        async def leaderboard(self, ctx):
-            query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoretotal != 0 ORDER BY pubquizscoreweekly DESC"
-            result = await ctx.bot.db.fetch(query, ctx.guild.id)
-            resultsEmbed = discord.Embed(title=ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
-            for row in range(0, len(result)):
-                resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" + ctx.guild.get_member(int(result[row]["userid"])).name + "#" + ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoretotal"]) + "** points. Placing them " + inflect.engine().ordinal(row + 1) + ".", inline=False)
-            query = "SELECT * FROM guilds WHERE guildID = $1"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            return resultsEmbed
+        query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoretotal != 0 ORDER BY pubquizscoreweekly DESC"
+        result = await ctx.bot.db.fetch(query, ctx.guild.id)
+        resultsEmbed = discord.Embed(title=ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
+        for row in range(0, len(result)):
+            resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" + ctx.guild.get_member(int(result[row]["userid"])).name + "#" + ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoretotal"]) + "** points. Placing them **" + inflect.engine().ordinal(row + 1) + "**.", inline=False)
+        return resultsEmbed
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
