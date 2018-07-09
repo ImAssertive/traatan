@@ -121,9 +121,9 @@ class pubquizCog:
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, ctx.author.id)
+                await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, memberid)
                 query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, ctx.author.id)
+                await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, memberid)
             await self.bot.db.release(connection)
             if value > 0:
                 await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
