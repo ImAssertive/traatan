@@ -11,10 +11,20 @@ class pubquizCog:
         if ctx.invoked_subcommand is None:
             await ctx.channel.send("Please enter a command. !help or !pubquiz help for a list of commands.")
 
-
+    @pubquiz.command(name='settext', aliases=['stext'])
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqsettext")
+    async def settext(self, ctx, *, pubquiztext):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET pubquiztext = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, pubquiztext,ctx.guild.id)
+        await self.bot.db.release(connection)
+        await ctx.channel.send(":white_check_mark: | Pub quiz text set to `"+pubquiztext+"`!")
 
     @pubquiz.command(name='start', aliases=['begin', 'go'])
     @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqstart")
     async def start(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -45,6 +55,11 @@ class pubquizCog:
         if result:
             await ctx.channel.send("A quiz is already active!")
         else:
+            connection = await self.bot.db.acquire()
+            async with connection.transaction():
+                query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
+                await self.bot.db.execute(query, ctx.guild.id)
+            await self.bot.db.release(connection)
             print("carry on here")
 
     @pubquiz.command()
