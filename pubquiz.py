@@ -172,9 +172,9 @@ class pubquizCog:
             currenttotal = result["pubquizscoretotal"]
             await self.changescore(ctx, memberid)
             if value > 0:
-                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator +"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
             elif value < 0:
-                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator +"** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +"** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
         elif value == 0:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
@@ -229,17 +229,17 @@ class pubquizCog:
                 if toAdd < 10:
                     toAdd = 10
             query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
-            currentvalue = result["pubquizscoreweekly"]
-            currenttotal = result["pubquizscoretotal"]
+            results = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+            currentvalue = results["pubquizscoreweekly"]
+            currenttotal = results["pubquizscoretotal"]
             async with connection.transaction():
                 query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
                 await self.bot.db.execute(query, currentvalue + toAdd, ctx.guild.id, memberid)
                 query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
                 await self.bot.db.execute(query, currenttotal + toAdd, ctx.guild.id, memberid)
-            embed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator, inline=False, value="gained "+ toAdd + "points.")
+            embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator, inline=False, value="gained "+ toAdd + "points.")
         await self.bot.db.release(connection)
-
+        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
 
     @pubquiz.command()
     async def question(self, ctx, *, question):
