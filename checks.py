@@ -71,7 +71,7 @@ def module_enabled(module):
         return False
     return commands.check(predicate)
 
-def module_enabled_not_check(module):
+def module_enabled_not_check(ctx, module):
     if ctx.author.id == 163691476788838401:
         return True
     else:
@@ -82,7 +82,7 @@ def module_enabled_not_check(module):
             return True
     return False
 
-def rolescheck_not_check(module):
+def rolescheck_not_check(ctx, module):
     if ctx.author.id == 163691476788838401:
         return True
     else:
