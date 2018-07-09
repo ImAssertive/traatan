@@ -18,6 +18,7 @@ async def run():
     pubquiz boolean DEFAULT true,
     bluetext boolean DEFAULT true,
     misc boolean DEFAULT true,
+    NSFW boolean DEFAULT false,
     welcome boolean DEFAULT false,
     welcomeChannel bigint,
     welcomeText text,
