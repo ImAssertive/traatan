@@ -35,14 +35,16 @@ class pubquizCog:
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = true WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
+                query = "UPDATE Guilds SET pubquizchannel = $1 WHERE guildID = $2"
+                await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
             await self.bot.db.release(connection)
-            query = "SELECT * FROM guilds WHERE guildID = $1"
-            results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if pubquiztext:
-                pubquiztext = ("{}".format(result["pubquiztext"]))
-                await ctx.guild.get_channel(int(channelID)).send(pubquiztext)
+            query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquiztext IS NOT NULL"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if results:
+                pubquiztext = ("{}".format(results["pubquiztext"]))
+                await ctx.channel.send(pubquiztext)
             else:
-                await ctx.guild.get_channel(int(channelID)).send("A new pub quiz is starting soon!")
+                await ctx.cahnnel.send("Pub quiz started!")
 
     @pubquiz.command()
     async def test(self, ctx):
