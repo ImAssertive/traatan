@@ -107,23 +107,55 @@ class pubquizCog:
                 await ctx.channel.send(pubquizendtext)
             else:
                 await ctx.channel.send("That was the pub quiz! I hope you enjoyed. :)")
-            await self.leaderboard(ctx)
+            embed = await self.leaderboardFunction(ctx)
+            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
 
-    async def leaderboard(self, ctx):
+    async def leaderboardFunction(self, ctx):
         query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
         print(result)
         resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range (0,len(result)):
-            resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them "+ inflect.engine().ordinal(row + 1) + ".", inline=False)
+            resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them "+ inflect.engine().ordinal(row + 1) + ". ("+str(result[row]["pubquizscoretotal"])+" total points)", inline=False)
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed = resultsEmbed)
+        return resultsEmbed
+
+    async def totalleaderboardFunction(self, ctx):
+        async def leaderboard(self, ctx):
+            query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoretotal != 0 ORDER BY pubquizscoreweekly DESC"
+            result = await ctx.bot.db.fetch(query, ctx.guild.id)
+            resultsEmbed = discord.Embed(title=ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
+            for row in range(0, len(result)):
+                resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" + ctx.guild.get_member(int(result[row]["userid"])).name + "#" + ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoretotal"]) + "** points. Placing them " + inflect.engine().ordinal(row + 1) + ".", inline=False)
+            query = "SELECT * FROM guilds WHERE guildID = $1"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            return resultsEmbed
+
+    @pubquiz.command()
+    @checks.module_enabled("pubquiz")
+    async def totalleaderboard(self, ctx):
+        embed = await self.totalleaderboardFunction(ctx)
+        if checks.rolescheck("pqleaderboard"):
+            await ctx.channel.send(embed=embed)
+        else:
+            await ctx.author.send(embed=embed)
+
+    @pubquiz.command()
+    @checks.module_enabled("pubquiz")
+    async def leaderboard(self, ctx):
+        embed = await self.leaderboardFunction(ctx)
+        if checks.rolescheck("pqleaderboard"):
+            query = "SELECT * FROM guilds WHERE guildID = $1"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+        else:
+            await ctx.author.send(embed=embed)
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")

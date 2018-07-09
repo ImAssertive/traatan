@@ -53,6 +53,7 @@ async def run():
     pqJoin boolean DEFAULT true,
     pqQMHelp boolean DEFAULT false,
     pqsettext boolean DEFAULT false,
+    pqleaderboard boolean DEFAULT false,
     bluetext boolean DEFAULT true,
     bluetextcode boolean DEFAULT true,
     setWelcomeChannel boolean DEFAULT false,
