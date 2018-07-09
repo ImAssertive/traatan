@@ -664,6 +664,23 @@ class rolesCog:
             else:
                 await ctx.channel.send(":no_entry: | This role is not self assignable!")
 
+    @commands.command()
+    @checks.is_not_banned()
+    async def iamnot(self, ctx, *, roleName):
+        role = discord.utils.get(ctx.guild.roles, name=roleName)
+        if role is None:
+            await ctx.channel.send(":no_entry: | Role not found.")
+        else:
+            query = "SELECT * FROM Roles WHERE roleID = $1"
+            result = await ctx.bot.db.fetchrow(query, role.id)
+            if result["selfassignable"] == True:
+                if role not in ctx.author.roles:
+                    await ctx.channel.send(":no_entry: | You don't have this role!")
+                else:
+                    await ctx.author.remove_roles(role)
+                    await ctx.channel.send(":white_check_mark: | **"+ctx.author.name+ "** You no longer have the **" + role.name + "** role.")
+            else:
+                await ctx.channel.send(":no_entry: | This role is not self assignable!")
 
 def setup(bot):
     bot.add_cog(rolesCog(bot))
