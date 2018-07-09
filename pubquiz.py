@@ -88,15 +88,48 @@ class pubquizCog:
         if result:
             await ctx.channel.send(":no_entry: | There is no quiz currently active!")
         else:
-            query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
-            result = await ctx.bot.db.fetch(query, ctx.guild.id)
-            for row in result:
-                print(row)
+            await self.leaderboard(ctx)
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
+
+    async def leaderboard(self, ctx):
+        query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
+        result = await ctx.bot.db.fetch(query, ctx.guild.id)
+        for row in result:
+            print(row)
+
+    @pubquiz.command()
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqoverride")
+    async def override(self, ctx, member, value):
+        successful = 1
+        try:
+            value = int(value)
+        except:
+            await ctx.channel.send("Please enter a whole number to add or subtract from the users score.")
+            successful = 0
+        if successful == 1 and value != 0:
+            memberid = useful.getid(member)
+            query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+            currentvalue = result["pubquizscoreweekly"]
+            currenttotal = result["pubquizscoretotal"]
+            connection = await self.bot.db.acquire()
+            async with connection.transaction():
+                query = "UPDATE Guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, ctx.user.id)
+                query = "UPDATE Guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, ctx.user.id)
+            await self.bot.db.release(connection)
+            if value > 0:
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score increased by **" + value + "**.")
+            elif value < 0:
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score reduced by **" + value + "**.")
+        elif value == 0:
+            await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
 
     @pubquiz.command()
