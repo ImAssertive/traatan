@@ -28,8 +28,8 @@ class pubquizCog:
             await self.bot.db.release(connection)
             query = "SELECT * FROM guilds WHERE guildID = $1"
             results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            pubquiztext =("{}".format(result["pubquiztext"]))
             if pubquiztext:
+                pubquiztext = ("{}".format(result["pubquiztext"]))
                 await ctx.guild.get_channel(int(channelID)).send(pubquiztext)
             else:
                 await ctx.guild.get_channel(int(channelID)).send("A new pub quiz is starting soon!")
