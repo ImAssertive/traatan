@@ -178,9 +178,9 @@ class pubquizCog:
                 await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, memberid)
             await self.bot.db.release(connection)
             if value > 0:
-                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +")** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
             elif value < 0:
-                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +"** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +")** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
         elif value == 0:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
