@@ -105,7 +105,7 @@ class pubquizCog:
         except:
             success = 0
         if success == 1:
-            if time.is_integer() and time > 0 and time < 60:
+            if time > 0 and time < 61:
                 connection = await self.bot.db.acquire()
                 async with connection.transaction():
                     query = "UPDATE Guilds SET pubquiztime = $1 WHERE guildID = $2"
