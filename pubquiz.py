@@ -84,16 +84,20 @@ class pubquizCog:
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
     async def stop(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = false"
-        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         if result:
             await ctx.channel.send(":no_entry: | There is no quiz currently active!")
         else:
+            query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
+            result = await ctx.bot.db.fetch(query, ctx.guild.id)
+            for row in result:
+                print(row)
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
-            print("carry on here")
+
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
