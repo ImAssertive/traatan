@@ -6,61 +6,177 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='setup', aliases=['botsetup', 'su'])
-    @checks.is_not_banned()
+    @commands.command(name='setup', aliases=['botsetup', 'guildsettings', 'modules','modulesettings'])
     @checks.owner_or_admin()
     async def setup(self, ctx):
-        if not ctx.guild:
-            await ctx.author.send(":no_good: | This command can not be used in DM!")
+        embed = discord.Embed(title="Menu Loading...", description="Please stand by.", colour=self.bot.getcolour())
+        menu = await ctx.channel.send(embed = embed)
+        emojis = useful.getMenuEmoji(10)
+        for emoji in range(0,len(emojis)):
+            await menu.add_reaction(emojis[emoji])
+        await self.setupMainMenu(ctx, menu)
+
+
+    async def setupMainMenu(self, ctx, menu):
+        embed = discord.Embed(title='Modules main menu', description="Here you can select which modules are enabled on this server.\n\nOptions:\n0: Administrator\n1: Miscellaneous\n2: Pub Quiz\n3: Bluetext\n4: Welcome\n5: Leave\n6: Games\n7: NSFW\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Current guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(10)
+        def emojiCheck(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
+            await menu.delete()
         else:
-            timeout = False
-            choice = "choice"
-            settings = [["Firstly", "Pub Quiz", "pubquizEnabled", "Allows the guild to run a weekly pub quiz complete with custom scoring! For full rules visit NOT DONE YET"],
-                        ["Secondly", "Video Game", "gamesEnabled", "Allows users to attatch video game accounts to the bot to help with matchmaking."],
-                        ["Next", "bluetext", "bluetextEnabled", "Enables a series of commands allowing members to use blue text emotes to construct sentences."],
-                        ["Next", "welcome messages", "welcomeEnabled", "Enables a welcome message when users join the server. This can be set with tt!setwelcome and tt!setwelcometext commands"],
-                        ["Next", "farewell messages", "leaveEnabled", "Enables a farewell message when the user leaves the server. This can be set with tt!setleave and tt!setleavetext commands"],
-                        ["Finally", "admin", "adminEnabled", "Enables the bots administrator commands. For a list of commands please use UNDEFINED"]]
-            options = ["info", "yes", "no", "skip"]
-            embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!", colour=self.bot.getcolour())
-            await ctx.channel.send(embed=embed)
-            for setting in settings:
-                print(setting)
-                choice = "choice"
-                while choice.lower() not in options and timeout == False:
-                    embed = discord.Embed(title=(setting[0] + " - would you like to have " + setting[1] + " commands enabled?"), description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
-                    await ctx.channel.send(embed = embed)
-                    try:
-                        msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
-                    except asyncio.TimeoutError:
-                        try:
-                            await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        except TypeError:
-                            await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
-                        timeout = True
-                    else:
-                        choice = msg.content
-                        if choice.lower() == "yes":
-                            connection = await self.bot.db.acquire()
-                            async with connection.transaction():
-                                query = "UPDATE Guilds SET "+ setting[2]+ " = true WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
-                            await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! "+ setting[1] +" commands have been enabled.")
-                        elif choice.lower() == "no":
-                            connection = await self.bot.db.acquire()
-                            async with connection.transaction():
-                                query = "UPDATE Guilds SET "+ setting[2] +" = false WHERE guildID = $1"
-                                await self.bot.db.execute(query, ctx.guild.id)
-                            await self.bot.db.release(connection)
-                            await ctx.channel.send("Got it! "+ setting[1]+" commands have been disabled.")
-                        elif choice.lower() == "info":
-                            await ctx.channel.send(setting[3])
-                            choice = "choice"
-                        elif choice.lower() == "skip":
-                            await ctx.channel.send("Got it! I've left your " + setting[1] + " settings as is!")
-            if timeout == False:
-                await ctx.channel.send("Thanks! You are all set up.")
+            await menu.remove_reaction(reaction.emoji, user)
+            if str(reaction.emoji) == "0\u20e3":
+                await self.setupAdminMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "1\u20e3":
+                await self.setupMiscMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "2\u20e3":
+                await self.setupPubQuizMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "3\u20e3":
+                await self.setupBluetextMenu(ctx, menu)
+
+
+            elif str(reaction.emoji) == "4\u20e3":
+                await self.setupWelcomeMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "5\u20e3":
+                await self.setupLeaveMenu(ctx, menu)
+
+
+            elif str(reaction.emoji) == "6\u20e3":
+                await self.setupGameMenu(ctx, menu)
+
+
+            elif str(reaction.emoji) == "7\u20e3":
+                await self.setupNSFWMenu(ctx, menu)
+
+
+            elif str(reaction.emoji) == "8\u20e3":
+                await self.setupMainMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "9\u20e3":
+                await self.setupMainMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "❌":
+                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+                await asyncio.sleep(1)
+                await closed.delete()
+
+    async def setupAdminMenu(self, ctx, menu):
+        embed = discord.Embed(title='Administrator Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(3)
+        def emojisCheck(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=emojischeck, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
+            await menu.delete()
+        else:
+            await menu.remove_reaction(reaction.emoji, user)
+            if str(reaction.emoji) == "0\u20e3":
+                await self.enableModule(ctx, "administrator")
+
+            elif str(reaction.emoji) == "1\u20e3":
+                await self.disableModule(ctx, "administrator")
+
+            elif str(reaction.emoji) == "2\u20e3":
+                await self.setupMainMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "❌":
+                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+                await asyncio.sleep(1)
+                await closed.delete()
+
+    async def enableModule(self, ctx, module):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET " + module + " = true WHERE guildID = $1"
+            await self.bot.db.execute(query, ctx.guild.id)
+            await ctx.channel.send(":white_check_mark: | **'"+module+"'** module enabled.")
+            await self.bot.db.release(connection)
+
+    async def disableModule(self, ctx, module):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET " + module + " = false WHERE guildID = $1"
+            await self.bot.db.execute(query, ctx.guild.id)
+            await ctx.channel.send(":white_check_mark: | **'"+module+"'** module disabled.")
+            await self.bot.db.release(connection)
+
+    # @commands.command(name='setup', aliases=['botsetup', 'su'])
+    # @checks.is_not_banned()
+    # @checks.owner_or_admin()
+    # async def setup(self, ctx):
+    #     if not ctx.guild:
+    #         await ctx.author.send(":no_good: | This command can not be used in DM!")
+    #     else:
+    #         timeout = False
+    #         choice = "choice"
+    #         settings = [["Firstly", "Pub Quiz", "pubquizEnabled", "Allows the guild to run a weekly pub quiz complete with custom scoring! For full rules visit NOT DONE YET"],
+    #                     ["Secondly", "Video Game", "gamesEnabled", "Allows users to attatch video game accounts to the bot to help with matchmaking."],
+    #                     ["Next", "bluetext", "bluetextEnabled", "Enables a series of commands allowing members to use blue text emotes to construct sentences."],
+    #                     ["Next", "welcome messages", "welcomeEnabled", "Enables a welcome message when users join the server. This can be set with tt!setwelcome and tt!setwelcometext commands"],
+    #                     ["Next", "farewell messages", "leaveEnabled", "Enables a farewell message when the user leaves the server. This can be set with tt!setleave and tt!setleavetext commands"],
+    #                     ["Finally", "admin", "adminEnabled", "Enables the bots administrator commands. For a list of commands please use UNDEFINED"]]
+    #         options = ["info", "yes", "no", "skip"]
+    #         embed = discord.Embed(title="Welcome to the TraaTan setup menu!", description="This menu allows you to decide which commands will work on this server. If you would like to grant or remove permissions from a specific role please use the UNDEFINED command!", colour=self.bot.getcolour())
+    #         await ctx.channel.send(embed=embed)
+    #         for setting in settings:
+    #             print(setting)
+    #             choice = "choice"
+    #             while choice.lower() not in options and timeout == False:
+    #                 embed = discord.Embed(title=(setting[0] + " - would you like to have " + setting[1] + " commands enabled?"), description="Options: `Yes`, `No`, `Info`, `Skip`",colour=self.bot.getcolour())
+    #                 await ctx.channel.send(embed = embed)
+    #                 try:
+    #                     msg = await self.bot.wait_for('message', check=checks.setup_options1, timeout = 60.0)
+    #                 except asyncio.TimeoutError:
+    #                     try:
+    #                         await ctx.channel.send(":no_entry: | **"+ctx.author.nick + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+    #                     except TypeError:
+    #                         await ctx.channel.send(":no_entry: | **"+ctx.author.name + "** The command menu has closed due to inactivity. Please type tt!setup again to restart the process.")
+    #                     timeout = True
+    #                 else:
+    #                     choice = msg.content
+    #                     if choice.lower() == "yes":
+    #                         connection = await self.bot.db.acquire()
+    #                         async with connection.transaction():
+    #                             query = "UPDATE Guilds SET "+ setting[2]+ " = true WHERE guildID = $1"
+    #                             await self.bot.db.execute(query, ctx.guild.id)
+    #                         await self.bot.db.release(connection)
+    #                         await ctx.channel.send("Got it! "+ setting[1] +" commands have been enabled.")
+    #                     elif choice.lower() == "no":
+    #                         connection = await self.bot.db.acquire()
+    #                         async with connection.transaction():
+    #                             query = "UPDATE Guilds SET "+ setting[2] +" = false WHERE guildID = $1"
+    #                             await self.bot.db.execute(query, ctx.guild.id)
+    #                         await self.bot.db.release(connection)
+    #                         await ctx.channel.send("Got it! "+ setting[1]+" commands have been disabled.")
+    #                     elif choice.lower() == "info":
+    #                         await ctx.channel.send(setting[3])
+    #                         choice = "choice"
+    #                     elif choice.lower() == "skip":
+    #                         await ctx.channel.send("Got it! I've left your " + setting[1] + " settings as is!")
+    #         if timeout == False:
+    #             await ctx.channel.send("Thanks! You are all set up.")
 
     @commands.command(name = "exit", aliases =['quit'], hidden = True)
     @checks.justme()

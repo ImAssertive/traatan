@@ -14,16 +14,16 @@ async def run():
     banned boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS Guilds(guildID bigint PRIMARY KEY,
-    gamesEnabled boolean DEFAULT true,
-    pubquizEnabled boolean DEFAULT true,
-    bluetextEnabled boolean DEFAULT true,
-    welcomeEnabled boolean DEFAULT false,
+    games boolean DEFAULT true,
+    pubquiz boolean DEFAULT true,
+    bluetext boolean DEFAULT true,
+    welcome boolean DEFAULT false,
     welcomeChannel bigint,
     welcomeText text,
-    leaveEnabled boolean DEFAULT false,
+    leave boolean DEFAULT false,
     leaveChannel bigint,
     leaveText text,
-    adminEnabled boolean DEFAULT true,
+    administrator boolean DEFAULT true,
     banned boolean DEFAULT false);
     
     
