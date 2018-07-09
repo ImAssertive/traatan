@@ -17,17 +17,17 @@ class pubquizCog:
     @checks.module_enabled("pubquiz")
     async def start(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
-        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         if result:
             await ctx.channel.send("A quiz is already active!")
         else:
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = true WHERE guildID = $1"
-                await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
+                await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
             query = "SELECT * FROM guilds WHERE guildID = $1"
-            results = await ctx.bot.db.fetchrow(query, ctx.author.id)
+            results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             pubquiztext =("{}".format(result["pubquiztext"]))
             if pubquiztext:
                 await ctx.guild.get_channel(int(channelID)).send(pubquiztext)
