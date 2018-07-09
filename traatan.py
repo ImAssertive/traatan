@@ -17,6 +17,7 @@ async def run():
     games boolean DEFAULT true,
     pubquiz boolean DEFAULT true,
     bluetext boolean DEFAULT true,
+    misc boolean DEFAULT true,
     welcome boolean DEFAULT false,
     welcomeChannel bigint,
     welcomeText text,
