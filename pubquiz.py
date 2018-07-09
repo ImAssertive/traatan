@@ -99,13 +99,19 @@ class pubquizCog:
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqsettime")
     async def settime(self, ctx, time):
-        if time.is_integer() and time > 0 and time < 60:
-            connection = await self.bot.db.acquire()
-            async with connection.transaction():
-                query = "UPDATE Guilds SET pubquiztime = $1 WHERE guildID = $2"
-                await self.bot.db.execute(query, time, ctx.guild.id)
-            await self.bot.db.release(connection)
-        await ctx.channel.send(":white_check_mark: | Default time set to **" + time + "** seconds.")
+        success = 1
+        try:
+            time = int(time)
+        except:
+            success = 0
+        if success == 1:
+            if time.is_integer() and time > 0 and time < 60:
+                connection = await self.bot.db.acquire()
+                async with connection.transaction():
+                    query = "UPDATE Guilds SET pubquiztime = $1 WHERE guildID = $2"
+                    await self.bot.db.execute(query, time, ctx.guild.id)
+                await self.bot.db.release(connection)
+            await ctx.channel.send(":white_check_mark: | Default time set to **" + time + "** seconds.")
 
 
 
