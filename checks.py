@@ -29,66 +29,6 @@ def is_not_banned():
         return False
     return commands.check(predicate)
 
-def bluetext_enabled():
-    async def predicate(ctx):
-        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
-            return True
-        else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND blueText = true"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if result:
-                return True
-        return False
-    return commands.check(predicate)
-
-def pubquiz_enabled():
-    async def predicate(ctx):
-        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
-            return True
-        else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND pubquiz = true"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if result:
-                return True
-        return False
-    return commands.check(predicate)
-
-def welcome_enabled():
-    async def predicate(ctx):
-        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
-            return True
-        else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND welcome = true"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if result:
-                return True
-        return False
-    return commands.check(predicate)
-
-def leave_enabled():
-    async def predicate(ctx):
-        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
-            return True
-        else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND leave = true"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if result:
-                return True
-        return False
-    return commands.check(predicate)
-
-def admin_enabled():
-    async def predicate(ctx):
-        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
-            return True
-        else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND administrator = true"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if result:
-                return True
-        return False
-    return commands.check(predicate)
-
 def owner_or_admin():
     async def predicate(ctx):
         if ctx.author.id == ctx.guild.owner_id:
@@ -118,17 +58,19 @@ async def getRolePerms(ctx):
     return rolesdata
 
 
-def games_enabled():
+
+def module_enabled(module):
     async def predicate(ctx):
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND games = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND "+module+" = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
         return False
     return commands.check(predicate)
+
 
 def rolescheck(command):
     async def predicate(ctx):

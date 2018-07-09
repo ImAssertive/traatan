@@ -436,7 +436,7 @@ class adminCog:
         await ctx.channel.send(":white_check_mark: | Done!")
 
     @commands.command(name="setfarewell", aliases=['setleave', 'setleavechannel', 'setfarewellchannel'])
-    @checks.leave_enabled()
+    @checks.module_enabled("leave")
     @checks.is_not_banned()
     @checks.rolescheck("setleavechannel")
     async def setfarewell(self, ctx):
@@ -449,7 +449,7 @@ class adminCog:
 
     @commands.command(name="setwelcome", aliases=['setwelcomechannel'])
     @checks.is_not_banned()
-    @checks.welcome_enabled()
+    @checks.module_enabled("welcome")
     @checks.rolescheck("setwelcomechannel")
     async def setwelcome(self, ctx):
         connection = await self.bot.db.acquire()
@@ -460,7 +460,7 @@ class adminCog:
         await ctx.channel.send("Done! Welcome channel set here.")
 
     @commands.command()
-    @checks.welcome_enabled()
+    @checks.module_enabled("welcome")
     @checks.is_not_banned()
     @checks.rolescheck("setwelcometext")
     async def setwelcometext(self, ctx, *, welcometext):
@@ -472,7 +472,7 @@ class adminCog:
         await ctx.channel.send("Done! Welcome text set to ```" + welcometext + "```")
 
     @commands.command(name="setfarewelltext", aliases =['setleavetext'])
-    @checks.leave_enabled()
+    @checks.module_enabled("leave")
     @checks.is_not_banned()
     @checks.rolescheck("setleavetext")
     async def setfarewelltext(self, ctx, *, leavetext):

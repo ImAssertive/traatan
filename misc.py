@@ -21,7 +21,7 @@ class miscCog:
 
     @commands.command(name="bluetext", aliases=['bt'])
     @checks.is_not_banned()
-    @checks.bluetext_enabled()
+    @checks.module_enabled("bluetext")
     @checks.rolescheck("bluetext")
     async def bluetext(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, False)
@@ -31,7 +31,7 @@ class miscCog:
 
     @commands.command(name="bluetextcode", aliases=['bluetextmarkup', 'btc', 'btmu'])
     @checks.is_not_banned()
-    @checks.bluetext_enabled()
+    @checks.module_enabled("bluetext")
     @checks.rolescheck("bluetextcode")
     async def bluetextcode(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, True)
@@ -42,7 +42,7 @@ class miscCog:
 
     @commands.command()
     @checks.is_not_banned()
-    @checks.bluetext_enabled()
+    @checks.module_enabled("bluetext")
     @checks.rolescheck("cute")
     async def cute(self, ctx, member):
         memberID = useful.getid(member)
@@ -65,6 +65,7 @@ class miscCog:
 
     @commands.command(name="conch", aliases=['shell'])
     @checks.rolescheck("conch")
+    @checks.module_enabled("misc")
     async def conch(self, ctx):
         randomNumber = random.randint(0,19)
         conchName = ("**" +ctx.author.name + "** | The conch says:")
@@ -76,6 +77,7 @@ class miscCog:
         await ctx.channel.send(embed = embed)
 
     @commands.command(name="eightball", aliases=['8ball'])
+    @checks.module_enabled("misc")
     @checks.rolescheck("eightball")
     async def eightball(self, ctx):
         randomNumber = random.randint(0, 19)

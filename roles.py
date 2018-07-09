@@ -575,7 +575,6 @@ class rolesCog:
                 await asyncio.sleep(1)
                 await closed.delete()
 
-
     async def rolePresetQuizMaster(self, ctx, menu, role):
         embed = discord.Embed(title='Quiz Master preset options', description="This will make this role have quiz master permissions. Are you sure you wish to proceed?\n\nOptions:\n0: Yes\n1: Back\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
@@ -637,6 +636,7 @@ class rolesCog:
 
     @roles.command()
     @checks.is_not_banned()
+    @checks.owner_or_admin()
     async def help(self, ctx):
         embed = discord.Embed(title="Roles Help Menu", description="", colour=self.bot.getcolour())
         embed.add_field(name="Add", value="Adds a role to have customised bot permission levels.", inline=False)
@@ -648,6 +648,7 @@ class rolesCog:
 
     @commands.command()
     @checks.is_not_banned()
+    @checks.module_enabled("administrator")
     async def iam(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
@@ -666,6 +667,7 @@ class rolesCog:
 
     @commands.command()
     @checks.is_not_banned()
+    @checks.module_enabled("administrator")
     async def iamnot(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
