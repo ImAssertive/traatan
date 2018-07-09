@@ -236,10 +236,10 @@ class rolesCog:
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
 
     async def rolePubQuizMenuPage2(self, ctx, menu, role):
-        embed = discord.Embed(title='Pub Quiz Permission options (2/2)', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqsettext\n1: Enable all quizmaster commands\n2: Disable all quizmaster commands\n3: Previous page\n4: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Pub Quiz Permission options (2/2)', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqsettext\n1: pqcorrect\n2: Enable all quizmaster commands\n3: Disable all quizmaster commands\n4: Previous page\n5: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(4)
+        options = useful.getMenuEmoji(5)
         def roles_emojis_admin_menu(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
         try:
@@ -258,20 +258,25 @@ class rolesCog:
                 await self.rolePubQuizMenuPage2(ctx, menu, role)
 
             if str(reaction.emoji) == "1\u20e3":
-                toeditTrue = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp", "pqsettext"]
+                permissionToEdit = "pqcorrect"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenuPage2(ctx, menu, role)
+
+            if str(reaction.emoji) == "2\u20e3":
+                toeditTrue = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp", "pqsettext", "pqcorrect"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePubQuizMenuPage2(ctx, menu, role)
-            elif str(reaction.emoji) == "2\u20e3":
+            elif str(reaction.emoji) == "3\u20e3":
                 toeditTrue = []
-                toeditFalse = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp", "pqsettext"]
+                toeditFalse = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp", "pqsettext", "pqcorrect"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePubQuizMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "3\u20e3":
+            elif str(reaction.emoji) == "4\u20e3":
                 await self.rolePubQuizMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "4\u20e3":
+            elif str(reaction.emoji) == "5\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "❌":

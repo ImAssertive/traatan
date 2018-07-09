@@ -170,20 +170,22 @@ class pubquizCog:
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
             currentvalue = result["pubquizscoreweekly"]
             currenttotal = result["pubquizscoretotal"]
-            connection = await self.bot.db.acquire()
-            async with connection.transaction():
-                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, memberid)
-                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, memberid)
-            await self.bot.db.release(connection)
+            await self.changescore(ctx, memberid)
             if value > 0:
-                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator +"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
             elif value < 0:
-                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator +"** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
         elif value == 0:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
+    async def changescore(self, ctx, memberid):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
+            await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, memberid)
+            query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
+            await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, memberid)
+        await self.bot.db.release(connection)
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
@@ -210,31 +212,34 @@ class pubquizCog:
 
 
     @pubquiz.command()
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqcorrect")
     async def correct(self, ctx, *, correctMembers):
-        loops = 0
         correctMembers = correctMembers.split(" ")
-        while not all(isinstance(item, int) for item in correctMembers):
-            toPop = []
-            for counter in range (0,len(correctMembers)):
-                if correctMembers[counter] == '':
-                    toPop.append(counter-len(toPop))
-                correctMembers[counter] = "".join(each for each in correctMembers[counter] if each.isdigit())
-            if toPop == []:
-                break
-            for each in toPop:
-                correctMembers.pop(toPop[each])
-        print(correctMembers)
-        for j in range (0,len(correctMembers)):
-            if self.lastQuestionSuper:
-                toAdd = round(25/len(correctMembers), 0)
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        embed = discord.Embed(title="The following users were correct:")
+        connection = await self.bot.db.acquire()
+        for i in range (0, len(correctMembers)):
+            memberid = (useful.getid(correctMembers[i]))
+            if result["pubquizlastquestionsuper"] == True:
+                toAdd = round(25/len(correctMembers))
             else:
-                toAdd = 14 - j
+                toAdd = 14-i
                 if toAdd < 10:
                     toAdd = 10
-            for i in range (0,len(self.pubquizMembers)):
-                if self.pubquizMembers[i][0] == ctx.guild.get_member(int(correctMembers[j])):
-                    self.pubquizMembers[i][1] = self.pubquizMembers[i][1] + toAdd
-        print(self.pubquizMembers)
+            query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+            currentvalue = result["pubquizscoreweekly"]
+            currenttotal = result["pubquizscoretotal"]
+            async with connection.transaction():
+                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currentvalue + toAdd, ctx.guild.id, memberid)
+                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currenttotal + toAdd, ctx.guild.id, memberid)
+            embed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator, inline=False, value="gained "+ toAdd + "points.")
+        await self.bot.db.release(connection)
+
 
     @pubquiz.command()
     async def question(self, ctx, *, question):
@@ -243,7 +248,7 @@ class pubquizCog:
 
     @pubquiz.command()
     async def help(self, ctx):
-        embed = discord.Embed(title="PubQuiz Help", description="Help for the following !pubquiz commands:", colour=0xDEADBF)
+        embed = discord.Embed(title="PubQuiz Help", description="Help for the following !pubquiz commands:", colour=self.bot.getcolour())
         embed.add_field(name="!pubquiz start", value ="Starts the weeks Pub Quiz! Can only be used by the QuizMaster")
         embed.add_field(name="!pubquiz stop", value ="End the weeks Pub Quiz! Can only be used by the QuizMaster")
         embed.add_field(name="!pubquiz question", value ="Sends a new question to everyone! Default time is 10. Can only be used by the QuizMaster")
