@@ -127,7 +127,7 @@ class pubquizCog:
             if value > 0:
                 await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
             elif value < 0:
-                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score reduced by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
+                await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).name+"** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
         elif value == 0:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
