@@ -18,10 +18,10 @@ class adminCog:
 
 
     async def setupMainMenu(self, ctx, menu):
-        embed = discord.Embed(title='Modules main menu', description="Here you can select which modules are enabled on this server.\n\nOptions:\n0: Administrator\n1: Miscellaneous\n2: Pub Quiz\n3: Bluetext\n4: Welcome\n5: Leave\n6: Games\n7: NSFW\n8: Next Page\n9: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Modules main menu', description="Here you can select which modules are enabled on this server.\n\nOptions:\n0: Administrator\n1: Miscellaneous\n2: Pub Quiz\n3: Bluetext\n4: Welcome\n5: Leave\n6: Games\n7: NSFW\n8: Next Page\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
         await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(10)
+        options = useful.getMenuEmoji(9)
         def emojiCheck(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
         try:
@@ -63,9 +63,6 @@ class adminCog:
 
 
             elif str(reaction.emoji) == "8\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "9\u20e3":
                 await self.setupMainMenu(ctx, menu)
 
             elif str(reaction.emoji) == "❌":
