@@ -79,10 +79,10 @@ class adminCog:
         embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(3)
-        def emojisCheck(reaction, user):
+        def emojiCheck(reaction, user):
             return (user == ctx.author) and (str(reaction.emoji) in options)
         try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojischeck, timeout=60.0)
+            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
         except asyncio.TimeoutError:
             try:
                 await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
