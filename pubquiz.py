@@ -99,7 +99,7 @@ class pubquizCog:
         query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
         print(result)
-        resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.getcolour())
+        resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range (0,len(result)):
             resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name + ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + result[row]["pubquizscoreweekly"] + "** points. Placing them "+ inflect.engine().ordinal(counter + 1) + ".", inline=False)
         query = "SELECT * FROM guilds WHERE guildID = $1"
