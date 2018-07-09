@@ -424,6 +424,25 @@ class adminCog:
         await self.bot.logout()
         sys.exit()
 
+    @commands.command()
+    @checks.justme()
+    async def evalquery(self, ctx, *, query):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            try:
+                await self.bot.db.execute(query)
+            except:
+                await ctx.channel.send(":no_entry: | An error occurred.")
+        await self.bot.db.release(connection)
+
+    @commands.command()
+    @checks.justme()
+    async def printevalquery(self, ctx, *, query):
+        result = await ctx.bot.db.fetch(query)
+        await ctx.channel.send(str(result))
+
+
+
     @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'], hidden = True)
     @checks.justme()
     async def botglobalban(self, ctx, member):

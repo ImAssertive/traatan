@@ -126,9 +126,9 @@ class pubquizCog:
             currenttotal = result["pubquizscoretotal"]
             connection = await self.bot.db.acquire()
             async with connection.transaction():
-                query = "UPDATE Guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
+                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
                 await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, ctx.author.id)
-                query = "UPDATE Guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
+                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
                 await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, ctx.author.id)
             await self.bot.db.release(connection)
             if value > 0:
