@@ -61,7 +61,7 @@ async def getRolePerms(ctx):
 
 def module_enabled(module):
     async def predicate(ctx):
-        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+        if ctx.author.id == 163691476788838401:
             return True
         else:
             query = "SELECT * FROM Guilds WHERE guildID = $1 AND "+module+" = true"
