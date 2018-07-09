@@ -102,6 +102,9 @@ class pubquizCog:
         query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
         print(result)
+        query = "SELECT * FROM guildusers WHERE guildID = $1"
+        result = await ctx.bot.db.fetch(query, ctx.guild.id)
+        print(result)
         for row in result:
             print(row)
 
