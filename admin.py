@@ -55,7 +55,7 @@ class adminCog:
 
 
             elif str(reaction.emoji) == "6\u20e3":
-                await self.setupGameMenu(ctx, menu)
+                await self.setupGamesMenu(ctx, menu)
 
 
             elif str(reaction.emoji) == "7\u20e3":
