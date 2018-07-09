@@ -93,9 +93,11 @@ class adminCog:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
                 await self.enableModule(ctx, "administrator")
+                await self.setupAdminMenu(ctx, menu)
 
             elif str(reaction.emoji) == "1\u20e3":
                 await self.disableModule(ctx, "administrator")
+                await self.setupAdminMenu(ctx, menu)
 
             elif str(reaction.emoji) == "2\u20e3":
                 await self.setupMainMenu(ctx, menu)
