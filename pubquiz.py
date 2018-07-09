@@ -101,7 +101,7 @@ class pubquizCog:
         print(result)
         resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range (0,len(result)):
-            resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name + str(ctx.guild.get_member(int(result[row]["userid"])).discriminator) + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them "+ inflect.engine().ordinal(counter + 1) + ".", inline=False)
+            resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name + str(ctx.guild.get_member(int(result[row]["userid"])).discriminator) + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them "+ inflect.engine().ordinal(row + 1) + ".", inline=False)
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
         await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed = resultsEmbed)
