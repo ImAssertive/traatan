@@ -170,22 +170,19 @@ class pubquizCog:
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
             currentvalue = result["pubquizscoreweekly"]
             currenttotal = result["pubquizscoretotal"]
-            await self.changescore(ctx, memberid)
+            connection = await self.bot.db.acquire()
+            async with connection.transaction():
+                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, memberid)
+                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, memberid)
+            await self.bot.db.release(connection)
             if value > 0:
                 await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +"** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
             elif value < 0:
                 await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +"** has had their weekly and total score reduced by **" + str(value*-1) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
         elif value == 0:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
-
-    async def changescore(self, ctx, memberid):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
-            await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, memberid)
-            query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
-            await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, memberid)
-        await self.bot.db.release(connection)
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
