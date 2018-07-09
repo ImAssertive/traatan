@@ -19,6 +19,7 @@ async def run():
     pubquiztime smallint DEFAULT 10, 
     ongoingpubquiz boolean DEFAULT false,
     pubquiztext text,
+    pubquizendtext text,
     pubquizchannel bigint,
     bluetext boolean DEFAULT true,
     misc boolean DEFAULT true,

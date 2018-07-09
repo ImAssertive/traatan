@@ -22,6 +22,18 @@ class pubquizCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Pub quiz text set to `"+pubquiztext+"`!")
 
+    @pubquiz.command(name='setendtext', aliases=['sendtext'])
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqsettext")
+    async def setendtext(self, ctx, *, pubquizendtext):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET pubquizendtext = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, pubquizendtext,ctx.guild.id)
+        await self.bot.db.release(connection)
+        await ctx.channel.send(":white_check_mark: | Pub quiz text set to `"+pubquizendtext+"`!")
+
+
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
     @checks.owner_or_admin()
@@ -88,6 +100,13 @@ class pubquizCog:
         if result:
             await ctx.channel.send(":no_entry: | There is no quiz currently active!")
         else:
+            query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquizendtext IS NOT NULL"
+            results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if results:
+                pubquizendtext = ("{}".format(results["pubquizendtext"]))
+                await ctx.channel.send(pubquizendtext)
+            else:
+                await ctx.channel.send("That was the pub quiz! I hope you enjoyed. :)")
             await self.leaderboard(ctx)
             connection = await self.bot.db.acquire()
             async with connection.transaction():
@@ -104,8 +123,6 @@ class pubquizCog:
             resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them "+ inflect.engine().ordinal(row + 1) + ".", inline=False)
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        print(result)
-        print(result["pubquizchannel"])
         await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed = resultsEmbed)
 
     @pubquiz.command()
