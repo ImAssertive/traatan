@@ -11,7 +11,7 @@ def has_role(*arg):
 
 def justme():
     async def predicate(ctx):
-        if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+        if ctx.author.id == 163691476788838401:
             return True
         else:
             return False
@@ -33,7 +33,7 @@ def owner_or_admin():
     async def predicate(ctx):
         if ctx.author.id == ctx.guild.owner_id:
             return True
-        elif ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
+        elif ctx.author.id == 163691476788838401:
             return True
         else:
             rolesData = await getRolePerms(ctx)
@@ -71,6 +71,31 @@ def module_enabled(module):
         return False
     return commands.check(predicate)
 
+def module_enabled_not_check(module):
+    if ctx.author.id == 163691476788838401:
+        return True
+    else:
+        query = "SELECT * FROM Guilds WHERE guildID = $1 AND " + module + " = true"
+        result = await
+        ctx.bot.db.fetchrow(query, ctx.guild.id)
+        if result:
+            return True
+    return False
+
+def rolescheck_not_check(module):
+    if ctx.author.id == 163691476788838401:
+        return True
+    else:
+        rolesData = await
+        getRolePerms(ctx)
+        for role in rolesData:
+            if role["administrator"] == True:
+                return True
+            elif role["muted"] == True:
+                return False
+            elif role[command] == True:
+                return True
+        return False
 
 def rolescheck(command):
     async def predicate(ctx):
