@@ -26,7 +26,6 @@ class pubquizCog:
     @checks.module_enabled("pubquiz")
     @checks.owner_or_admin()
     async def resetguildscoreboard(self, ctx):
-        initmessage = ctx
         confirmationnumber = random.randint(1000,9999)
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -34,8 +33,8 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | A pub quiz is already active! Please end the current pub quiz to continue.")
         else:
             await ctx.channel.send(":clock1: | Are you sure? This will completely reset the pub quiz scores for the entire guild. To continue please type `"+ str(confirmationnumber) +"`")
-            def confirmationcheck(ctx):
-                return ctx.content == str(confirmationnumber) and initmessage.id == ctx.channel.id and initmessage.author.id == ctx.author.id
+            def confirmationcheck(msg):
+                return msg.content == str(confirmationnumber) and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
             try:
                 msg = await self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
             except asyncio.TimeoutError:
@@ -44,12 +43,13 @@ class pubquizCog:
                 except TypeError:
                     await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The reset command has closed due to inactivity.")
             else:
-                connection = await self.bot.db.acquire()
-                async with connection.transaction():
-                    query = "UPDATE GuildUsers SET pubquizscoretotal = 0 WHERE guildID = $1"
-                    await self.bot.db.execute(query, ctx.guild.id)
-                await self.bot.db.release(connection)
-                await ctx.channel.send(":white_check_mark: | Pub quiz scores reset!")
+                if msg.content == str(confirmationnumber):
+                    connection = await self.bot.db.acquire()
+                    async with connection.transaction():
+                        query = "UPDATE GuildUsers SET pubquizscoretotal = 0 WHERE guildID = $1"
+                        await self.bot.db.execute(query, ctx.guild.id)
+                    await self.bot.db.release(connection)
+                    await ctx.channel.send(":white_check_mark: | Pub quiz scores reset!")
 
     @pubquiz.command(name='start', aliases=['begin', 'go'])
     @checks.module_enabled("pubquiz")
