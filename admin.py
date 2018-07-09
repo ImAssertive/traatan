@@ -127,11 +127,45 @@ class adminCog:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
                 await self.enableModule(ctx, "misc")
-                await self.setupAdminMenu(ctx, menu)
+                await self.setupMiscMenu(ctx, menu)
 
             elif str(reaction.emoji) == "1\u20e3":
                 await self.disableModule(ctx, "misc")
-                await self.setupAdminMenu(ctx, menu)
+                await self.setupMiscMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "2\u20e3":
+                await self.setupMainMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "❌":
+                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
+                await menu.delete()
+                await asyncio.sleep(1)
+                await closed.delete()
+
+    async def setupPubQuizMenu(self, ctx, menu):
+        embed = discord.Embed(title='Pub Quiz Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
+        await menu.edit(embed=embed)
+        options = useful.getMenuEmoji(3)
+        def emojiCheck(reaction, user):
+            return (user == ctx.author) and (str(reaction.emoji) in options)
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
+        except asyncio.TimeoutError:
+            try:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
+            except TypeError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
+            await menu.delete()
+        else:
+            await menu.remove_reaction(reaction.emoji, user)
+            if str(reaction.emoji) == "0\u20e3":
+                await self.enableModule(ctx, "pubquiz")
+                await self.setupPubQuizMenu(ctx, menu)
+
+            elif str(reaction.emoji) == "1\u20e3":
+                await self.disableModule(ctx, "pubquiz")
+                await self.setupPubQuizMenu(ctx, menu)
 
             elif str(reaction.emoji) == "2\u20e3":
                 await self.setupMainMenu(ctx, menu)
