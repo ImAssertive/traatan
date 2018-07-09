@@ -112,7 +112,7 @@ class adminCog:
             query = "UPDATE Guilds SET " + module + " = true WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.guild.id)
             await ctx.channel.send(":white_check_mark: | **'"+module+"'** module enabled.")
-            await self.bot.db.release(connection)
+        await self.bot.db.release(connection)
 
     async def disableModule(self, ctx, module):
         connection = await self.bot.db.acquire()
@@ -120,7 +120,7 @@ class adminCog:
             query = "UPDATE Guilds SET " + module + " = false WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.guild.id)
             await ctx.channel.send(":white_check_mark: | **'"+module+"'** module disabled.")
-            await self.bot.db.release(connection)
+        await self.bot.db.release(connection)
 
     # @commands.command(name='setup', aliases=['botsetup', 'su'])
     # @checks.is_not_banned()
