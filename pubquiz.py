@@ -6,7 +6,7 @@ class pubquizCog:
         self.bot = bot
 
 
-    @commands.group(pass_context=True)
+    @commands.group(pass_context=True, name='pubquiz', aliases=['pq','pubq'])
     async def pubquiz(self, ctx):
         if ctx.invoked_subcommand is None:
             await ctx.channel.send("Please enter a command. !help or !pubquiz help for a list of commands.")
