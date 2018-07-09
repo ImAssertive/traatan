@@ -34,7 +34,7 @@ def bluetext_enabled():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND blueTextEnabled = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND blueText = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
@@ -46,7 +46,7 @@ def pubquiz_enabled():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND pubquizEnabled = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND pubquiz = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
@@ -58,7 +58,7 @@ def welcome_enabled():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND welcomeEnabled = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND welcome = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
@@ -70,7 +70,7 @@ def leave_enabled():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND leaveEnabled = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND leave = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
@@ -82,7 +82,7 @@ def admin_enabled():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND adminEnabled = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND administrator = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
@@ -98,9 +98,9 @@ def owner_or_admin():
         else:
             rolesData = await getRolePerms(ctx)
             for role in rolesData:
-                if role[2] == True:
+                if role["administrator"] == True:
                     return True
-                elif role[3] == True:
+                elif role["muted"] == True:
                     return False
 
             return False
@@ -123,7 +123,7 @@ def games_enabled():
         if ctx.author.id == 163691476788838401 or ctx.author.id == 447089705691906048:
             return True
         else:
-            query = "SELECT * FROM Guilds WHERE guildID = $1 AND gamesEnabled = true"
+            query = "SELECT * FROM Guilds WHERE guildID = $1 AND games = true"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if result:
                 return True
@@ -137,9 +137,9 @@ def rolescheck(command):
         else:
             rolesData = await getRolePerms(ctx)
             for role in rolesData:
-                if role[2] == True:
+                if role["administrator"] == True:
                     return True
-                elif role[3] == True:
+                elif role["muted"] == True:
                     return False
                 elif role[command] == True:
                     return True
