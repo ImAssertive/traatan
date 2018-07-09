@@ -112,6 +112,10 @@ class pubquizCog:
                     await self.bot.db.execute(query, time, ctx.guild.id)
                 await self.bot.db.release(connection)
             await ctx.channel.send(":white_check_mark: | Default time set to **" + time + "** seconds.")
+            else:
+                await ctx.channel.send(":no_entry: | Time must be between 1 and 60 seconds.")
+        else:
+            await ctx.channel.send(":no_entry: | Please enter a positive whole time number.")
 
 
 
