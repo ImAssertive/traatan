@@ -365,7 +365,7 @@ class pubquizCog:
                 toadd = []
                 toadd.append(ctx.author)
                 toadd.append(ctx.guild.id)
-                toadd.append(ctx.message.content)
+                toadd.append(ctx.content)
                 self.bot.pubquizAnswers.append(toadd)
                 await ctx.delete()
         else:
