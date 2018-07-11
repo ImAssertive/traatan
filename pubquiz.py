@@ -80,6 +80,8 @@ class pubquizCog:
                 await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
                 query = "UPDATE GuildUsers SET pubquizscoreweekly = 0 WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
+                query = "UPDATE Guilds SET pubquizquestionnumber = 0 WHERE guildID = $1"
+                await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
             query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquiztext IS NOT NULL"
             results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -240,11 +242,6 @@ class pubquizCog:
         await self.bot.db.release(connection)
         await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
 
-    @pubquiz.command()
-    @checks.module_enabled("pubquiz")
-    async def question(self, ctx, *, question):
-        self.lastQuestionSuper = False
-        questionEmbed = discord.Embed(title="**SUPER QUESTION**", description="This question is worth 25 points.")
 
     @pubquiz.command()
     async def help(self, ctx):
@@ -256,6 +253,46 @@ class pubquizCog:
         embed.add_field(name="!pubquiz correct", value ="Updates the points gained values for these users. Fastest user should be entered first with slowest user last. Can only be used by the QuizMaster.")
         embed.add_field(name="!pubquiz join/leave", value ="Joins or leaves this weeks pub quiz. Can only be used during a pub quiz.")
         await ctx.channel.send(embed = embed)
+
+    @pubquiz.command()
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqquestion")
+    async def question(self, ctx, *, question):
+        superQuestion = False
+        await questionFunction(ctx, question, superQuestion)
+
+    @pubquiz.command()
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqsuperquestion")
+    async def superquestion(self, ctx, *, question):
+        superQuestion = True
+        await questionFunction(ctx, question, superQuestion)
+
+    async def questionFunction(self, ctx, question, superQuestion):
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+        currentquestion = result["pubquizquestionnumber"]
+        currentquestion += 1
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET pubquizquestionnumber = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, currentquestion, ctx.guild.id)
+            query = "UPDATE Guilds SET pubquizquestionactive = true WHERE guildID = $1"
+            await self.bot.db.execute(query, ctx.guild.id)
+        if superQuestion:
+            questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.getcolour())
+            questionEmbed.add_field(name="Please type your answers now.", value=(self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention))
+            async with connection.transaction():
+                query = "UPDATE Guilds SET pubquizlastquestionsuper = true WHERE guildID = $1"
+                await self.bot.db.execute(query, ctx.guild.id)
+        else:
+            questionEmbed = discord.Embed(title="**Question " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
+            questionEmbed.add_field(name="Please type your answers now.", value =(self.bot.user.mention + " " +self.bot.user.mention + " " + self.bot.user.mention + " " +self.bot.user.mention))
+            async with connection.transaction():
+                query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
+                await self.bot.db.execute(query, ctx.guild.id)
+        await self.bot.db.release(connection)
+        ctx.guild.get_channel(int(result["pubquizchannel"])).send(questionEmbed)
 
 def setup(bot):
     bot.add_cog(pubquizCog(bot))
