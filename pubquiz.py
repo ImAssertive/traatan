@@ -270,7 +270,7 @@ class pubquizCog:
 
     async def questionFunction(self, ctx, question, superQuestion):
         query = "SELECT * FROM guilds WHERE guildID = $1"
-        result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         currentquestion = result["pubquizquestionnumber"]
         currentquestion += 1
         connection = await self.bot.db.acquire()
