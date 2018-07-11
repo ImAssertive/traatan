@@ -314,7 +314,7 @@ class pubquizCog:
             toPop = []
             for answer in range(0,len(self.bot.pubquizAnswers)):
                 if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
-                    answerEmbed.add_field(name=self.bot.pubquizAnswers[answer][0].display_name+" (" +self.bot.pubquizAnswers[answer][0].name+"#"+self.bot.pubquizAnswers[answer][0].discriminator+") answered:", value=self.bot.pubquizAnswers[answer][2])
+                    answerEmbed.add_field(name=self.bot.pubquizAnswers[answer][0].display_name+" (" +self.bot.pubquizAnswers[answer][0].name+"#"+self.bot.pubquizAnswers[answer][0].discriminator+") answered:", value=self.bot.pubquizAnswers[answer][2], inline=False)
                     toPop.append(self.bot.pubquizAnswers[answer])
             for i in range(0,len(toPop)):
                 self.bot.pubquizAnswers.remove(toPop[i])

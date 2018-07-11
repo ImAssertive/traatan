@@ -86,8 +86,7 @@ def rolescheck_not_check(ctx, module):
     if ctx.author.id == 163691476788838401:
         return True
     else:
-        rolesData = await
-        getRolePerms(ctx)
+        rolesData = await getRolePerms(ctx)
         for role in rolesData:
             if role["administrator"] == True:
                 return True
