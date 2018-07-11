@@ -109,15 +109,11 @@ class miscCog:
                     total = 0
                     toOutput = []
                     for counter in range (0,repeats):
-                        rollresult = random.randint(0,throws)
+                        rollresult = random.randint(1,throws)
                         total = total + rollresult
                         toOutput.append(str(rollresult))
                     toOutput = ', '.join(toOutput)
-                    if throws == 1:
-                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"** sided die... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
-
-                    else:
-                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"** sided dice... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
+                    await ctx.channel.send(":game_die: | Rolling a **"+str(throws)+"** sided die **" + str(repeats)+" **times... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
                 elif throws > 0 and throws < 100001:
                     await ctx.channel.send(":no_entry: | You can only throw between 1 and 100 dice at a time.")
                 elif repeats > 0 and repeats < 101:
