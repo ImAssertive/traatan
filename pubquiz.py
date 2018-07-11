@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, random, useful, inflect
+import discord, asyncio, sys, traceback, checks, random, useful, inflect, random
 from discord.ext import commands
 
 class pubquizCog:
