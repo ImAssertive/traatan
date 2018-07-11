@@ -311,11 +311,13 @@ class pubquizCog:
             await self.bot.db.release(connection)
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send("Answers are now closed!")
             answerEmbed = discord.Embed(title="Answers:", colour=self.bot.getcolour())
+            toPop = []
             for answer in range(0,len(self.bot.pubquizAnswers)):
                 if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
                     answerEmbed.add_field(name=self.bot.pubquizAnswers[answer][0].display_name+" (" +self.bot.pubquizAnswers[answer][0].name+"#"+self.bot.pubquizAnswers[answer][0].discriminator+") answered:", value=self.bot.pubquizAnswers[answer][2])
-                    self.bot.pubquizAnswers.remove(self.bot.pubquizAnswers[answer])
-                    ##ctx.author.display_name + " (" + ctx.author.name + "#" + ctx.author.discriminator + ") answered:", ctx.content
+                    toPop.append(self.bot.pubquizAnswers[answer])
+            for i in range(0,len(toPop)):
+                self.bot.pubquizAnswers.remove(toPop[i])
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=answerEmbed)
         else:
             await ctx.channel.send(":no_entry: | There is already an active question!")
