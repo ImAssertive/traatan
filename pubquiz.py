@@ -292,7 +292,7 @@ class pubquizCog:
                 query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(questionEmbed)
+        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=questionEmbed)
 
 def setup(bot):
     bot.add_cog(pubquizCog(bot))
