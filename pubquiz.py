@@ -259,14 +259,14 @@ class pubquizCog:
     @checks.rolescheck("pqquestion")
     async def question(self, ctx, *, question):
         superQuestion = False
-        await questionFunction(ctx, question, superQuestion)
+        await self.questionFunction(ctx, question, superQuestion)
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqsuperquestion")
     async def superquestion(self, ctx, *, question):
         superQuestion = True
-        await questionFunction(ctx, question, superQuestion)
+        await self.questionFunction(ctx, question, superQuestion)
 
     async def questionFunction(self, ctx, question, superQuestion):
         query = "SELECT * FROM guilds WHERE guildID = $1"
