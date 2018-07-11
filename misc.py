@@ -114,7 +114,7 @@ class miscCog:
                     for counter in range (0,repeats):
                         rollresult = random.randint(0,throws)
                         total = total + rollresult
-                        toOutput.append(rollresult)
+                        toOutput.append(str(rollresult))
                     toOutput = ', '.join(toOutput)
                     if throws == 1:
                         await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"**sided die... You rolled: **" + str(toOutput) + "** for a total of: **" +total+"**.")
