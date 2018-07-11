@@ -96,13 +96,13 @@ class miscCog:
         else:
             succeeded = 1
             try:
-                throws = int(diceCommand[0])
+                repeats = int(diceCommand[0])
             except:
                 await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
                 print("2")
                 succeeded = 0
             try:
-                repeats = int(diceCommand[1])
+                throws = int(diceCommand[1])
             except:
                 await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
                 print("3")
@@ -117,10 +117,10 @@ class miscCog:
                         toOutput.append(str(rollresult))
                     toOutput = ', '.join(toOutput)
                     if throws == 1:
-                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"**sided die... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
+                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"** sided die... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
 
                     else:
-                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"**sided dice... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
+                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"** sided dice... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
                 elif repeats > 0 and repeats < 101:
                     await ctx.channel.send(":no_entry: | You can only throw between 1 and 100 dice at a time.")
                 elif throws > 0 and throws < 100001:
