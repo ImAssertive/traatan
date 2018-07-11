@@ -113,7 +113,7 @@ class miscCog:
                     toOutput = []
                     for counter in range (0,repeats):
                         rollresult = random.randint(0,throws)
-                        total = toal + rollresult
+                        total = total + rollresult
                         toOutput.append(rollresult)
                     toOutput = ', '.join(toOutput)
                     if throws == 1:
