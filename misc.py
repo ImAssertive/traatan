@@ -104,7 +104,7 @@ class miscCog:
             except:
                 await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
                 succeeded = 0
-            if succeeded = 1:
+            if succeeded == 1:
                 if throws > 0 and throws < 100001 and repeats > 0 and repeats < 101:
                     total = 0
                     toOutput = []
