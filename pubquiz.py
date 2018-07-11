@@ -296,6 +296,7 @@ class pubquizCog:
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("mew")
+            connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET pubquizquestionactive = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
