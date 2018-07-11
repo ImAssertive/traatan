@@ -92,20 +92,17 @@ class miscCog:
         diceCommand = diceCommand.split("d")
         if len(diceCommand) != 2:
             await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
-            print(diceCommand + " 1")
         else:
             succeeded = 1
             try:
                 repeats = int(diceCommand[0])
             except:
                 await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
-                print("2")
                 succeeded = 0
             try:
                 throws = int(diceCommand[1])
             except:
                 await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
-                print("3")
                 succeeded = 0
             if succeeded == 1:
                 if throws > 0 and throws < 100001 and repeats > 0 and repeats < 101:
@@ -121,13 +118,12 @@ class miscCog:
 
                     else:
                         await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"** sided dice... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
-                elif repeats > 0 and repeats < 101:
-                    await ctx.channel.send(":no_entry: | You can only throw between 1 and 100 dice at a time.")
                 elif throws > 0 and throws < 100001:
+                    await ctx.channel.send(":no_entry: | You can only throw between 1 and 100 dice at a time.")
+                elif repeats > 0 and repeats < 101:
                     await ctx.channel.send(":no_entry: | You can only throw dice with between 1 and 100000 sides.")
                 else:
                     await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
-                    print("4")
 
 
 def setup(bot):
