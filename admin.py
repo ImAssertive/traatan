@@ -431,6 +431,7 @@ class adminCog:
         async with connection.transaction():
             try:
                 await self.bot.db.execute(query)
+                await ctx.channel.send(":white_check_mark: | Done!")
             except:
                 await ctx.channel.send(":no_entry: | An error occurred.")
         await self.bot.db.release(connection)

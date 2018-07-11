@@ -296,6 +296,10 @@ class pubquizCog:
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("mew")
+            async with connection.transaction():
+                query = "UPDATE Guilds SET pubquizquestionactive = false WHERE guildID = $1"
+                await self.bot.db.execute(query, ctx.guild.id)
+            await self.bot.db.release(connection)
         else:
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(":no_entry: | There is already an active question!")
 def setup(bot):
