@@ -241,6 +241,7 @@ class pubquizCog:
         await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
 
     @pubquiz.command()
+    @checks.module_enabled("pubquiz")
     async def question(self, ctx, *, question):
         self.lastQuestionSuper = False
         questionEmbed = discord.Embed(title="**SUPER QUESTION**", description="This question is worth 25 points.")
