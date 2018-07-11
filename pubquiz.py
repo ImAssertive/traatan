@@ -360,7 +360,7 @@ class pubquizCog:
             guild = 0
         if guild == 1:
             query = "SELECT * FROM guilds WHERE guildID = $1"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            result = await self.bot.db.fetchrow(query, ctx.guild.id)
             if result["pubquizquestionactive"] == True:
                 toadd = []
                 toadd.append(ctx.author)
