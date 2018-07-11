@@ -112,3 +112,23 @@ def rolescheck(command):
                     return True
             return False
     return commands.check(predicate)
+
+def pubquiz_active():
+    async def predicate(ctx):
+        query = "SELECT * FROM Guilds WHERE guildID = $1 AND ongoingpubquiz = true"
+        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        if result:
+            return True
+        else:
+            return False
+    return commands.check(predicate)
+
+def pubquiz_not_active():
+    async def predicate(ctx):
+        query = "SELECT * FROM Guilds WHERE guildID = $1 AND ongoingpubquiz = false"
+        result = await ctx.bot.db.fetchrow(query, ctx.author.id)
+        if result:
+            return True
+        else:
+            return False
+    return commands.check(predicate)

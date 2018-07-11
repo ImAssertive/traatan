@@ -66,6 +66,7 @@ class pubquizCog:
     @pubquiz.command(name='start', aliases=['begin', 'go'])
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqstart")
+    @checks.pubquiz_not_active()
     async def start(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -91,33 +92,25 @@ class pubquizCog:
             else:
                 await ctx.channel.send("Pub quiz started!")
 
-    @pubquiz.command()
-    async def test(self, ctx):
-        print(self.pubquizMembers)
-
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
+    @checks.pubquiz_active()
     async def stop(self, ctx):
-        query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = false"
-        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        if result:
-            await ctx.channel.send(":no_entry: | There is no quiz currently active!")
+        query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquizendtext IS NOT NULL"
+        results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        if results:
+            pubquizendtext = ("{}".format(results["pubquizendtext"]))
+            await ctx.channel.send(pubquizendtext)
         else:
-            query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquizendtext IS NOT NULL"
-            results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if results:
-                pubquizendtext = ("{}".format(results["pubquizendtext"]))
-                await ctx.channel.send(pubquizendtext)
-            else:
-                await ctx.channel.send("That was the pub quiz! I hope you enjoyed. :)")
-            embed = await self.leaderboardFunction(ctx)
-            query = "SELECT * FROM guilds WHERE guildID = $1"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
-            connection = await self.bot.db.acquire()
-            async with connection.transaction():
-                query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
-                await self.bot.db.execute(query, ctx.guild.id)
-            await self.bot.db.release(connection)
+            await ctx.channel.send("That was the pub quiz! I hope you enjoyed. :)")
+        embed = await self.leaderboardFunction(ctx)
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
+            await self.bot.db.execute(query, ctx.guild.id)
+        await self.bot.db.release(connection)
 
     async def leaderboardFunction(self, ctx):
         query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
@@ -147,6 +140,7 @@ class pubquizCog:
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
+    @checks.pubquiz_active()
     async def leaderboard(self, ctx):
         embed = await self.leaderboardFunction(ctx)
         if checks.rolescheck_not_check(ctx, "pqleaderboard"):
@@ -257,6 +251,7 @@ class pubquizCog:
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqquestion")
+    @checks.pubquiz_active()
     async def question(self, ctx, *, question):
         superQuestion = False
         await self.questionFunction(ctx, question, superQuestion)
@@ -264,6 +259,7 @@ class pubquizCog:
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqsuperquestion")
+    @checks.pubquiz_active()
     async def superquestion(self, ctx, *, question):
         superQuestion = True
         await self.questionFunction(ctx, question, superQuestion)
@@ -303,5 +299,6 @@ class pubquizCog:
             await self.bot.db.release(connection)
         else:
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(":no_entry: | There is already an active question!")
+
 def setup(bot):
     bot.add_cog(pubquizCog(bot))
