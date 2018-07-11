@@ -280,7 +280,7 @@ class pubquizCog:
             query = "UPDATE Guilds SET pubquizquestionactive = true WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.guild.id)
         if superQuestion:
-            questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.getcolour())
+            questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
             questionEmbed.add_field(name="Please type your answers now.", value=(self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention))
             async with connection.transaction():
                 query = "UPDATE Guilds SET pubquizlastquestionsuper = true WHERE guildID = $1"
