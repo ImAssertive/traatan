@@ -89,7 +89,7 @@ class miscCog:
     @checks.module_enabled("misc")
     async def roll(self, ctx, diceCommand):
         diceCommand = diceCommand.lower()
-        diceCommand.split("d")
+        diceCommand = diceCommand.split("d")
         if len(diceCommand) != 2:
             await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
             print(diceCommand + " 1")
