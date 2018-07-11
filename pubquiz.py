@@ -358,7 +358,7 @@ class pubquizCog:
     async def on_message(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await self.bot.db.fetchrow(query, ctx.guild.id)
-        if ctx.author == bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]):
+        if ctx.author == self.bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]):
             pass
         else:
             guild = 1
