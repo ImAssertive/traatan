@@ -264,6 +264,17 @@ class pubquizCog:
         superQuestion = True
         await self.questionFunction(ctx, question, superQuestion)
 
+    @pubquiz.command()
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqanswer")
+    @checks.module_enabled("pubquiz")
+    @checks.pubquiz_active()
+    async def answer(self, ctx, *, answer):
+        embed = discord.Embed(title="The answer was...", description = answer, colour=self.bot.getcolour())
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+
     async def questionFunction(self, ctx, question, superQuestion):
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -291,14 +302,74 @@ class pubquizCog:
             await self.bot.db.release(connection)
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
-            await ctx.channel.send("mew")
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET pubquizquestionactive = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
+            await ctx.guild.get_channel(int(result["pubquizchannel"])).send("Answers are now closed!")
+            answerEmbed = discord.Embed(title="Answers:", colour=self.getcolour())
+            for answer in range(0,len(self.bot.pubquizAnswers)):
+                if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
+                    answerEmbed.add_field(name=self.bot.pubquizAnswers[answer][0].display_name+" (" +self.bot.pubquizAnswers[answer][0].name+"#"+cself.bot.pubquizAnswers[answer][0].discriminator+") answered:", value=self.bot.pubquizAnswers[answer][0][2])
+                    ##ctx.author.display_name + " (" + ctx.author.name + "#" + ctx.author.discriminator + ") answered:", ctx.content
+            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=answerEmbed)
         else:
-            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(":no_entry: | There is already an active question!")
+            await ctx.channel.send(":no_entry: | There is already an active question!")
+
+
+    # @pubquiz.command()
+    # @checks.module_enabled("pubquiz")
+    # async def dm(self, ctx):
+    #     toadd = []
+    #     toadd.append(ctx.author.id)
+    #     toadd.append(ctx.guild.id)
+    #     working = 0
+    #     try:
+    #         self.bot.pubquizDMList.index(toadd)
+    #     except ValueError:
+    #         working = 1
+    #     if working == 1:
+    #         self.bot.pubquizDMList.append(toadd)
+    #         await ctx.channel.send(":white_check_mark: | Ill start DMing you questions!")
+    #     else:
+    #         await ctx.channel.send(":no_entry: | I am already DMing you questions!")
+    #
+    # @pubquiz.command()
+    # @checks.module_enabled("pubquiz")
+    # async def stopdm(self, ctx):
+    #     toadd = []
+    #     toadd.append(ctx.author.id)
+    #     toadd.append(ctx.guild.id)
+    #     working = 1
+    #     try:
+    #         self.bot.pubquizDMList.index(toadd)
+    #     except ValueError:
+    #         working = 0
+    #     if working == 1:
+    #         self.bot.pubquizDMList.remove(self.bot.pubquizDMList.index(toadd))
+    #         await ctx.channel.send(":white_check_mark: | Ill stop DMing you questions!")
+    #     else:
+    #         await ctx.channel.send(":no_entry: | I am not currently DMing you questions!")
+
+    async def on_message(self, ctx):
+        guild = 1
+        try:
+            ctx.guild
+        except:
+            guild = 0
+        if guild == 1:
+            query = "SELECT * FROM guilds WHERE guildID = $1"
+            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+            if result["pubquizquestionactive"] == True:
+                toadd = []
+                toadd.append(ctx.author)
+                toadd.append(ctx.guild.id)
+                toadd.append(ctx.message.content)
+                self.bot.pubquizAnswers.append(toadd)
+                await ctx.delete()
+        else:
+            pass
 
 def setup(bot):
     bot.add_cog(pubquizCog(bot))

@@ -10,7 +10,6 @@ async def run():
     credentials = credentialsFile.getCredentials()
     db = await asyncpg.create_pool(**credentials)
     await db.execute('''CREATE TABLE IF NOT EXISTS Users(userID bigint PRIMARY KEY,
-    pubquizDM boolean DEFAULT false,
     banned boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS Guilds(guildID bigint PRIMARY KEY,
@@ -59,6 +58,7 @@ async def run():
     pqsettext boolean DEFAULT false,
     pqleaderboard boolean DEFAULT false,
     pqcorrect boolean DEFAULT false,
+    pqanswer boolean DEFAULT false,
     bluetext boolean DEFAULT true,
     bluetextcode boolean DEFAULT true,
     setWelcomeChannel boolean DEFAULT false,
@@ -113,6 +113,7 @@ class Bot(commands.Bot):
             command_prefix=getPrefix
         )
 
+        self.pubquizAnswers = []
         self.db = kwargs.pop("db")
         self.currentColour = -1
         self.outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely",
