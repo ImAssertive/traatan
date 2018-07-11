@@ -21,6 +21,7 @@ async def run():
     pubquiztext text,
     pubquizendtext text,
     pubquizchannel bigint,
+    pubquizquestionuserid bigint,
     pubquizquestionnumber integer DEFAULT 0,
     pubquizquestionactive boolean DEFAULT false,
     pubquizlastquestionsuper boolean DEFAULT false,

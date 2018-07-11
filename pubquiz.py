@@ -287,6 +287,8 @@ class pubquizCog:
                 await self.bot.db.execute(query, currentquestion, ctx.guild.id)
                 query = "UPDATE Guilds SET pubquizquestionactive = true WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
+                query = "UPDATE Guilds SET pubquizquestionuserid = $1 WHERE guildID = $2"
+                await self.bot.db.execute(query, ctx.author.id, ctx.guild.id)
             if superQuestion:
                 questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
                 questionEmbed.add_field(name="Please type your answers now.", value=(self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention))
@@ -311,7 +313,7 @@ class pubquizCog:
             answerEmbed = discord.Embed(title="Answers:", colour=self.bot.getcolour())
             for answer in range(0,len(self.bot.pubquizAnswers)):
                 if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
-                    answerEmbed.add_field(name=self.bot.pubquizAnswers[answer][0].display_name+" (" +self.bot.pubquizAnswers[answer][0].name+"#"+cself.bot.pubquizAnswers[answer][0].discriminator+") answered:", value=self.bot.pubquizAnswers[answer][0][2])
+                    answerEmbed.add_field(name=self.bot.pubquizAnswers[answer][0].display_name+" (" +self.bot.pubquizAnswers[answer][0].name+"#"+self.bot.pubquizAnswers[answer][0].discriminator+") answered:", value=self.bot.pubquizAnswers[answer][0][2])
                     self.bot.pubquizAnswers.remove(answer)
                     ##ctx.author.display_name + " (" + ctx.author.name + "#" + ctx.author.discriminator + ") answered:", ctx.content
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=answerEmbed)
@@ -354,23 +356,26 @@ class pubquizCog:
     #         await ctx.channel.send(":no_entry: | I am not currently DMing you questions!")
 
     async def on_message(self, ctx):
-        guild = 1
-        try:
-            ctx.guild
-        except:
-            guild = 0
-        if guild == 1:
-            query = "SELECT * FROM guilds WHERE guildID = $1"
-            result = await self.bot.db.fetchrow(query, ctx.guild.id)
-            if result["pubquizquestionactive"] == True:
-                toadd = []
-                toadd.append(ctx.author)
-                toadd.append(ctx.guild.id)
-                toadd.append(ctx.content)
-                self.bot.pubquizAnswers.append(toadd)
-                await ctx.delete()
-        else:
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await self.bot.db.fetchrow(query, ctx.guild.id)
+        if ctx.author == bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]):
             pass
+        else:
+            guild = 1
+            try:
+                ctx.guild
+            except:
+                guild = 0
+            if guild == 1:
+                if result["pubquizquestionactive"] == True:
+                    toadd = []
+                    toadd.append(ctx.author)
+                    toadd.append(ctx.guild.id)
+                    toadd.append(ctx.content)
+                    self.bot.pubquizAnswers.append(toadd)
+                    await ctx.delete()
+            else:
+                pass
 
 def setup(bot):
     bot.add_cog(pubquizCog(bot))
