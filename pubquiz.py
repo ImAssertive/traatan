@@ -271,28 +271,32 @@ class pubquizCog:
     async def questionFunction(self, ctx, question, superQuestion):
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        currentquestion = result["pubquizquestionnumber"]
-        currentquestion += 1
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "UPDATE Guilds SET pubquizquestionnumber = $1 WHERE guildID = $2"
-            await self.bot.db.execute(query, currentquestion, ctx.guild.id)
-            query = "UPDATE Guilds SET pubquizquestionactive = true WHERE guildID = $1"
-            await self.bot.db.execute(query, ctx.guild.id)
-        if superQuestion:
-            questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
-            questionEmbed.add_field(name="Please type your answers now.", value=(self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention))
+        if result["pubquizquestionactive"] == False:
+            currentquestion = result["pubquizquestionnumber"]
+            currentquestion += 1
+            connection = await self.bot.db.acquire()
             async with connection.transaction():
-                query = "UPDATE Guilds SET pubquizlastquestionsuper = true WHERE guildID = $1"
+                query = "UPDATE Guilds SET pubquizquestionnumber = $1 WHERE guildID = $2"
+                await self.bot.db.execute(query, currentquestion, ctx.guild.id)
+                query = "UPDATE Guilds SET pubquizquestionactive = true WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
+            if superQuestion:
+                questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
+                questionEmbed.add_field(name="Please type your answers now.", value=(self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention))
+                async with connection.transaction():
+                    query = "UPDATE Guilds SET pubquizlastquestionsuper = true WHERE guildID = $1"
+                    await self.bot.db.execute(query, ctx.guild.id)
+            else:
+                questionEmbed = discord.Embed(title="**Question " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
+                questionEmbed.add_field(name="Please type your answers now.", value =(self.bot.user.mention + " " +self.bot.user.mention + " " + self.bot.user.mention + " " +self.bot.user.mention))
+                async with connection.transaction():
+                    query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
+                    await self.bot.db.execute(query, ctx.guild.id)
+            await self.bot.db.release(connection)
+            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=questionEmbed)
+            await asyncio.sleep(result["pubquiztime"])
+            await ctx.channel.send("mew")
         else:
-            questionEmbed = discord.Embed(title="**Question " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
-            questionEmbed.add_field(name="Please type your answers now.", value =(self.bot.user.mention + " " +self.bot.user.mention + " " + self.bot.user.mention + " " +self.bot.user.mention))
-            async with connection.transaction():
-                query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
-                await self.bot.db.execute(query, ctx.guild.id)
-        await self.bot.db.release(connection)
-        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=questionEmbed)
-
+            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(":no_entry: | There is already an active question!")
 def setup(bot):
     bot.add_cog(pubquizCog(bot))
