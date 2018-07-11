@@ -248,7 +248,7 @@ class pubquizCog:
         embed.add_field(name="!pubquiz join/leave", value ="Joins or leaves this weeks pub quiz. Can only be used during a pub quiz.")
         await ctx.channel.send(embed = embed)
 
-    @pubquiz.command()
+    @pubquiz.command(name='question', aliases=['q'])
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqquestion")
     @checks.pubquiz_active()
@@ -256,7 +256,7 @@ class pubquizCog:
         superQuestion = False
         await self.questionFunction(ctx, question, superQuestion)
 
-    @pubquiz.command()
+    @pubquiz.command(name='superquestion', aliases=['sq', 'spq'])
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqsuperquestion")
     @checks.pubquiz_active()
@@ -266,8 +266,8 @@ class pubquizCog:
 
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqanswer")
-    @checks.module_enabled("pubquiz")
+    #@checks.rolescheck("pqanswer")
+    @checks.rolescheck("pqquestion")
     @checks.pubquiz_active()
     async def answer(self, ctx, *, answer):
         embed = discord.Embed(title="The answer was...", description = answer, colour=self.bot.getcolour())

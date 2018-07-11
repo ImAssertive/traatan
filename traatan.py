@@ -126,7 +126,7 @@ class Bot(commands.Bot):
 
     async def on_ready(self):
         print("Username: {0}\nID: {0.id}".format(self.user))
-        game = discord.Game("with your heart <3")
+        game = discord.Game("with the community!")
         await self.change_presence(status=discord.Status.online, activity=game)
 
     def getcolour(self):
