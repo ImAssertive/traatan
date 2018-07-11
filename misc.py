@@ -85,5 +85,46 @@ class miscCog:
         eightballValue = ('"' + self.bot.outcomes[randomNumber] + '."')
         await ctx.channel.send(":8ball: | "+eightballName + " " + eightballValue)
 
+    @commands.command(name="roll")
+    @checks.module_enabled("misc")
+    async def roll(self, ctx, diceCommand):
+        diceCommand = diceCommand.lower()
+        diceCommand.split("d")
+        if len(diceCommand) != 2:
+            await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
+        else:
+            succeeded = 1
+            try:
+                throws = int(diceCommand[0])
+            except:
+                await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
+                succeeded = 0
+            try:
+                repeats = int(diceCommand[1])
+            except:
+                await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
+                succeeded = 0
+            if succeeded = 1:
+                if throws > 0 and throws < 100001 and repeats > 0 and repeats < 101:
+                    total = 0
+                    toOutput = []
+                    for counter in range (0,repeats):
+                        rollresult = random.randint(0,throws)
+                        total = toal + rollresult
+                        toOutput.append(rollresult)
+                    toOutput = ', '.join(toOutput)
+                    if throws == 1:
+                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"**sided die... You rolled: **" + str(toOutput) + "** for a total of: **" +total+"**.")
+
+                    else:
+                        await ctx.channel.send(":game_die: | Rolling **" + str(repeats)+" "+str(throws)+"**sided dice... You rolled: **" + str(toOutput) + "** for a total of: **" +total+"**.")
+                elif repeats > 0 and repeats < 101:
+                    await ctx.channel.send(":no_entry: | You can only throw between 1 and 100 dice at a time.")
+                elif throws > 0 and throws < 100001:
+                    await ctx.channel.send(":no_entry: | You can only throw dice with between 1 and 100000 sides.")
+                else:
+                    await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
+
+
 def setup(bot):
     bot.add_cog(miscCog(bot))
