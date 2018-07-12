@@ -132,8 +132,9 @@ class pubquizCog:
     @pubquiz.command()
     @checks.module_enabled("pubquiz")
     async def totalleaderboard(self, ctx):
+        rolecheck = await checks.rolescheck_not_check(ctx, "pqleaderboard")
         embed = await self.totalleaderboardFunction(ctx)
-        if checks.rolescheck_not_check(ctx, "pqleaderboard"):
+        if rolecheck:
             await ctx.channel.send(embed=embed)
         else:
             await ctx.author.send(embed=embed)
@@ -142,8 +143,9 @@ class pubquizCog:
     @checks.module_enabled("pubquiz")
     @checks.pubquiz_active()
     async def leaderboard(self, ctx):
+        rolecheck = await checks.rolescheck_not_check(ctx, "pqleaderboard")
         embed = await self.leaderboardFunction(ctx)
-        if checks.rolescheck_not_check(ctx, "pqleaderboard"):
+        if rolecheck:
             query = "SELECT * FROM guilds WHERE guildID = $1"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)

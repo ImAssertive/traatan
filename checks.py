@@ -1,4 +1,4 @@
-import discord, asyncio
+import discord
 from discord.ext import commands
 
 def has_role(*arg):
@@ -82,7 +82,7 @@ def module_enabled_not_check(ctx, module):
             return True
     return False
 
-def rolescheck_not_check(ctx, module):
+async def rolescheck_not_check(ctx, module):
     if ctx.author.id == 163691476788838401:
         return True
     else:
