@@ -1,4 +1,4 @@
-import discord
+import discord, asyncio
 from discord.ext import commands
 
 def has_role(*arg):
@@ -36,14 +36,7 @@ def owner_or_admin():
         elif ctx.author.id == 163691476788838401:
             return True
         else:
-            roleIDs = []
-            rolesdata = []
-            for role in ctx.author.roles:
-                roleIDs.append(role.id)
-            for i in range(0, len(roleIDs)):
-                query = "SELECT * FROM Roles WHERE roleID = $1"
-                result = await ctx.bot.db.fetchrow(query, int(roleIDs[i]))
-                rolesdata.append(result)
+            rolesData = await getRolePerms(ctx)
             for role in rolesData:
                 if role["administrator"] == True:
                     return True
