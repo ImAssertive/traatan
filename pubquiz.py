@@ -122,28 +122,30 @@ class pubquizCog:
         return resultsEmbed
 
     async def totalleaderboardFunction(self, ctx):
-        query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoretotal != 0 ORDER BY pubquizscoreweekly DESC"
+        query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoretotal != 0 ORDER BY pubquizscoretotal DESC"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
         resultsEmbed = discord.Embed(title=ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range(0, len(result)):
             resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" + ctx.guild.get_member(int(result[row]["userid"])).name + "#" + ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoretotal"]) + "** points. Placing them **" + inflect.engine().ordinal(row + 1) + "**.", inline=False)
         return resultsEmbed
 
-    @pubquiz.command()
+    @pubquiz.command(name="totalleaderboard", aliases=['total', 'totalscoreboard', 'totalscores','totalscore'])
     @checks.module_enabled("pubquiz")
     async def totalleaderboard(self, ctx):
+        rolecheck = await checks.rolescheck_not_check(ctx, "pqleaderboard")
         embed = await self.totalleaderboardFunction(ctx)
-        if checks.rolescheck_not_check(ctx, "pqleaderboard"):
+        if rolecheck:
             await ctx.channel.send(embed=embed)
         else:
             await ctx.author.send(embed=embed)
 
-    @pubquiz.command()
+    @pubquiz.command(name="leaderboard", aliases=['scoreboard', 'score', 'scores'])
     @checks.module_enabled("pubquiz")
     @checks.pubquiz_active()
     async def leaderboard(self, ctx):
+        rolecheck = await checks.rolescheck_not_check(ctx, "pqleaderboard")
         embed = await self.leaderboardFunction(ctx)
-        if checks.rolescheck_not_check(ctx, "pqleaderboard"):
+        if rolecheck:
             query = "SELECT * FROM guilds WHERE guildID = $1"
             result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
@@ -158,7 +160,7 @@ class pubquizCog:
         try:
             value = int(value)
         except:
-            await ctx.channel.send("Please enter a whole number to add or subtract from the users score.")
+            await ctx.channel.send(":no_entry: | Please enter a whole number to add or subtract from the users score.")
             successful = 0
         if successful == 1 and value != 0:
             memberid = useful.getid(member)
