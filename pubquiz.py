@@ -34,7 +34,7 @@ class pubquizCog:
         await ctx.channel.send(":white_check_mark: | Pub quiz end text set to `"+pubquizendtext+"`!")
 
 
-    @pubquiz.command()
+    @pubquiz.command(name="resetguildscoreboard", aliases=['resetscore', 'reset'])
     @checks.module_enabled("pubquiz")
     @checks.owner_or_admin()
     async def resetguildscoreboard(self, ctx):
@@ -149,7 +149,7 @@ class pubquizCog:
         else:
             await ctx.author.send(embed=embed)
 
-    @pubquiz.command()
+    @pubquiz.command(name="override", aliases=['or', 'oride'])
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqoverride")
     async def override(self, ctx, member, value):
@@ -179,7 +179,7 @@ class pubquizCog:
         elif value == 0:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
-    @pubquiz.command()
+    @pubquiz.command(name="settime", aliases=['st'])
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqsettime")
     async def settime(self, ctx, time):
@@ -203,7 +203,7 @@ class pubquizCog:
 
 
 
-    @pubquiz.command()
+    @pubquiz.command(name="correct")
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqcorrect")
     async def correct(self, ctx, *, correctMembers):
@@ -263,7 +263,7 @@ class pubquizCog:
         superQuestion = True
         await self.questionFunction(ctx, question, superQuestion)
 
-    @pubquiz.command()
+    @pubquiz.command(name="answer")
     @checks.module_enabled("pubquiz")
     #@checks.rolescheck("pqanswer")
     @checks.rolescheck("pqquestion")
