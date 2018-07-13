@@ -82,7 +82,7 @@ def module_enabled_not_check(ctx, module):
             return True
     return False
 
-async def rolescheck_not_check(ctx, module):
+async def rolescheck_not_check(ctx, command):
     if ctx.author.id == 163691476788838401:
         return True
     else:
