@@ -42,18 +42,15 @@ class pubquizCog:
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         if result:
-            await ctx.channel.send(":no_entry: | A pub quiz is already active! Please end the current pub quiz to continue.")
+            await ctx.channel.send(":no_entry: | **"+ctx.author.display_name+"** a pub quiz is already active! Please end the current pub quiz to continue.")
         else:
-            await ctx.channel.send(":clock1: | Are you sure? This will completely reset the pub quiz scores for the entire guild. To continue please type `"+ str(confirmationnumber) +"`")
+            await ctx.channel.send(":clock1: | **"+ctx.author.display_name+"** are you sure? This will completely reset the pub quiz scores for the entire guild. To continue please type `"+ str(confirmationnumber) +"`")
             def confirmationcheck(msg):
                 return msg.content == str(confirmationnumber) and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
             try:
                 msg = await self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
             except asyncio.TimeoutError:
-                try:
-                    await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The reset command has closed due to inactivity.")
-                except TypeError:
-                    await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The reset command has closed due to inactivity.")
+                await ctx.channel.send(":no_entry: | **" + ctx.author.display_name + "** The reset command has closed due to inactivity.")
             else:
                 if msg.content == str(confirmationnumber):
                     connection = await self.bot.db.acquire()

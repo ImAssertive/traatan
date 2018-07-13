@@ -671,7 +671,7 @@ class rolesCog:
                     await ctx.channel.send(":no_entry: | You already have this role!")
                 else:
                     await ctx.author.add_roles(role)
-                    await ctx.channel.send(":white_check_mark: | **"+ctx.author.name+ "** You now have the **" + role.name + "** role.")
+                    await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** You now have the **" + role.name + "** role.")
             else:
                 await ctx.channel.send(":no_entry: | This role is not self assignable!")
 
@@ -690,7 +690,7 @@ class rolesCog:
                     await ctx.channel.send(":no_entry: | You don't have this role!")
                 else:
                     await ctx.author.remove_roles(role)
-                    await ctx.channel.send(":white_check_mark: | **"+ctx.author.name+ "** You no longer have the **" + role.name + "** role.")
+                    await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** You no longer have the **" + role.name + "** role.")
             else:
                 await ctx.channel.send(":no_entry: | This role is not self assignable!")
 

@@ -35,7 +35,7 @@ class miscCog:
     @checks.rolescheck("bluetextcode")
     async def bluetextcode(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, True)
-        await ctx.channel.send("Here's your code:")
+        await ctx.channel.send(":white_check_mark | **"+ctx.author.display_name+"** here's your code:")
         await ctx.channel.send("```" + toOutput + "```")
         if self.deleteBlueText and ctx.author.id == 163691476788838401:
             await ctx.message.delete()
@@ -113,7 +113,7 @@ class miscCog:
                         total = total + rollresult
                         toOutput.append(str(rollresult))
                     toOutput = ', '.join(toOutput)
-                    await ctx.channel.send(":game_die: | Rolling a **"+str(throws)+"** sided die **" + str(repeats)+" **time(s) ... You rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
+                    await ctx.channel.send(":game_die: | Rolling a **"+str(throws)+"** sided die **" + str(repeats)+" **time(s) ... **"+ctx.author.display_name+"** rolled: **" + str(toOutput) + "** for a total of: **" +str(total)+"**.")
                 elif throws > 0 and throws < 100001:
                     await ctx.channel.send(":no_entry: | You can only throw between 1 and 100 dice at a time.")
                 elif repeats > 0 and repeats < 101:
@@ -125,11 +125,11 @@ class miscCog:
     @checks.module_enabled("misc")
     async def choose(self, ctx, *, choices):
         choices = choices.split(" | ")
-        if len(choices) < 2:
+        if len(choices) < 2 or (len(choices)==2 and choices[0] == choices[1]):
             await ctx.channel.send(":no_entry: | Please enter at least two choices!")
         else:
             choice = random.randint(0,len(choices)-1)
-            await ctx.channel.send(":white_check_mark: | I choose ** "+choices[choice]+" **.")
+            await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** I choose **"+choices[choice]+" **.")
 
 
 def setup(bot):
