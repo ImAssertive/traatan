@@ -5,6 +5,8 @@ def getid(mention):
 def formatText(ctx, text):
     return text.replace("%user%", ctx.mention)
 
+def formatTextLeave(ctx, text):
+    return text.replace("%user%", ctx.display_name)
 
 
 def getMenuEmoji(noOfOptions):

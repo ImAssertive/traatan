@@ -109,7 +109,7 @@ class setupCog:
         result = await self.bot.db.fetchrow(query, ctx.guild.id)
         if result:
             channelID = ("{}".format(result["leavechannel"]))
-            leavetext = useful.formatText(ctx, ("{}".format(result["leavetext"])))
+            leavetext = useful.formatTextLeave(ctx, ("{}".format(result["leavetext"])))
             await ctx.guild.get_channel(int(channelID)).send(leavetext)
 
     async def on_member_join(self, ctx):
