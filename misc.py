@@ -121,6 +121,16 @@ class miscCog:
                 else:
                     await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
 
+    @commands.command(name="choose", alises=['choice'])
+    @checks.module_enabled("misc")
+    async def choose(self, ctx, *, choices):
+        choices = choices.split(" | ")
+        if len(choices) < 2:
+            await ctx.channel.send(":no_entry: | Please enter at least two choices!")
+        else:
+            choice = random.randint(0,len(choices)-1)
+            await ctx.channel.send(":white_check_mark: | I choose ** "+choices[choice]+" **.")
+
 
 def setup(bot):
     bot.add_cog(miscCog(bot))
