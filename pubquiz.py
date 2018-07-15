@@ -239,12 +239,12 @@ class pubquizCog:
     @pubquiz.command()
     async def help(self, ctx):
         embed = discord.Embed(title="PubQuiz Help", description="Help for the following !pubquiz commands:", colour=self.bot.getcolour())
-        embed.add_field(name="!pubquiz start", value ="Starts the weeks Pub Quiz! Can only be used by the QuizMaster")
-        embed.add_field(name="!pubquiz stop", value ="End the weeks Pub Quiz! Can only be used by the QuizMaster")
-        embed.add_field(name="!pubquiz question", value ="Sends a new question to everyone! Default time is 10. Can only be used by the QuizMaster")
-        embed.add_field(name="!pubquiz settime", value ="Changes the default time in seconds people have to answer questions. Can only be used by the QuizMaster")
-        embed.add_field(name="!pubquiz correct", value ="Updates the points gained values for these users. Fastest user should be entered first with slowest user last. Can only be used by the QuizMaster.")
-        embed.add_field(name="!pubquiz join/leave", value ="Joins or leaves this weeks pub quiz. Can only be used during a pub quiz.")
+
+        embed.add_field(name="start", value ="Starts the weeks Pub Quiz! Can only be used by the QuizMaster")
+        embed.add_field(name="stop", value ="End the weeks Pub Quiz! Can only be used by the QuizMaster")
+        embed.add_field(name="question", value ="Sends a new question to everyone! Default time is 10. Can only be used by the QuizMaster")
+        embed.add_field(name="settime", value ="Changes the default time in seconds people have to answer questions. Can only be used by the QuizMaster")
+        embed.add_field(name="correct", value ="Updates the points gained values for these users. Fastest user should be entered first with slowest user last. Can only be used by the QuizMaster.")
         await ctx.channel.send(embed = embed)
 
     @pubquiz.command(name='question', aliases=['q'])
@@ -265,7 +265,6 @@ class pubquizCog:
 
     @pubquiz.command(name="answer")
     @checks.module_enabled("pubquiz")
-    #@checks.rolescheck("pqanswer")
     @checks.rolescheck("pqquestion")
     @checks.pubquiz_active()
     async def answer(self, ctx, *, answer):

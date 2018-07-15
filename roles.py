@@ -649,10 +649,13 @@ class rolesCog:
     @checks.owner_or_admin()
     async def help(self, ctx):
         embed = discord.Embed(title="Roles Help Menu", description="", colour=self.bot.getcolour())
-        embed.add_field(name="Add", value="Adds a role to have customised bot permission levels.", inline=False)
-        embed.add_field(name="Remove/Delete", value="Removes a roles custom permission levels.", inline=False)
-        embed.add_field(name="Reset", value="Resets a roles permissions to default values.", inline=False)
-        embed.add_field(name="Edit", value="Edits the custom permissions for the specified role.", inline=False)
+        embed.add_field(name="edit", value="Edits the custom permissions for the specified role.", inline=False)
+        embed.add_field(name="reset", value="Resets a roles permissions to default values.", inline=False)
+        embed.add_field(name="edit", value="Edits the custom permissions for the specified role.", inline=False)
+        embed.add_field(name="setsa", value="Sets the specified role as a self assignable role. Can also be done in the edit role menu.", inline=False)
+        embed.add_field(name="removesa", value="Removes the specified role as a self assignable role. Can also be done in the edit role menu.", inline=False)
+        embed.add_field(name="setadmin", value="Sets the specified role as an administrator. Administrators can use every command. Can also be done in the edit role menu.", inline=False)
+        embed.add_field(name="setquizmaster", value="Sets the specified role as a quiz master. Can also be done in the edit role menu.", inline=False)
         await ctx.channel.send(embed=embed)
 
 

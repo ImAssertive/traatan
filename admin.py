@@ -6,7 +6,7 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='setup', aliases=['botsetup', 'guildsettings', 'modules','modulesettings', 'module'])
+    @commands.command(name='setup', aliases=['botsetup', 'guildsettings', 'modules','modulesettings', 'module','settings'])
     @checks.owner_or_admin()
     async def setup(self, ctx):
         embed = discord.Embed(title="Menu Loading...", description="Please stand by.", colour=self.bot.getcolour())
