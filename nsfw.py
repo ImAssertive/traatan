@@ -6,7 +6,7 @@ class nsfwCog:
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name=e621)
+    @commands.command(name="nsfw")
     @checks.module_enabled("nsfw")
     async def e621(self, ctx, keywordsText):
         keywords = keywordsText.split(',')
