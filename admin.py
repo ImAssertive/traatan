@@ -420,7 +420,7 @@ class adminCog:
             query = "UPDATE Guilds SET leavechannel = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send("Done! Farewell channel set here.")
+        await ctx.channel.send(":white_check_mark: | Done! Farewell channel set here.")
 
     @commands.command(name="setwelcome", aliases=['setwelcomechannel'])
     @checks.is_not_banned()
@@ -432,7 +432,7 @@ class adminCog:
             query = "UPDATE Guilds SET welcomechannel = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send("Done! Welcome channel set here.")
+        await ctx.channel.send(":white_check_mark: | Done! Welcome channel set here.")
 
     @commands.command()
     @checks.module_enabled("welcome")
