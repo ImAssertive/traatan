@@ -132,7 +132,7 @@ class Bot(commands.Bot):
     def getcolour(self):
         colours = ["5C6BC0", "AB47BC", "EF5350", "FFA726", "FFEE58", "66BB6A", "5BCEFA", "F5A9B8", "FFFFFF", "F5A9B8", "5BCEFA"]
         self.currentColour += 1
-        if self.currentColour ==  len(colours) - 1:
+        if self.currentColour ==  len(colours):
             self.currentColour = 0
         return discord.Colour(int(colours[self.currentColour], 16))
 
