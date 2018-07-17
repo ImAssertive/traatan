@@ -74,7 +74,7 @@ async def run():
     conch boolean DEFAULT true,
     eightball boolean DEFAULT true, 
     setMuteRole boolean DEFAULT false,
-    esix boolean DEFAULT true,
+    esix boolean DEFAULT false,
     selfAssignable boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
