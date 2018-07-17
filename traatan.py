@@ -2,7 +2,7 @@ import discord, asyncio, sys, traceback, checks, asyncpg, useful, credentialsFil
 from discord.ext import commands
 
 def getPrefix(bot, message):
-    prefixes = ["traa!","!valtarithegreat","tt!","tt?"]
+    prefixes = ["traa!","valtarithegreat!","tt!","tt?"]
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 async def run():
@@ -74,6 +74,7 @@ async def run():
     conch boolean DEFAULT true,
     eightball boolean DEFAULT true, 
     setMuteRole boolean DEFAULT false,
+    esix boolean DEFAULT true,
     selfAssignable boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
