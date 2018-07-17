@@ -2,7 +2,7 @@ import discord, asyncio, sys, traceback, checks, asyncpg, useful, credentialsFil
 from discord.ext import commands
 
 def getPrefix(bot, message):
-    prefixes = ["traa!"]
+    prefixes = ["traa!","!valtarithegreat","tt!","tt?"]
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 async def run():
