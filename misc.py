@@ -136,7 +136,7 @@ class miscCog:
     async def flip(self, ctx):
         result = random.randint(0,1)
         if result == 1:
-            await ctx.channel.send(":dvd: | **"+ctx.message.author.display_name+"** flipped a coin and got: **heads!**")
+            await ctx.channel.send(":cd: | **"+ctx.message.author.display_name+"** flipped a coin and got: **heads!**")
         else:
             await ctx.channel.send(":dvd: | **"+ctx.message.author.display_name+"** flipped a coin and got: **tails!**")
 
