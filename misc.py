@@ -131,6 +131,14 @@ class miscCog:
             choice = random.randint(0,len(choices)-1)
             await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** I choose **"+choices[choice]+" **.")
 
+    @commands.command(name='flip', alises=['coin', 'coinflip'])
+    @checks.module_enabled("misc")
+    async def flip(self, ctx):
+        result = random.randint(0,1)
+        if result == 1:
+            await ctx.channel.send(":cd: | **"+ctx.message.author.display_name+"** flipped a coin and got: **heads!**")
+        else:
+            await ctx.channel.send(":dvd: | **"+ctx.message.author.display_name+"** flipped a coin and got: **tails!**")
 
 def setup(bot):
     bot.add_cog(miscCog(bot))
