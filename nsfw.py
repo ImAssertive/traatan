@@ -17,7 +17,7 @@ class nsfwCog:
             imageembed = discord.Embed(colour=self.bot.getcolour())
             imagetopost = random.randint(0, len(results))
             imageembed.set_image(url=results[imagetopost].file_url)
-            imageembed.set_footer(text="Image "+str(imagetopost)+" on e621 of "+str(len(results))+" results with tags: "+keywordsText+".")
+            imageembed.set_footer(text="Image "+str(imagetopost)+" of "+str(len(results))+" results with tags: "+keywordsText+".")
             await ctx.channel.send(embed=imageembed)
         else:
            await ctx.channel.send(':no_entry: | No results found!')
