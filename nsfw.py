@@ -14,8 +14,11 @@ class nsfwCog:
             keywords[counter] = keywords[counter].replace(' ', '%20')
         results = yippi.search.post(keywords)
         if len(results) != 0:
+            imageembed = discord.Embed(description="Tags: "keywordsText,colour=self.bot.getcolour())
             imagetopost = random.randint(0, len(results))
-            await ctx.send(results[imagetopost].file_url)
+            imageembed.set_image(url=results[imagetopost].file_url)
+            embed.set_footer(text="Image "+imagetopost+" on e621 of "+str(len(results))+" results.")
+            await ctx.channel.send(embed=imageembed)
         else:
            await ctx.channel.send(':no_entry: | No results found!')
 
