@@ -12,12 +12,12 @@ class nsfwCog:
         keywords = keywordsText.split(',')
         for counter in range(0, len(keywords)):
             keywords[counter] = keywords[counter].replace(' ', '%20')
-        results = yippi.search.post(keywords, limit=5000)
+        results = yippi.search.post(keywords, limit=100)
         if len(results) != 0:
             imageembed = discord.Embed(colour=self.bot.getcolour())
             imagetopost = random.randint(0, len(results))
             imageembed.set_image(url=results[imagetopost].file_url)
-            imageembed.set_footer(text="Image "+str(imagetopost)+" of "+str(len(results))+" results with tags: "+keywordsText+".")
+            imageembed.set_footer(text="Tags: "+keywordsText)
             await ctx.channel.send(embed=imageembed)
         else:
            await ctx.channel.send(':no_entry: | No results found!')
