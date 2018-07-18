@@ -12,7 +12,7 @@ class nsfwCog:
         keywords = keywordsText.split(',')
         for counter in range(0, len(keywords)):
             keywords[counter] = keywords[counter].replace(' ', '%20')
-        results = yippi.search.post(keywords, limit=100)
+        results = yippi.search.post(keywords, limit=50)
         if len(results) != 0:
             imageembed = discord.Embed(colour=self.bot.getcolour())
             imagetopost = random.randint(0, len(results))
