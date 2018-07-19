@@ -747,9 +747,9 @@ class rolesCog:
             permsTrue = []
             permsFalse = []
             for counter in range(0,len(result)):
-                if result[row] == True:
+                if result[counter] == True:
                     permsTrue.append(result[row])
-                elif result[row] == False:
+                elif result[counter] == False:
                     permsFalse.append(result[row])
             print(permsFalse)
             print(permsTrue)
