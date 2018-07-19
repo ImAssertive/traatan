@@ -757,7 +757,7 @@ class rolesCog:
             embed.add_field(name="ID", value=str(role.id))
             embed.add_field(name="Created", value=str(role.created_at))
             embed.add_field(name="Members", value=str(len(role.members)))
-            embed.add_field(name="Colour", value=str(role.colour.value.hex()))
+            embed.add_field(name="Colour", value=str(hex(role.colour.value)))
             embed.add_field(name="Displayed separately", value=str(role.hoist))
             embed.add_field(name="Externally managed", value=str(role.managed))
             embed.add_field(name="Position", value=str(role.position)+" of "+str(len(ctx.guild.roles))+" roles.")
