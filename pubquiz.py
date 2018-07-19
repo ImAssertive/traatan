@@ -9,7 +9,7 @@ class pubquizCog:
     @commands.group(pass_context=True, name='pubquiz', aliases=['pq','pubq'])
     async def pubquiz(self, ctx):
         if ctx.invoked_subcommand is None:
-            await ctx.channel.send("Please enter a command. !help or !pubquiz help for a list of commands.")
+            await ctx.channel.send("Please enter a command. tt!help or tt!pubquiz help for a list of commands.")
 
     @pubquiz.command(name='settext', aliases=['stext'])
     @checks.module_enabled("pubquiz")
@@ -201,6 +201,37 @@ class pubquizCog:
         else:
             await ctx.channel.send(":no_entry: | Please enter a positive whole time number.")
 
+    @pubquiz.command(name="undo")
+    @checks.module_enabled("pubquiz")
+    @checks.rolescheck("pqcorrect")
+    async def undo(self, ctx, *, correctMembers):
+        correctMembers = correctMembers.split(" ")
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        embed = discord.Embed(title="Reduced the following users scores:")
+        connection = await self.bot.db.acquire()
+        for i in range (0, len(correctMembers)):
+            memberid = (useful.getid(correctMembers[i]))
+            if result["pubquizlastquestionsuper"] == True:
+                toAdd = round(25/len(correctMembers))
+            elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
+                toAdd = 16
+            else:
+                toAdd = 14-i
+                if toAdd < 10:
+                    toAdd = 10
+            query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
+            results = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+            currentvalue = results["pubquizscoreweekly"]
+            currenttotal = results["pubquizscoretotal"]
+            async with connection.transaction():
+                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currentvalue - toAdd, ctx.guild.id, memberid)
+                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
+                await self.bot.db.execute(query, currenttotal - toAdd, ctx.guild.id, memberid)
+            embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="lost **"+ str(toAdd) + "** points.")
+        await self.bot.db.release(connection)
+        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
 
 
     @pubquiz.command(name="correct")
