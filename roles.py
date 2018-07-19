@@ -806,7 +806,7 @@ class rolesCog:
     async def unmute(self, ctx, *, member):
                     memberID = useful.getid(member)
                     query = "SELECT * FROM guilds WHERE guildID = $1"
-                    result = await ctx.bot.db.fetchrow(query, role.id)
+                    result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
                     raidrole = discord.utils.get(ctx.guild.roles, id=result["raidroleid"])
                     if not muterole:
                         await ctx.channel.send(":no_entry: | The raid role has not been set! Please use the setraidrole command to set a role.")
