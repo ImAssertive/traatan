@@ -748,9 +748,9 @@ class rolesCog:
             permsFalse = []
             for counter in range(0,len(result)):
                 if result[counter] == True:
-                    permsTrue.append(result[row])
+                    permsTrue.append(result[counter])
                 elif result[counter] == False:
-                    permsFalse.append(result[row])
+                    permsFalse.append(result[counter])
             print(permsFalse)
             print(permsTrue)
             embed = discord.Embed(title="Info for role: "+roleName+"")
