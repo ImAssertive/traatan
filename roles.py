@@ -776,7 +776,7 @@ class rolesCog:
         else:
             connection = await self.bot.db.acquire()
             async with connection.transaction():
-                query = "UPDATE Roles SET raidroleid = $1 WHERE guildID = $2"
+                query = "UPDATE Guilds SET raidroleid = $1 WHERE guildID = $2"
                 await self.bot.db.execute(query, role.id, ctx.guild.id)
             await self.bot.db.release(connection)
             await ctx.channel.send(":white_check_mark: | Raid role set to **"+roleName+" **(ID: **"+str(role.id)+"**)")
