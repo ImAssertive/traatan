@@ -753,8 +753,8 @@ class rolesCog:
             embed.add_field(name="Externally managed", value=str(role.managed))
             embed.add_field(name="Position", value=str(role.position)+" of "+str(len(ctx.guild.roles))+" roles.")
             embed.add_field(name="Mentionable", value=str(role.mentionable))
-            embed.add_field(name="Enabled bot permissions")
-            embed.add_field(name="Disabled bot permissions")
+            embed.add_field(name="Enabled bot permissions", value="wew")
+            embed.add_field(name="Disabled bot permissions", value="wew")
             await ctx.channel.send(embed=embed)
 
 
