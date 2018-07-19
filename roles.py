@@ -822,4 +822,3 @@ class rolesCog:
 
 def setup(bot):
     bot.add_cog(rolesCog(bot))
-    role = discord.utils.get(ctx.guild.roles, name=roleName)
