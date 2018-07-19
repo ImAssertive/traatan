@@ -753,7 +753,7 @@ class rolesCog:
                     permsFalse.append(key)
             permsTrue = ', '.join(permsTrue)
             permsFalse = ', '.join(permsFalse)
-            embed = discord.Embed(title="Info for role: "+roleName+"", colour = discord.Colour(hex(role.colour.value)))
+            embed = discord.Embed(title="Info for role: "+roleName+"", colour = discord.Colour(role.colour.value))
             embed.add_field(name="ID", value=str(role.id))
             embed.add_field(name="Created", value=str(role.created_at))
             embed.add_field(name="Members", value=str(len(role.members)))
