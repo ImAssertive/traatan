@@ -670,9 +670,6 @@ class rolesCog:
                 await menu.add_reaction(emojis[emoji])
             await self.rolesMainMenu(ctx, menu, role)
 
-    @roles.command()
-    async def view(self, ctx, *, role):
-        await ctx.channel.send("coming soon")
 
 
     @roles.command()
@@ -727,6 +724,39 @@ class rolesCog:
                     await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** You no longer have the **" + role.name + "** role.")
             else:
                 await ctx.channel.send(":no_entry: | This role is not self assignable!")
+
+
+    @roles.command()
+    @checks.is_not_banned()
+    @checks.module_enabled("administrator")
+    async def view(self, ctx, *, roleName):
+        role = discord.utils.get(ctx.guild.roles, name=roleName)
+        if role is None:
+            await ctx.channel.send(":no_entry: | Role not found.")
+        else:
+            query = "SELECT * FROM Roles WHERE roleID = $1"
+            result = await ctx.bot.db.fetchrow(query, role.id)
+            if result is None:
+                connection = await self.bot.db.acquire()
+                async with connection.transaction():
+                    query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+                    await self.bot.db.execute(query, role.id, ctx.guild.id)
+                await self.bot.db.release(connection)
+                query = "SELECT * FROM Roles WHERE roleID = $1"
+                result = await ctx.bot.db.fetchrow(query, role.id)
+            embed = discord.Embed(title="Info for role: "+roleName+"")
+            embed.add_field(name="ID", value=str(role.id))
+            embed.add_field(name="Created", value=str(role.created_at))
+            embed.add_field(name="Members", value=str(len(role.members)))
+            embed.add_field(name="Colour", value=str(role.colour.value))
+            embed.add_field(name="Displayed separately", value=str(role.hoist))
+            embed.add_field(name="Externally managed", value=str(role.managed))
+            embed.add_field(name="Position", value=str(role.position)+" of "+str(len(ctx.guild.roles))+" roles.")
+            embed.add_field(name="Mentionable", value=str(role.mentionable))
+            embed.add_field(name="Enabled bot permissions")
+            embed.add_field(name="Disabled bot permissions")
+            await ctx.channel.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(rolesCog(bot))
