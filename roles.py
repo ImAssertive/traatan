@@ -754,18 +754,72 @@ class rolesCog:
             permsTrue = ', '.join(permsTrue)
             permsFalse = ', '.join(permsFalse)
             embed = discord.Embed(title="Info for role: "+roleName+"", colour = discord.Colour(role.colour.value))
-            embed.add_field(name="ID", value=str(role.id))
-            embed.add_field(name="Created", value=str(role.created_at))
-            embed.add_field(name="Members", value=str(len(role.members)))
-            embed.add_field(name="Colour", value=str(hex(role.colour.value)))
-            embed.add_field(name="Displayed separately", value=str(role.hoist))
-            embed.add_field(name="Externally managed", value=str(role.managed))
-            embed.add_field(name="Position", value=str(role.position)+" of "+str(len(ctx.guild.roles)-1)+" roles.")
-            embed.add_field(name="Mentionable", value=str(role.mentionable))
-            embed.add_field(name="Enabled bot permissions", value=str(permsTrue))
-            embed.add_field(name="Disabled bot permissions", value=str(permsFalse))
+            embed.add_field(name="ID", value=str(role.id), inline=False)
+            embed.add_field(name="Created", value=str(role.created_at), inline=False)
+            embed.add_field(name="Members", value=str(len(role.members)), inline=False)
+            embed.add_field(name="Colour", value=str(hex(role.colour.value)), inline=False)
+            embed.add_field(name="Displayed separately", value=str(role.hoist), inline=False)
+            embed.add_field(name="Externally managed", value=str(role.managed), inline=False)
+            embed.add_field(name="Position", value=str(role.position)+" of "+str(len(ctx.guild.roles)-1)+" roles.", inline=False)
+            embed.add_field(name="Mentionable", value=str(role.mentionable), inline=False)
+            embed.add_field(name="Enabled bot permissions", value=str(permsTrue), inline=False)
+            embed.add_field(name="Disabled bot permissions", value=str(permsFalse), inline=False)
             await ctx.channel.send(embed=embed)
+
+    @commands.command()
+    @checks.module_enabled("administrator")
+    @checks.rolescheck("setraidrole")
+    async def setraidrole(self, ctx, *, roleName):
+        role = discord.utils.get(ctx.guild.roles, name=roleName)
+        if role is None:
+            await ctx.channel.send(":no_entry: | Role not found.")
+        else:
+            connection = await self.bot.db.acquire()
+            async with connection.transaction():
+                query = "UPDATE Roles SET raidroleid = $1 WHERE guildID = $2"
+                await self.bot.db.execute(query, role.id, ctx.guild.id)
+            await self.bot.db.release(connection)
+            await ctx.channel.send(":white_check_mark: | Raid role set to **"+roleName+" **(ID: **"+str(role.id)+"**)")
+
+    @commands.command()
+    @checks.module_enabled("administrator")
+    @checks.rolescheck("mute")
+    async def mute(self, ctx, *, member):
+        memberID = useful.getid(member)
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, role.id)
+        raidrole = discord.utils.get(ctx.guild.roles, id=result["raidroleid"])
+        if not muterole:
+            await ctx.channel.send(":no_entry: | The raid role has not been set! Please use the setraidrole command to set a role.")
+        else:
+            if raidrole in ctx.guild.get_member(memberID).roles:
+                await ctx.channel.send(":no_entry: | This user is already muted. Use the unmute command to unmute them.")
+            else:
+                ctx.guild.get_member(memberID).add_roles(raidrole)
+                await ctx.channel.send(":white_check_mark: | Muted user **"+ctx.guild.get_member(memberID).display_name+"**.")
+                if ctx.guild.id == 331517548636143626:
+                    ctx.guild.get_member(memberID).remove_roles(discord.utils.get(ctx.guild.roles, name="User"))
+
+    @commands.command()
+    @checks.module_enabled("administrator")
+    @checks.rolescheck("mute")
+    async def unmute(self, ctx, *, member):
+                    memberID = useful.getid(member)
+                    query = "SELECT * FROM guilds WHERE guildID = $1"
+                    result = await ctx.bot.db.fetchrow(query, role.id)
+                    raidrole = discord.utils.get(ctx.guild.roles, id=result["raidroleid"])
+                    if not muterole:
+                        await ctx.channel.send(":no_entry: | The raid role has not been set! Please use the setraidrole command to set a role.")
+                    else:
+                        if raidrole not in ctx.guild.get_member(memberID).roles:
+                            await ctx.channel.send(":no_entry: | This user is not muted. Use the mute command to mute them.")
+                        else:
+                            ctx.guild.get_member(memberID).remove_roles(raidrole)
+                            await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "**.")
+                            if ctx.guild.id == 331517548636143626:
+                                ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, name="User"))
 
 
 def setup(bot):
     bot.add_cog(rolesCog(bot))
+    role = discord.utils.get(ctx.guild.roles, name=roleName)
