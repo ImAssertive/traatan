@@ -746,13 +746,13 @@ class rolesCog:
                 result = await ctx.bot.db.fetchrow(query, role.id)
             permsTrue = []
             permsFalse = []
-            for counter in range(0,len(result)):
-                if result[counter] == True:
-                    permsTrue.append(result[counter])
-                elif result[counter] == False:
-                    permsFalse.append(result[counter])
-            print(permsFalse)
+            for key in result.keys():
+                if result[key] == True:
+                    permsTrue.append(key)
+                elif result[key] == True:
+                    permsFalse.append(key)
             print(permsTrue)
+            print(permsFalse)
             embed = discord.Embed(title="Info for role: "+roleName+"")
             embed.add_field(name="ID", value=str(role.id))
             embed.add_field(name="Created", value=str(role.created_at))
