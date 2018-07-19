@@ -749,7 +749,7 @@ class rolesCog:
             for key in result.keys():
                 if result[key] == True:
                     permsTrue.append(key)
-                elif result[key] == True:
+                elif result[key] == False:
                     permsFalse.append(key)
             print(permsTrue)
             print(permsFalse)
