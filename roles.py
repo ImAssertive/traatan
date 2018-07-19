@@ -795,10 +795,10 @@ class rolesCog:
             if raidrole in ctx.guild.get_member(memberID).roles:
                 await ctx.channel.send(":no_entry: | This user is already muted. Use the unmute command to unmute them.")
             else:
-                ctx.guild.get_member(memberID).add_roles(raidrole)
+                await ctx.guild.get_member(memberID).add_roles(raidrole)
                 await ctx.channel.send(":white_check_mark: | Muted user **"+ctx.guild.get_member(memberID).display_name+"**.")
                 if ctx.guild.id == 331517548636143626:
-                    ctx.guild.get_member(memberID).remove_roles(discord.utils.get(ctx.guild.roles, name="User"))
+                    await ctx.guild.get_member(memberID).remove_roles(discord.utils.get(ctx.guild.roles, name="User"))
 
     @commands.command()
     @checks.module_enabled("administrator")
@@ -814,10 +814,10 @@ class rolesCog:
                         if raidrole not in ctx.guild.get_member(memberID).roles:
                             await ctx.channel.send(":no_entry: | This user is not muted. Use the mute command to mute them.")
                         else:
-                            ctx.guild.get_member(memberID).remove_roles(raidrole)
+                            await ctx.guild.get_member(memberID).remove_roles(raidrole)
                             await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "**.")
                             if ctx.guild.id == 331517548636143626:
-                                ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, name="User"))
+                                await ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, name="User"))
 
 
 def setup(bot):
