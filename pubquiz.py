@@ -269,13 +269,28 @@ class pubquizCog:
 
     @pubquiz.command()
     async def help(self, ctx):
-        embed = discord.Embed(title="PubQuiz Help", description="Help for the following !pubquiz commands:", colour=self.bot.getcolour())
+        embed = discord.Embed(title="PubQuiz Help", description="Help for the following tt!pubquiz commands:", colour=self.bot.getcolour())
+        embed.add_field(name="total", value ="DM's the user the total scoreboard for the pub quiz.")
+        embed.add_field(name="leaderboard", value ="DM's the user the weekly scoreboard. Can only be used when a pub quiz is active.")
 
-        embed.add_field(name="start", value ="Starts the weeks Pub Quiz! Can only be used by the QuizMaster")
-        embed.add_field(name="stop", value ="End the weeks Pub Quiz! Can only be used by the QuizMaster")
-        embed.add_field(name="question", value ="Sends a new question to everyone! Default time is 10. Can only be used by the QuizMaster")
-        embed.add_field(name="settime", value ="Changes the default time in seconds people have to answer questions. Can only be used by the QuizMaster")
-        embed.add_field(name="correct", value ="Updates the points gained values for these users. Fastest user should be entered first with slowest user last. Can only be used by the QuizMaster.")
+
+    @pubquiz.command()
+    async def qmhelp(self, ctx):
+        embed = discord.Embed(title="PubQuiz Quizmaster Help", description="Help for the following tt!pubquiz commands:", colour=self.bot.getcolour())
+        embed.add_field(name="settext", value ="Changes the text the bot sends when a new pub quiz is started.")
+        embed.add_field(name="setendtext", value ="Changes the text the bot sends when a pub quiz ends.")
+        embed.add_field(name="reset", value ="Resets the total leaderboard for the guild. Use with caution.")
+        embed.add_field(name="leaderboard", value ="Posts the weekly leaderboard in the channel where the pubquiz was started. If the user does not have permission the leaderboard will instead be DM'ed to them.")
+        embed.add_field(name="total", value ="Posts the total leaderboard. If the user does not have permission the leaderboard will instead be DM'ed to them.")
+        embed.add_field(name="start", value ="Starts the weeks Pub Quiz!")
+        embed.add_field(name="stop", value ="End the weeks Pub Quiz!")
+        embed.add_field(name="question", value ="Sends a new question to everyone! Default time is 10.")
+        embed.add_field(name="superquestion", value ="Sends a new super question to everyone! Default time is 10.")
+        embed.add_field(name="settime", value ="Changes the default time in seconds people have to answer questions.")
+        embed.add_field(name="correct", value ="Updates the points gained values for these users. Fastest user should be entered first with slowest user last.")
+        embed.add_field(name="undo", value ="Reduces the points gained values for these users. Fastest user should be entered first with slowest user last.")
+        embed.add_field(name="override", value ="Overrides the mentioned users score, this allows for mistakes to be quickly corrected. Correct usage is tt!pq or @user (amount of points)")
+        embed.add_field(name="answer", value ="Gets the bot to echo the answer. Correct usage is tt!pq answer (Answer)")
         await ctx.channel.send(embed = embed)
 
     @pubquiz.command(name='question', aliases=['q'])
@@ -320,13 +335,13 @@ class pubquizCog:
                 await self.bot.db.execute(query, ctx.author.id, ctx.guild.id)
             if superQuestion:
                 questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
-                questionEmbed.add_field(name="Please type your answers now.", value=(self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention + " " + self.bot.user.mention))
+                questionEmbed.add_field(name="Please type your answers now.", value ="DM's have been disabled! Please enter your answer below.")
                 async with connection.transaction():
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = true WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
             else:
                 questionEmbed = discord.Embed(title="**Question " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
-                questionEmbed.add_field(name="Please type your answers now.", value =(self.bot.user.mention + " " +self.bot.user.mention + " " + self.bot.user.mention + " " +self.bot.user.mention))
+                questionEmbed.add_field(name="Please type your answers now.", value ="DM's have been disabled! Please enter your answer below.")
                 async with connection.transaction():
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
