@@ -317,7 +317,7 @@ class pubquizCog:
     @checks.rolescheck("pqquestion")
     @checks.pubquiz_active()
     async def answer(self, ctx, *, answer):
-        embed = discord.Embed(title="The answer was...", description = answer, colour=self.bot.getcolour())
+        embed = discord.Embed(title="The answer is...", description = answer, colour=self.bot.getcolour())
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
