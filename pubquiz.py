@@ -250,7 +250,7 @@ class pubquizCog:
             elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
-                toAdd = 14-i
+                toAdd = 13-i
                 if toAdd < 10:
                     toAdd = 10
             query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
