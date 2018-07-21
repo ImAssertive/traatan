@@ -272,6 +272,9 @@ class pubquizCog:
         embed = discord.Embed(title="PubQuiz Help", description="Help for the following tt!pubquiz commands:", colour=self.bot.getcolour())
         embed.add_field(name="total", value ="DM's the user the total scoreboard for the pub quiz.")
         embed.add_field(name="leaderboard", value ="DM's the user the weekly scoreboard. Can only be used when a pub quiz is active.")
+        await ctx.channel.send(embed = embed)
+
+
 
 
     @pubquiz.command()
