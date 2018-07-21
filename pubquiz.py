@@ -321,6 +321,7 @@ class pubquizCog:
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+        await ctx.delete()
 
     async def questionFunction(self, ctx, question, superQuestion):
         query = "SELECT * FROM guilds WHERE guildID = $1"
