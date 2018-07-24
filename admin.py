@@ -555,7 +555,7 @@ class adminCog:
             memberfound = False
         if memberfound:
             confirmationnumber = random.randint(1000, 9999)
-            embed = discord.Embed(title="You are about to kick user: "+ctx.guild.get_member(memberid).display_name, description="This action is irreversable. To continue please type" + str(confirmationnumber), colour=self.bot.getcolour())
+            embed = discord.Embed(title="You are about to kick user: "+ctx.guild.get_member(memberid).display_name, description="This action is irreversable. To continue please type `" + str(confirmationnumber)+"` or to cancel, please type `cancel`.", colour=self.bot.getcolour())
             embed.add_field(name='User ID: ', value=str(ctx.guild.get_member(memberid).id), inline=False)
             embed.add_field(name='User discord name: ', value=ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator, inline=False)
             embed.add_field(name='Reason: ', value=reason, inline=False)
@@ -569,15 +569,15 @@ class adminCog:
             else:
                 if msg.content == str(confirmationnumber):
                     embed = discord.Embed(title=":exclamation: | You have been kicked from " + ctx.guild.name, description="You have been kicked from "+ ctx.guild.name+ ". Details of this kick including reason and user are listed below.", colour=self.bot.getcolour())
-                    embed.add_field(name="User (You):", value=ctx.guild.get_member(memberid).mention + " " + ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator + " `" + str(ctx.guild.get_member(memberid).id)+"`")
-                    embed.add_field(name="Issued by:", value=ctx.author.mention + " " + ctx.author.name +"#" +ctx.author.discriminator + " `" + str(ctx.author.id)+"`")
-                    embed.add_field(name="Reason:", value=reason)
+                    embed.add_field(name="User (You):", value=ctx.guild.get_member(memberid).mention + " " + ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator + " `" + str(ctx.guild.get_member(memberid).id)+"`", inline=False)
+                    embed.add_field(name="Issued by:", value=ctx.author.mention + " " + ctx.author.name +"#" +ctx.author.discriminator + " `" + str(ctx.author.id)+"`", inline=False)
+                    embed.add_field(name="Reason:", value=reason, inline=False)
                     query = "SELECT * FROM guilds WHERE guildID = $1 AND kicktext IS NOT NULL"
                     results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
                     if results:
                         embed.add_field(name="Message from server:", value=results["kicktext"])
                     await ctx.channel.send(":white_check_mark: | Kicking user...")
-                    await ctx.guild.get_member(memberid).send(embed=embed)
+                    await ctx.guild.get_member(memberid).send(embed=embed, inline=False)
 
                 elif msg.content.lower() == "cancel":
                     await ctx.channel.send(":white_check_mark: | Canceled!")
