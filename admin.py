@@ -552,7 +552,7 @@ class adminCog:
                 if results:
                     embed.add_field(name="Message from server:", value=results["kicktext"])
                 await ctx.channel.send(":white_check_mark: | Kicking user...")
-                await ctx.guild.get_member(memberid).send(embed=embed, inline=False)
+                await ctx.guild.get_member(memberid).send(embed=embed)
                 await ctx.guild.get_member(memberid).kick(reason=reason)
 
             elif msg.content.lower() == "cancel":
@@ -588,7 +588,7 @@ async def ban(self, ctx, member, *, reason):
             if results:
                 embed.add_field(name="Message from server:", value=results["bantext"])
             await ctx.channel.send(":white_check_mark: | banning user...")
-            await ctx.guild.get_member(memberid).send(embed=embed, inline=False)
+            await ctx.guild.get_member(memberid).send(embed=embed)
             await ctx.guild.get_member(memberid).ban(reason=reason)
 
         elif msg.content.lower() == "cancel":
