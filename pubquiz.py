@@ -422,7 +422,7 @@ class pubquizCog:
     #         await ctx.channel.send(":no_entry: | I am not currently DMing you questions!")
 
     async def on_message(self, ctx):
-        if not ctx.guild:
+        if ctx.guild is not None:
             query = "SELECT * FROM guilds WHERE guildID = $1"
             result = await self.bot.db.fetchrow(query, ctx.guild.id)
             if ctx.author == self.bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]):
