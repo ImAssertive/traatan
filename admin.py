@@ -540,7 +540,7 @@ class adminCog:
             query = "UPDATE Guilds SET kicktext = $1 WHERE guildID = $2"
             await self.bot.db.execute(query, kickText,ctx.guild.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send(":white_check_mark: | Ban text set to `"+kickText+"`!")
+        await ctx.channel.send(":white_check_mark: | Kick text set to `"+kickText+"`!")
 
     @commands.command()
     @checks.module_enabled("administrator")
@@ -548,8 +548,42 @@ class adminCog:
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member, *, reason):
         memberid = int(useful.getid(member))
-        print(memberid)
-        print(reason)
+        memberfound = True
+        try:
+            ctx.guild.get_member(memberid)
+        except:
+            memberfound = False
+        if memberfound:
+            confirmationnumber = random.randint(1000, 9999)
+            embed = discord.Embed(title="You are about to kick user: "+ctx.guild.get_member(memberid).display_name, description="This action is irreversable. To continue please type" + str(confirmationnumber), colour=self.bot.getcolour())
+            embed.add_field(name='User ID: ', value=str(ctx.guild.get_member(memberid).id), inline=False)
+            embed.add_field(name='User discord name: ', value=ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator, inline=False)
+            embed.add_field(name='Reason: ', value=reason, inline=False)
+            kickinfo = await ctx.channel.send(embed=embed)
+            def confirmationcheck(msg):
+                return (msg.content == str(confirmationnumber) or msg.content.lower() == "cancel") and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
+            try:
+                msg = await self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
+            except asyncio.TimeoutError:
+                await ctx.channel.send(":no_entry: | **" + ctx.author.display_name + "** The reset command has closed due to inactivity.")
+            else:
+                if msg.content == str(confirmationnumber):
+                    embed = discord.Embed(title=":exclamation: | You have been kicked from " + ctx.guild.name, description="You have been kicked from "+ ctx.guild.name+ ". Details of this kick including reason and user are listed below.", colour=self.bot.getcolour())
+                    embed.add_field(name="User (You):", value=ctx.guild.get_member(memberid).mention + " " + ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator + " `" + str(ctx.guild.get_member(memberid).id)+"`")
+                    embed.add_field(name="Issued by:", value=ctx.author.mention + " " + ctx.author.name +"#" +ctx.author.discriminator + " `" + str(ctx.author.id)+"`")
+                    embed.add_field(name="Reason:", value=reason)
+                    query = "SELECT * FROM guilds WHERE guildID = $1 AND kicktext IS NOT NULL"
+                    results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+                    if results:
+                        embed.add_field(name="Message from server:", value=results["kicktext"])
+                    await ctx.channel.send(":white_check_mark: | Kicking user...")
+                    await ctx.guild.get_member(memberid).send(embed=embed)
+
+                elif msg.content.lower() == "cancel":
+                    await ctx.channel.send(":white_check_mark: | Canceled!")
+                    await kickinfo.delete()
+        else:
+            await ctx.channel.send(":no_entry: | User not found.")
 
 def setup(bot):
     bot.add_cog(adminCog(bot))
