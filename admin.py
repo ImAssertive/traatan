@@ -593,8 +593,7 @@ async def ban(self, ctx, member, *, reason):
     def confirmationcheck(msg):
         return (msg.content == str(confirmationnumber) or msg.content.lower() == "cancel") and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
     try:
-        msg = await
-        self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
+        msg = await self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
     except asyncio.TimeoutError:
         await ctx.channel.send(":no_entry: | **" + ctx.author.display_name + "** The reset command has closed due to inactivity.")
     else:
