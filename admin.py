@@ -590,11 +590,8 @@ async def ban(self, ctx, member, *, reason):
     embed.add_field(name='User discord name: ',value=ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator,inline=False)
     embed.add_field(name='Reason: ', value=reason, inline=False)
     baninfo = await ctx.channel.send(embed=embed)
-
     def confirmationcheck(msg):
-        return (msg.content == str(
-            confirmationnumber) or msg.content.lower() == "cancel") and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
-
+        return (msg.content == str(confirmationnumber) or msg.content.lower() == "cancel") and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
     try:
         msg = await
         self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
