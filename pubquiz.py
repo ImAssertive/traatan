@@ -422,26 +422,29 @@ class pubquizCog:
     #         await ctx.channel.send(":no_entry: | I am not currently DMing you questions!")
 
     async def on_message(self, ctx):
-        query = "SELECT * FROM guilds WHERE guildID = $1"
-        result = await self.bot.db.fetchrow(query, ctx.guild.id)
-        if ctx.author == self.bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]):
-            pass
-        else:
-            guild = 1
-            try:
-                ctx.guild
-            except:
-                guild = 0
-            if guild == 1:
-                if result["pubquizquestionactive"] == True:
-                    toadd = []
-                    toadd.append(ctx.author)
-                    toadd.append(ctx.guild.id)
-                    toadd.append(ctx.content)
-                    self.bot.pubquizAnswers.append(toadd)
-                    await ctx.delete()
-            else:
+        if not ctx.guild:
+            query = "SELECT * FROM guilds WHERE guildID = $1"
+            result = await self.bot.db.fetchrow(query, ctx.guild.id)
+            if ctx.author == self.bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]):
                 pass
+            else:
+                guild = 1
+                try:
+                    ctx.guild
+                except:
+                    guild = 0
+                if guild == 1:
+                    if result["pubquizquestionactive"] == True:
+                        toadd = []
+                        toadd.append(ctx.author)
+                        toadd.append(ctx.guild.id)
+                        toadd.append(ctx.content)
+                        self.bot.pubquizAnswers.append(toadd)
+                        await ctx.delete()
+                else:
+                    pass
+        else:
+            pass
 
 def setup(bot):
     bot.add_cog(pubquizCog(bot))

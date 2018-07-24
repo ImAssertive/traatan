@@ -559,40 +559,40 @@ class adminCog:
                 await ctx.channel.send(":white_check_mark: | Canceled!")
                 await kickinfo.delete()
 
-@commands.command()
-@checks.module_enabled("administrator")
-@checks.is_not_banned()
-@commands.has_permissions(ban_members=True)
-async def ban(self, ctx, member, *, reason):
-    memberid = int(useful.getid(member))
-    confirmationnumber = random.randint(1000, 9999)
-    embed = discord.Embed(title="You are about to ban user: " + ctx.guild.get_member(memberid).display_name, description="This action is irreversable. To continue please type `" + str(confirmationnumber) + "` or to cancel, please type `cancel`.",colour=self.bot.getcolour())
-    embed.add_field(name='User ID: ', value=str(ctx.guild.get_member(memberid).id), inline=False)
-    embed.add_field(name='User discord name: ',value=ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator,inline=False)
-    embed.add_field(name='Reason: ', value=reason, inline=False)
-    baninfo = await ctx.channel.send(embed=embed)
-    def confirmationcheck(msg):
-        return (msg.content == str(confirmationnumber) or msg.content.lower() == "cancel") and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
-    try:
-        msg = await self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
-    except asyncio.TimeoutError:
-        await ctx.channel.send(":no_entry: | **" + ctx.author.display_name + "** The reset command has closed due to inactivity.")
-    else:
-        if msg.content == str(confirmationnumber):
-            embed = discord.Embed(title=":exclamation: | You have been banned from " + ctx.guild.name,description="You have been banned from " + ctx.guild.name + ". Details of this ban including reason and user are listed below.",colour=self.bot.getcolour())
-            embed.add_field(name="User (You):", value=ctx.guild.get_member(memberid).mention + " " + ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator + " `" + str(ctx.guild.get_member(memberid).id) + "`", inline=False)
-            embed.add_field(name="Issued by:", value=ctx.author.mention + " " + ctx.author.name + "#" + ctx.author.discriminator + " `" + str(ctx.author.id) + "`", inline=False)
-            embed.add_field(name="Reason:", value=reason, inline=False)
-            query = "SELECT * FROM guilds WHERE guildID = $1 AND bantext IS NOT NULL"
-            results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            if results:
-                embed.add_field(name="Message from server:", value=results["bantext"])
-            await ctx.channel.send(":white_check_mark: | banning user...")
-            await ctx.guild.get_member(memberid).send(embed=embed)
-            await ctx.guild.get_member(memberid).ban(reason=reason)
+    @commands.command()
+    @checks.module_enabled("administrator")
+    @checks.is_not_banned()
+    @commands.has_permissions(ban_members=True)
+    async def ban(self, ctx, member, *, reason):
+        memberid = int(useful.getid(member))
+        confirmationnumber = random.randint(1000, 9999)
+        embed = discord.Embed(title="You are about to ban user: " + ctx.guild.get_member(memberid).display_name, description="This action is irreversable. To continue please type `" + str(confirmationnumber) + "` or to cancel, please type `cancel`.",colour=self.bot.getcolour())
+        embed.add_field(name='User ID: ', value=str(ctx.guild.get_member(memberid).id), inline=False)
+        embed.add_field(name='User discord name: ',value=ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator,inline=False)
+        embed.add_field(name='Reason: ', value=reason, inline=False)
+        baninfo = await ctx.channel.send(embed=embed)
+        def confirmationcheck(msg):
+            return (msg.content == str(confirmationnumber) or msg.content.lower() == "cancel") and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
+        try:
+            msg = await self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
+        except asyncio.TimeoutError:
+            await ctx.channel.send(":no_entry: | **" + ctx.author.display_name + "** The reset command has closed due to inactivity.")
+        else:
+            if msg.content == str(confirmationnumber):
+                embed = discord.Embed(title=":exclamation: | You have been banned from " + ctx.guild.name,description="You have been banned from " + ctx.guild.name + ". Details of this ban including reason and user are listed below.",colour=self.bot.getcolour())
+                embed.add_field(name="User (You):", value=ctx.guild.get_member(memberid).mention + " " + ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator + " `" + str(ctx.guild.get_member(memberid).id) + "`", inline=False)
+                embed.add_field(name="Issued by:", value=ctx.author.mention + " " + ctx.author.name + "#" + ctx.author.discriminator + " `" + str(ctx.author.id) + "`", inline=False)
+                embed.add_field(name="Reason:", value=reason, inline=False)
+                query = "SELECT * FROM guilds WHERE guildID = $1 AND bantext IS NOT NULL"
+                results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+                if results:
+                    embed.add_field(name="Message from server:", value=results["bantext"])
+                await ctx.channel.send(":white_check_mark: | banning user...")
+                await ctx.guild.get_member(memberid).send(embed=embed)
+                await ctx.guild.get_member(memberid).ban(reason=reason)
 
-        elif msg.content.lower() == "cancel":
-            await ctx.channel.send(":white_check_mark: | Canceled!")
-            await baninfo.delete()
+            elif msg.content.lower() == "cancel":
+                await ctx.channel.send(":white_check_mark: | Canceled!")
+                await baninfo.delete()
 def setup(bot):
     bot.add_cog(adminCog(bot))
