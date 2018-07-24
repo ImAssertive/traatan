@@ -587,7 +587,7 @@ class adminCog:
                 results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
                 if results:
                     embed.add_field(name="Message from server:", value=results["bantext"])
-                await ctx.channel.send(":white_check_mark: | banning user...")
+                await ctx.channel.send(":white_check_mark: | Banning user...")
                 await ctx.guild.get_member(memberid).send(embed=embed)
                 await ctx.guild.get_member(memberid).ban(reason=reason)
 
