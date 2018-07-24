@@ -166,7 +166,7 @@ class rolesCog:
                 await closed.delete()
 
     async def roleAdminMenuPage2(self, ctx, menu, role):
-        embed = discord.Embed(title='Administrator Permission options (2/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: muted (disables all commands)\n3: Enable All\n4: Disable All\n5: Previous Page\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Administrator Permission options (2/2)', description="These commands allow users to perform a variety of admin tasks.\n\nOptions: \n0: setmuterole\n1: mute\n2: muted (disables all commands)\n3: setkicktext\n4: setbantext\n5: Enable All\n6: Disable All\n7: Previous Page\n8: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(7)
@@ -199,21 +199,31 @@ class rolesCog:
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
             elif str(reaction.emoji) == "3\u20e3":
-                toeditTrue = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
+                permissionToEdit = "setkicktext"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "4\u20e3":
+                permissionToEdit = "setbantext"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.roleAdminMenuPage2(ctx, menu, role)
+
+            elif str(reaction.emoji) == "5\u20e3":
+                toeditTrue = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext", "setkicktext", "setbantext"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "4\u20e3":
-                toeditFalse = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext"]
+            elif str(reaction.emoji) == "6\u20e3":
+                toeditFalse = ["setmuterole", "mute", "editrole", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext", "setbantext", "setkicktext"]
                 toeditTrue = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.roleAdminMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "5\u20e3":
+            elif str(reaction.emoji) == "7\u20e3":
                 await self.roleAdminMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "6\u20e3":
+            elif str(reaction.emoji) == "8\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "❌":
@@ -235,7 +245,7 @@ class rolesCog:
             await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
 
     async def rolePubQuizMenuPage2(self, ctx, menu, role):
-        embed = discord.Embed(title='Pub Quiz Permission options (2/2)', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: pqsettext\n1: pqcorrect\n2: Enable all quizmaster commands\n3: Disable all quizmaster commands\n4: Previous page\n5: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
+        embed = discord.Embed(title='Pub Quiz Permission options (2/2)', description="These commands allow users to create and partake in pub quizzes.\n\nOptions:\n0: settext\n1: correct\n2: leaderboard\n3: Enable all quizmaster commands\n4: Disable all quizmaster commands\n5: Previous page\n6: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
         embed.set_footer(text="Current role: "+ role.name +"("+ str(role.id)+")")
         await menu.edit(embed=embed)
         options = useful.getMenuEmoji(5)
@@ -262,20 +272,25 @@ class rolesCog:
                 await self.rolePubQuizMenuPage2(ctx, menu, role)
 
             if str(reaction.emoji) == "2\u20e3":
+                permissionToEdit = "pqleaderboard"
+                await self.roleToggleFunction(ctx, role, menu, permissionToEdit)
+                await self.rolePubQuizMenuPage2(ctx, menu, role)
+
+            if str(reaction.emoji) == "3\u20e3":
                 toeditTrue = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp", "pqsettext", "pqcorrect"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePubQuizMenuPage2(ctx, menu, role)
-            elif str(reaction.emoji) == "3\u20e3":
+            elif str(reaction.emoji) == "4\u20e3":
                 toeditTrue = []
                 toeditFalse = ["pqstart", "pqend", "pqquestion", "pqsuperquestion","pqoverride","pqsettime","pqqmhelp", "pqsettext", "pqcorrect"]
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePubQuizMenuPage2(ctx, menu, role)
 
-            elif str(reaction.emoji) == "4\u20e3":
+            elif str(reaction.emoji) == "5\u20e3":
                 await self.rolePubQuizMenu(ctx, menu, role)
 
-            elif str(reaction.emoji) == "5\u20e3":
+            elif str(reaction.emoji) == "6\u20e3":
                 await self.rolesMainMenu(ctx, menu, role)
 
             elif str(reaction.emoji) == "❌":
@@ -383,7 +398,6 @@ class rolesCog:
                 await menu.delete()
                 await asyncio.sleep(1)
                 await closed.delete()
-
 
     async def roleMiscMenu(self, ctx, menu, role):
         embed = discord.Embed(title='Misc Permission options', description="These commands are mostly for fun.\n\nOptions:\n0: bluetext\n1: bluetextcode\n2: cute\n3: conch\n4: eightball\n5:selfassignable\n6: Enable all\n7: Disable all\n8: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
@@ -544,7 +558,7 @@ class rolesCog:
         else:
             await menu.remove_reaction(reaction.emoji, user)
             if str(reaction.emoji) == "0\u20e3":
-                toeditTrue = ["administrator", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqjoin", "pqqmhelp", "bluetext", "bluetextcode", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext", "mute", "cute", "editrole", "conch", "setmuterole"]
+                toeditTrue = ["administrator", "pqstart", "pqend", "pqquestion", "pqsuperquestion", "pqoverride", "pqsettime", "pqjoin", "pqqmhelp", "bluetext", "bluetextcode", "setwelcomechannel", "setwelcometext", "setleavechannel", "setleavetext", "toggleraid", "setraidrole", "setraidtext", "mute", "cute", "editrole", "conch", "setmuterole", "setbantext", "setkicktext"]
                 toeditFalse = []
                 await self.editRolePermissions(ctx, menu, role, toeditTrue, toeditFalse)
                 await self.rolePresetMenu(ctx, menu, role)
@@ -769,6 +783,7 @@ class rolesCog:
     @commands.command()
     @checks.module_enabled("administrator")
     @checks.rolescheck("setraidrole")
+    @checks.is_not_banned()
     async def setraidrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
@@ -784,6 +799,7 @@ class rolesCog:
     @commands.command()
     @checks.module_enabled("administrator")
     @checks.rolescheck("mute")
+    @checks.is_not_banned()
     async def mute(self, ctx, *, member):
         memberID = useful.getid(member)
         query = "SELECT * FROM guilds WHERE guildID = $1"
@@ -803,6 +819,7 @@ class rolesCog:
     @commands.command()
     @checks.module_enabled("administrator")
     @checks.rolescheck("mute")
+    @checks.is_not_banned()
     async def unmute(self, ctx, *, member):
                     memberID = useful.getid(member)
                     query = "SELECT * FROM guilds WHERE guildID = $1"

@@ -65,6 +65,7 @@ class miscCog:
 
     @commands.command(name="conch", aliases=['shell'])
     @checks.rolescheck("conch")
+    @checks.is_not_banned()
     @checks.module_enabled("misc")
     async def conch(self, ctx):
         randomNumber = random.randint(0,19)
@@ -78,6 +79,7 @@ class miscCog:
 
     @commands.command(name="eightball", aliases=['8ball'])
     @checks.module_enabled("misc")
+    @checks.is_not_banned()
     @checks.rolescheck("eightball")
     async def eightball(self, ctx):
         randomNumber = random.randint(0, 19)
@@ -87,6 +89,7 @@ class miscCog:
 
     @commands.command(name="roll")
     @checks.module_enabled("misc")
+    @checks.is_not_banned()
     async def roll(self, ctx, diceCommand):
         diceCommand = diceCommand.lower()
         diceCommand = diceCommand.split("d")
@@ -123,6 +126,7 @@ class miscCog:
 
     @commands.command(name="choose", alises=['choice'])
     @checks.module_enabled("misc")
+    @checks.is_not_banned()
     async def choose(self, ctx, *, choices):
         choices = choices.split(" | ")
         if len(choices) < 2 or (len(choices)==2 and choices[0] == choices[1]):
@@ -133,6 +137,7 @@ class miscCog:
 
     @commands.command(name='flip', alises=['coin', 'coinflip'])
     @checks.module_enabled("misc")
+    @checks.is_not_banned()
     async def flip(self, ctx):
         result = random.randint(0,1)
         if result == 1:

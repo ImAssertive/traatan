@@ -15,6 +15,8 @@ async def run():
     CREATE TABLE IF NOT EXISTS Guilds(guildID bigint PRIMARY KEY,
     prefix text,
     raidroleid bigint,
+    kicktext text,
+    bantext text,
     games boolean DEFAULT true,
     pubquiz boolean DEFAULT true,
     pubquiztime smallint DEFAULT 10, 
@@ -76,6 +78,8 @@ async def run():
     eightball boolean DEFAULT true, 
     setMuteRole boolean DEFAULT false,
     esix boolean DEFAULT false,
+    setbantext boolean DEFAULT false,
+    setkicktext boolean DEFAULT false,
     selfAssignable boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,

@@ -8,6 +8,7 @@ class adminCog:
 
     @commands.command(name='setup', aliases=['botsetup', 'guildsettings', 'modules','modulesettings', 'module','settings'])
     @checks.owner_or_admin()
+    @checks.is_not_banned()
     async def setup(self, ctx):
         embed = discord.Embed(title="Menu Loading...", description="Please stand by.", colour=self.bot.getcolour())
         menu = await ctx.channel.send(embed = embed)
@@ -517,8 +518,38 @@ class adminCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")
 
+    @commands.command(name='setbantext')
+    @checks.module_enabled("administrator")
+    @checks.is_not_banned()
+    @checks.rolescheck("setbantext")
+    async def setbantext(self, ctx, *, banText):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET bantext = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, banText,ctx.guild.id)
+        await self.bot.db.release(connection)
+        await ctx.channel.send(":white_check_mark: | Ban text set to `"+banText+"`!")
 
+    @commands.command(name='setkicktext')
+    @checks.module_enabled("administrator")
+    @checks.is_not_banned()
+    @checks.rolescheck("setkicktext")
+    async def setkicktext(self, ctx, *, kickText):
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            query = "UPDATE Guilds SET kicktext = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, kickText,ctx.guild.id)
+        await self.bot.db.release(connection)
+        await ctx.channel.send(":white_check_mark: | Ban text set to `"+kickText+"`!")
 
+    @commands.command()
+    @checks.module_enabled("administrator")
+    @checks.is_not_banned()
+    @commands.has_permissions(kick_members=True)
+    async def kick(self, ctx, member, *, reason):
+        memberid = int(useful.getid(member))
+        print(memberid)
+        print(reason)
 
 def setup(bot):
     bot.add_cog(adminCog(bot))

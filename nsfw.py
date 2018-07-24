@@ -8,6 +8,7 @@ class nsfwCog:
     @commands.command(name="e621")
     @checks.module_enabled("nsfw")
     @checks.rolescheck("esix")
+    @checks.is_not_banned()
     async def e621(self, ctx, keywordsText):
         keywords = keywordsText.split(',')
         for counter in range(0, len(keywords)):
