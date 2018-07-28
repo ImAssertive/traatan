@@ -273,7 +273,7 @@ class pubquizCog:
                 await self.bot.db.execute(query, currentvalue + toAdd, ctx.guild.id, memberid)
                 query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
                 await self.bot.db.execute(query, currenttotal + toAdd, ctx.guild.id, memberid)
-            embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="gained **"+ str(toAdd) + "** points.", colour = self.bot.getcolour())
+            embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="gained **"+ str(toAdd) + "** points.")
         await self.bot.db.release(connection)
         await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
 
