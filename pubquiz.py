@@ -218,7 +218,7 @@ class pubquizCog:
         correctMembers = correctMembers.split(" ")
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        embed = discord.Embed(title="Reduced the following users scores:")
+        embed = discord.Embed(title="Reduced the following users scores:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
         for i in range (0, len(correctMembers)):
             memberid = (useful.getid(correctMembers[i]))
@@ -252,7 +252,7 @@ class pubquizCog:
         correctMembers = correctMembers.split(" ")
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        embed = discord.Embed(title="The following users were correct:")
+        embed = discord.Embed(title="The following users were correct:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
         for i in range (0, len(correctMembers)):
             memberid = (useful.getid(correctMembers[i]))
