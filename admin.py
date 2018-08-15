@@ -11,7 +11,7 @@ class adminCog:
     async def setgame(self, ctx, *, gameName):
         game = discord.Game(gameName)
         await self.bot.change_presence(status=discord.Status.online, activity=game)
-        await ctx.channel.send(":white_check_mark: | Online status set to: ** playing: "+ gameName+"**")
+        await ctx.channel.send(":white_check_mark: | Online status set to: ** playing "+ gameName+"**")
 
     @commands.command(name='setup', aliases=['botsetup', 'guildsettings', 'modules','modulesettings', 'module','settings'])
     @checks.owner_or_admin()
