@@ -425,7 +425,7 @@ class pubquizCog:
         if ctx.guild is not None:
             query = "SELECT * FROM guilds WHERE guildID = $1"
             result = await self.bot.db.fetchrow(query, ctx.guild.id)
-            if ctx.author == self.bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]):
+            if ctx.author == self.bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]) or ctx.channel.id != int(result["pubquizchannel"]):
                 pass
             else:
                 guild = 1
