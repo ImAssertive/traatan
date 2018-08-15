@@ -23,6 +23,15 @@ class pubquizCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Pub quiz text set to `"+pubquiztext+"`!")
 
+    @pubquiz.command(name='active')
+    @checks.justme()
+    async def active(self, ctx):
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        if result["ongoingpubquiz"]:
+            await ctx.channel.send("The pub quiz is currently active in channel: **" + ctx.guild.get_channel(int(result["pubquizchannel"])).name + "**"
+
+
     @pubquiz.command(name='setendtext', aliases=['sendtext'])
     @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqsettext")
