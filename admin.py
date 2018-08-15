@@ -6,6 +6,12 @@ class adminCog:
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command()
+    @checks.justme()
+    async def setgame(self, ctx, *, gameName):
+        game = discord.Game(gameName)
+        await self.bot.change_presence(status=discord.Status.online, activity=game)
+
     @commands.command(name='setup', aliases=['botsetup', 'guildsettings', 'modules','modulesettings', 'module','settings'])
     @checks.owner_or_admin()
     @checks.is_not_banned()
