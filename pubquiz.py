@@ -29,7 +29,7 @@ class pubquizCog:
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         if result["ongoingpubquiz"]:
-            await ctx.channel.send("The pub quiz is currently active in channel: **" + ctx.guild.get_channel(int(result["pubquizchannel"])).name + "**"
+            await ctx.channel.send("The pub quiz is currently active in channel: **" + ctx.guild.get_channel(int(result["pubquizchannel"])).name + "**")
 
 
     @pubquiz.command(name='setendtext', aliases=['sendtext'])
