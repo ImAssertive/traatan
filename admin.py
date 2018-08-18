@@ -610,9 +610,10 @@ class adminCog:
     @commands.has_permissions(ban_members=True)
     async def hackban(self, ctx, memberid):
         try:
-            await guild.ban(discord.Object(id=memberid))
+            await ctx.guild.ban(discord.Object(id=int(memberid)))
             await ctx.channel.send(":white_check_mark: | Banned ID `"+str(memberid)+"`")
         except:
             await ctx.channel.send(":no_entry: | An error occurred. Was that a valid user ID?")
+
 def setup(bot):
     bot.add_cog(adminCog(bot))
