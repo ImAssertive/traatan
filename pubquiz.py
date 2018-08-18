@@ -268,6 +268,8 @@ class pubquizCog:
             memberid = (useful.getid(correctMembers[i]))
             if result["pubquizlastquestionsuper"] == True:
                 toAdd = round(25/len(correctMembers))
+                if toAdd == 12:
+                    toAdd = 13
             elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:

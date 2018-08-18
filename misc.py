@@ -35,7 +35,7 @@ class miscCog:
     @checks.rolescheck("bluetextcode")
     async def bluetextcode(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, True)
-        await ctx.channel.send(":white_check_mark | **"+ctx.author.display_name+"** here's your code:")
+        await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** here's your code:")
         await ctx.channel.send("```" + toOutput + "```")
         if self.deleteBlueText and ctx.author.id == 163691476788838401:
             await ctx.message.delete()
