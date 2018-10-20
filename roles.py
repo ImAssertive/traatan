@@ -748,36 +748,16 @@ class rolesCog:
         if role is None:
             await ctx.channel.send(":no_entry: | Role not found.")
         else:
-            query = "SELECT * FROM Roles WHERE roleID = $1"
-            result = await ctx.bot.db.fetchrow(query, role.id)
-            if result is None:
-                connection = await self.bot.db.acquire()
-                async with connection.transaction():
-                    query = "INSERT INTO Roles (roleID, guildID) VALUES($1, $2) ON CONFLICT DO NOTHING"
-                    await self.bot.db.execute(query, role.id, ctx.guild.id)
-                await self.bot.db.release(connection)
-                query = "SELECT * FROM Roles WHERE roleID = $1"
-                result = await ctx.bot.db.fetchrow(query, role.id)
-            permsTrue = []
-            permsFalse = []
-            for key in result.keys():
-                if result[key] == True:
-                    permsTrue.append(key)
-                elif result[key] == False:
-                    permsFalse.append(key)
-            permsTrue = ', '.join(permsTrue)
-            permsFalse = ', '.join(permsFalse)
             embed = discord.Embed(title="Info for role: "+roleName+"", colour = discord.Colour(role.colour.value))
             embed.add_field(name="ID", value=str(role.id), inline=False)
             embed.add_field(name="Created", value=str(role.created_at), inline=False)
             embed.add_field(name="Members", value=str(len(role.members)), inline=False)
             embed.add_field(name="Colour", value=str(hex(role.colour.value)), inline=False)
-            embed.add_field(name="Displayed separately", value=str(role.hoist), inline=False)
+            embed.add_field(name="Displayed separately (Hoisted)", value=str(role.hoist), inline=False)
             embed.add_field(name="Externally managed", value=str(role.managed), inline=False)
             embed.add_field(name="Position", value=str(role.position)+" of "+str(len(ctx.guild.roles)-1)+" roles.", inline=False)
             embed.add_field(name="Mentionable", value=str(role.mentionable), inline=False)
-            embed.add_field(name="Enabled bot permissions", value=str(permsTrue), inline=False)
-            embed.add_field(name="Disabled bot permissions", value=str(permsFalse), inline=False)
+            embed.add_field(name="Created at", value=str(role.created_at), inline=False)
             await ctx.channel.send(embed=embed)
 
     @commands.command()
