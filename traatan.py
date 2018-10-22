@@ -43,7 +43,10 @@ async def run():
     pubquizScoreTotal integer DEFAULT 0,
     pubquizScoreWeekly integer DEFAULT 0,
     PRIMARY KEY(userID, guildID));''')
-    bot = Bot(description=description, db=db)
+    query = "SELECT * FROM guilds WHERE guildID = $1"
+    result = self.db.fetchrow(query, ctx.guild.id)
+
+    bot = Bot(description=description, db=db, pubquizActive=result["ongoingpubquiz"], pubquizQuestionUserID = result["pubquizquestionuserid"], pubquizChannel = result["pubquizchannel"])
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
     if __name__ == '__main__':
         for extension in initial_extensions:
@@ -74,22 +77,9 @@ class Bot(commands.Bot):
                         "Quizmaster": 449941007619063828,
                         "Muted": 356529701675859990}
         self.db = kwargs.pop("db")
-        query = "SELECT * FROM guilds WHERE guildID = $1"
-        result = await self.db.fetchrow(query, ctx.guild.id)
-        if result["ongoingpubquiz"]:
-            self.pubquizActive = True
-        else:
-            self.pubquizActive = False
-        try:
-            self.pubquizQuestionUserID = result["pubquizquestionuserid"]
-        except:
-            self.pubquizQuestionUserID = 1
-        try:
-            self.pubquizChannel = result["pubquizchannel"]
-        except:
-            self.pubquizChannel = 1
-
-
+        self.pubquizActive = kwargs.pop("pubquizActive")
+        self.pubquizQuestionUserID = kwargs.pop("pubquizQuestionUserID")
+        self.pubquizChannel = kwargs.pop("pubquizChannel")
         self.currentColour = -1
         self.outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely",
                     "You may rely on it",
