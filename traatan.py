@@ -44,7 +44,7 @@ async def run():
     pubquizScoreWeekly integer DEFAULT 0,
     PRIMARY KEY(userID, guildID));''')
     query = "SELECT * FROM guilds WHERE guildID = $1"
-    result = self.db.fetchrow(query, ctx.guild.id)
+    result = db.fetchrow(query, ctx.guild.id)
 
     bot = Bot(description=description, db=db, pubquizActive=result["ongoingpubquiz"], pubquizQuestionUserID = result["pubquizquestionuserid"], pubquizChannel = result["pubquizchannel"])
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
