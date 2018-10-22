@@ -45,7 +45,7 @@ async def run():
     PRIMARY KEY(userID, guildID));''')
     query = "SELECT * FROM guilds WHERE guildID = $1"
     result = await db.fetchrow(query, 331517548636143626)
-
+    print(result)
     bot = Bot(description=description, db=db, pubquizActive=result["ongoingpubquiz"], pubquizQuestionUserID = result["pubquizquestionuserid"], pubquizChannel = result["pubquizchannel"])
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
     if __name__ == '__main__':
