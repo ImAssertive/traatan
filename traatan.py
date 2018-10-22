@@ -66,7 +66,7 @@ class Bot(commands.Bot):
             command_prefix=getPrefix
         )
         self.pubquizAnswers = []
-        self.rolesDict {"Admin": 348608087793467412, "Admin Powers": 406091590923321355,
+        self.rolesDict = {"Admin": 348608087793467412, "Admin Powers": 406091590923321355,
                         "Helper": 395565792457916417, "Helper Powers": 395565792457916417,
                         "Owner": 348207687319683072,
                         "Moderator Powers": 388829460759052288, "Moderator": 348747695088730113,
