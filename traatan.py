@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, asyncpg, useful, credentialsFile
+import discord, asyncio, sys, traceback, checks, asyncpg, useful, credentialsFileDev
 from discord.ext import commands
 
 def getPrefix(bot, message):
@@ -7,7 +7,7 @@ def getPrefix(bot, message):
 
 async def run():
     description = "Super Gay Bot"
-    credentials = credentialsFile.getCredentials()
+    credentials = credentialsFileDev.getCredentials()
     db = await asyncpg.create_pool(**credentials) ##CAPITALS ARE NOT CARRIED OVER ON DATABASE CREATION SO ARNT INCLUDED TO REDUCE CONFUSION
     await db.execute('''CREATE TABLE IF NOT EXISTS Users(userID bigint PRIMARY KEY,
     pubquizScoreTotal integer DEFAULT 0,
