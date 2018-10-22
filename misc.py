@@ -4,9 +4,9 @@ from discord.ext import commands
 class miscCog:
     def __init__(self, bot):
         self.bot = bot
-        self.deleteBlueText = False
+        self.deleteBlueText = False ##Determines if the bot deletes the message issuing any bluetext commands. Should never be edited by a user.
 
-    def blueTextFunction(self, userText, spaces):
+    def blueTextFunction(self, userText, spaces): ##Function returning any inputted text to blue emoji's.
         blueText = ""
         for counter in range(0,len(userText)):
             if userText[counter].isalpha() and spaces == True:
@@ -19,42 +19,35 @@ class miscCog:
                 blueText += userText[counter]
         return blueText
 
-    @commands.command(name="bluetext", aliases=['bt'])
-    @checks.is_not_banned()
-    @checks.module_enabled("bluetext")
-    @checks.rolescheck("bluetext")
+    @commands.command(name="bluetext", aliases=['bt'])##Makes the bot echo whatever entered in blue emoji's
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def bluetext(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, False)
         await ctx.channel.send(toOutput)
         if self.deleteBlueText:
             await ctx.message.delete()
 
-    @commands.command(name="bluetextcode", aliases=['bluetextmarkup', 'btc', 'btmu'])
-    @checks.is_not_banned()
-    @checks.module_enabled("bluetext")
-    @checks.rolescheck("bluetextcode")
+    @commands.command(name="bluetextcode", aliases=['bluetextmarkup', 'btc', 'btmu'])##Pastes the code for blue emoji's of any text entered after the command.
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def bluetextcode(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, True)
-        await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** here's your code:")
+        await ctx.channel.send(":white_check_mark | **"+ctx.author.display_name+"** here's your code:")
         await ctx.channel.send("```" + toOutput + "```")
         if self.deleteBlueText and ctx.author.id == 163691476788838401:
             await ctx.message.delete()
 
-    @commands.command()
-    @checks.is_not_banned()
-    @checks.module_enabled("bluetext")
-    @checks.rolescheck("cute")
-    async def cute(self, ctx, member):
-        memberID = useful.getid(member)
-        try:
-            toOutput = self.blueTextFunction((ctx.guild.get_member(memberID).nick +" is cute and valid and i love them"), False)
-        except TypeError:
-            toOutput = self.blueTextFunction((ctx.guild.get_member(memberID).name +" is cute and valid and i love them"), False)
-        await ctx.channel.send(toOutput + ":heartpulse:")
-        if self.deleteBlueText and ctx.author.id == 163691476788838401:
-            await ctx.message.delete()
+    # @commands.command()
+    # async def cute(self, ctx, member):
+    #     memberID = useful.getid(member)
+    #     try:
+    #         toOutput = self.blueTextFunction((ctx.guild.get_member(memberID).nick +" is cute and valid and i love them"), False)
+    #     except TypeError:
+    #         toOutput = self.blueTextFunction((ctx.guild.get_member(memberID).name +" is cute and valid and i love them"), False)
+    #     await ctx.channel.send(toOutput + ":heartpulse:")
+    #     if self.deleteBlueText and ctx.author.id == 163691476788838401:
+    #         await ctx.message.delete()
 
-    @commands.command(name="togglebluetextdelete", aliases=['deletebluetext', 'tbtd'], hidden = True)
+    @commands.command(name="togglebluetextdelete", aliases=['deletebluetext', 'tbtd'], hidden = True) ##Toggles the self.deleteBlueText value.
     @checks.justme()
     async def toggleBlueTextDelete(self, ctx):
         self.deleteBlueText = not self.deleteBlueText
@@ -63,10 +56,8 @@ class miscCog:
         else:
             await ctx.channel.send(":white_check_mark: | No longer hiding bluetext commands!")
 
-    @commands.command(name="conch", aliases=['shell'])
-    @checks.rolescheck("conch")
-    @checks.is_not_banned()
-    @checks.module_enabled("misc")
+    @commands.command(name="conch", aliases=['shell']) #Spongebob themed eightball command.
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def conch(self, ctx):
         randomNumber = random.randint(0,19)
         conchName = ("**" +ctx.author.name + "** | The conch says:")
@@ -77,10 +68,8 @@ class miscCog:
         embed.set_footer(text="THE SHELL HAS SPOKEN")
         await ctx.channel.send(embed = embed)
 
-    @commands.command(name="eightball", aliases=['8ball'])
-    @checks.module_enabled("misc")
-    @checks.is_not_banned()
-    @checks.rolescheck("eightball")
+    @commands.command(name="eightball", aliases=['8ball']) #Regular eightball command, near identical to tatsu's
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def eightball(self, ctx):
         randomNumber = random.randint(0, 19)
         eightballName = ("**" + ctx.author.name + "** - The 8ball says:")
@@ -88,9 +77,8 @@ class miscCog:
         await ctx.channel.send(":8ball: | "+eightballName + " " + eightballValue)
 
     @commands.command(name="roll")
-    @checks.module_enabled("misc")
-    @checks.is_not_banned()
-    async def roll(self, ctx, diceCommand):
+    @checks.has_role(ctx.bot.rolesDict["User"])
+    async def roll(self, ctx, diceCommand): #DND Diceroll command - rolls a number of dice and adds the score.
         diceCommand = diceCommand.lower()
         diceCommand = diceCommand.split("d")
         if len(diceCommand) != 2:
@@ -124,20 +112,18 @@ class miscCog:
                 else:
                     await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
 
-    @commands.command(name="choose", alises=['choice'])
-    @checks.module_enabled("misc")
-    @checks.is_not_banned()
+    @commands.command(name="choose", alises=['choice']) ##Chooses an item from a list of other items
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def choose(self, ctx, *, choices):
         choices = choices.split(" | ")
         if len(choices) < 2 or (len(choices)==2 and choices[0] == choices[1]):
-            await ctx.channel.send(":no_entry: | Please enter at least two choices!")
+            await ctx.channel.send(":no_entry: | Please enter at least two choices separated with ` | `!")
         else:
             choice = random.randint(0,len(choices)-1)
             await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** I choose **"+choices[choice]+" **.")
 
-    @commands.command(name='flip', alises=['coin', 'coinflip'])
-    @checks.module_enabled("misc")
-    @checks.is_not_banned()
+    @commands.command(name='flip', alises=['coin', 'coinflip']) #Flips a coin
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def flip(self, ctx):
         result = random.randint(0,1)
         if result == 1:

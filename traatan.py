@@ -6,99 +6,45 @@ def getPrefix(bot, message):
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 async def run():
-    description = "/r/Traa community help bot! tt!help for commands"
+    description = "Super Gay Bot"
     credentials = credentialsFile.getCredentials()
-    db = await asyncpg.create_pool(**credentials)
+    db = await asyncpg.create_pool(**credentials) ##CAPITALS ARE NOT CARRIED OVER ON DATABASE CREATION SO ARNT INCLUDED TO REDUCE CONFUSION
     await db.execute('''CREATE TABLE IF NOT EXISTS Users(userID bigint PRIMARY KEY,
-    banned boolean DEFAULT false);
+    pubquizScoreTotal integer DEFAULT 0,
+    pubquizScoreWeekly integer DEFAULT 0,
+    totalWarnings integer DEFAULT 0,
+    verificationmessage text,
+    verificationEnabled boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS Guilds(guildID bigint PRIMARY KEY,
-    prefix text,
-    raidroleid bigint,
+    muteroleid bigint,
     kicktext text,
     bantext text,
-    games boolean DEFAULT true,
-    pubquiz boolean DEFAULT true,
     pubquiztime smallint DEFAULT 10, 
     ongoingpubquiz boolean DEFAULT false,
     pubquiztext text,
     pubquizendtext text,
     pubquizchannel bigint,
-    pubquizquestionuserid bigint,
     pubquizquestionnumber integer DEFAULT 0,
     pubquizquestionactive boolean DEFAULT false,
     pubquizlastquestionsuper boolean DEFAULT false,
-    bluetext boolean DEFAULT true,
-    misc boolean DEFAULT true,
-    NSFW boolean DEFAULT false,
     welcome boolean DEFAULT false,
     welcomeChannel bigint,
     welcomeText text,
     leave boolean DEFAULT false,
     leaveChannel bigint,
-    leaveText text,
-    administrator boolean DEFAULT true,
-    banned boolean DEFAULT false);
-    
-    
-    CREATE TABLE IF NOT EXISTS Games(gameID serial PRIMARY KEY,
-    gameName text,
-    gameReleaseDate text,
-    gamePublisher text,
-    gameDescription text);
-    
+    leaveText text);
+
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
-    guildID bigint references Guilds(guildID) ON DELETE CASCADE ON UPDATE CASCADE,
-    administrator boolean DEFAULT false,
-    muted boolean DEFAULT false,
-    pqStart boolean DEFAULT false,
-    pqEnd boolean DEFAULT false,
-    pqQuestion boolean DEFAULT false,
-    pqSuperQuestion boolean DEFAULT false,
-    pqOverride boolean DEFAULT false,
-    pqSetTime boolean DEFAULT false,
-    pqJoin boolean DEFAULT true,
-    pqQMHelp boolean DEFAULT false,
-    pqsettext boolean DEFAULT false,
-    pqleaderboard boolean DEFAULT false,
-    pqcorrect boolean DEFAULT false,
-    pqanswer boolean DEFAULT false,
-    bluetext boolean DEFAULT true,
-    bluetextcode boolean DEFAULT true,
-    setWelcomeChannel boolean DEFAULT false,
-    setWelcomeText boolean DEFAULT false,
-    setLeaveChannel boolean DEFAULT false,
-    setLeaveText boolean DEFAULT false,
-    toggleRaid boolean DEFAULT false,
-    setRaidRole boolean DEFAULT false,
-    setRaidText boolean DEFAULT false,
-    mute boolean DEFAULT false,
-    cute boolean DEFAULT true,
-    conch boolean DEFAULT true,
-    eightball boolean DEFAULT true, 
-    setMuteRole boolean DEFAULT false,
-    esix boolean DEFAULT false,
-    setbantext boolean DEFAULT false,
-    setkicktext boolean DEFAULT false,
     selfAssignable boolean DEFAULT false);
     
     CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
     guildID bigint references Guilds(guildID) ON DELETE CASCADE ON UPDATE CASCADE,
     pubquizScoreTotal integer DEFAULT 0,
     pubquizScoreWeekly integer DEFAULT 0,
-    PRIMARY KEY(userID, guildID));
-    
-    CREATE TABLE IF NOT EXISTS UserGameAccounts(accountID serial PRIMARY KEY,
-    userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
-    gameID serial references Games(gameID) ON DELETE CASCADE ON UPDATE CASCADE,
-    accountRank text,
-    accountName text,
-    accountRegion text,
-    accountPublic boolean DEFAULT true,
-    accountInfo text,
-    accountPlatform text);''')
+    PRIMARY KEY(userID, guildID));''')
     bot = Bot(description=description, db=db)
-    initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz', 'nsfw']
+    initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
     if __name__ == '__main__':
         for extension in initial_extensions:
             try:
@@ -119,9 +65,31 @@ class Bot(commands.Bot):
             description=kwargs.pop("description"),
             command_prefix=getPrefix
         )
-
         self.pubquizAnswers = []
+        self.rolesDict {"Admin": 348608087793467412, "Admin Powers": 406091590923321355,
+                        "Helper": 395565792457916417, "Helper Powers": 395565792457916417,
+                        "Owner": 348207687319683072,
+                        "Moderator Powers": 388829460759052288, "Moderator": 348747695088730113,
+                        "User": 348208233254617110,
+                        "Quizmaster": 449941007619063828,
+                        "Muted": 356529701675859990}
         self.db = kwargs.pop("db")
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await self.db.fetchrow(query, ctx.guild.id)
+        if result["ongoingpubquiz"]:
+            self.pubquizActive = True
+        else:
+            self.pubquizActive = False
+        try:
+            self.pubquizQuestionUserID = result["pubquizquestionuserid"]
+        except:
+            self.pubquizQuestionUserID = 1
+        try:
+            self.pubquizChannel = result["pubquizchannel"]
+        except:
+            self.pubquizChannel = 1
+
+
         self.currentColour = -1
         self.outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely",
                     "You may rely on it",

@@ -12,9 +12,8 @@ class pubquizCog:
             await ctx.channel.send("Please enter a command. tt!help or tt!pubquiz help for a list of commands.")
 
     @pubquiz.command(name='settext', aliases=['stext'])
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqsettext")
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def settext(self, ctx, *, pubquiztext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -24,7 +23,7 @@ class pubquizCog:
         await ctx.channel.send(":white_check_mark: | Pub quiz text set to `"+pubquiztext+"`!")
 
     @pubquiz.command(name='active')
-    @checks.justme()
+    @commands.has_permissions(kick_members=True)
     async def active(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -34,9 +33,8 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | The pub quiz is not currently active.")
 
     @pubquiz.command(name='setendtext', aliases=['sendtext'])
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqsettext")
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Helper Powers"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def setendtext(self, ctx, *, pubquizendtext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -47,9 +45,7 @@ class pubquizCog:
 
 
     @pubquiz.command(name="resetguildscoreboard", aliases=['resetscore', 'reset'])
-    @checks.module_enabled("pubquiz")
-    @checks.owner_or_admin()
-    @checks.is_not_banned()
+    @checks.justme()
     async def resetguildscoreboard(self, ctx):
         confirmationnumber = random.randint(1000,9999)
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
@@ -68,16 +64,14 @@ class pubquizCog:
                 if msg.content == str(confirmationnumber):
                     connection = await self.bot.db.acquire()
                     async with connection.transaction():
-                        query = "UPDATE GuildUsers SET pubquizscoretotal = 0 WHERE guildID = $1"
+                        query = "UPDATE Users SET pubquizscoretotal = 0"
                         await self.bot.db.execute(query, ctx.guild.id)
                     await self.bot.db.release(connection)
                     await ctx.channel.send(":white_check_mark: | Pub quiz scores reset!")
 
     @pubquiz.command(name='start', aliases=['begin', 'go'])
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqstart")
-    @checks.pubquiz_not_active()
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def start(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -90,11 +84,13 @@ class pubquizCog:
                 await self.bot.db.execute(query, ctx.guild.id)
                 query = "UPDATE Guilds SET pubquizchannel = $1 WHERE guildID = $2"
                 await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
-                query = "UPDATE GuildUsers SET pubquizscoreweekly = 0 WHERE guildID = $1"
+                query = "UPDATE Users SET pubquizscoreweekly = 0"
                 await self.bot.db.execute(query, ctx.guild.id)
                 query = "UPDATE Guilds SET pubquizquestionnumber = 0 WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
+            self.bot.pubquizActive = True
+            self.bot.pubquizChannel = ctx.channel.id
             query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquiztext IS NOT NULL"
             results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if results:
@@ -105,7 +101,8 @@ class pubquizCog:
 
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
     @checks.pubquiz_active()
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def stop(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquizendtext IS NOT NULL"
         results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -117,24 +114,24 @@ class pubquizCog:
         embed = await self.leaderboardFunction(ctx)
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+        await ctx.channel.send(embed=embed)
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.guild.id)
         await self.bot.db.release(connection)
+        self.bot.pubquizActive = True
 
     async def leaderboardFunction(self, ctx):
-        query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
+        query = "SELECT * FROM users WHERE pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
-        print(result)
         resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range (0,len(result)):
             resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them **"+ inflect.engine().ordinal(row + 1) + "**. ("+str(result[row]["pubquizscoretotal"])+" total points)", inline=False)
         return resultsEmbed
 
     async def totalleaderboardFunction(self, ctx):
-        query = "SELECT * FROM guildusers WHERE guildID = $1 AND pubquizscoretotal != 0 ORDER BY pubquizscoretotal DESC"
+        query = "SELECT * FROM users pubquizscoretotal != 0 ORDER BY pubquizscoretotal DESC"
         result = await ctx.bot.db.fetch(query, ctx.guild.id)
         resultsEmbed = discord.Embed(title=ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range(0, len(result)):
@@ -142,10 +139,9 @@ class pubquizCog:
         return resultsEmbed
 
     @pubquiz.command(name="totalleaderboard", aliases=['total', 'totalscoreboard', 'totalscores','totalscore'])
-    @checks.module_enabled("pubquiz")
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def totalleaderboard(self, ctx):
-        rolecheck = await checks.rolescheck_not_check(ctx, "pqleaderboard")
+        rolecheck = await checks.has_role_not_check(ctx, ctx.bot.rolesDict["Quizmaster"])
         embed = await self.totalleaderboardFunction(ctx)
         if rolecheck:
             await ctx.channel.send(embed=embed)
@@ -153,23 +149,18 @@ class pubquizCog:
             await ctx.author.send(embed=embed)
 
     @pubquiz.command(name="leaderboard", aliases=['scoreboard', 'score', 'scores'])
-    @checks.module_enabled("pubquiz")
     @checks.pubquiz_active()
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def leaderboard(self, ctx):
-        rolecheck = await checks.rolescheck_not_check(ctx, "pqleaderboard")
+        rolecheck = await checks.has_role_not_check(ctx, ctx.bot.rolesDict["Quizmaster"])
         embed = await self.leaderboardFunction(ctx)
         if rolecheck:
-            query = "SELECT * FROM guilds WHERE guildID = $1"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+            await ctx.channel.send(embed=embed)
         else:
             await ctx.author.send(embed=embed)
 
     @pubquiz.command(name="override", aliases=['or', 'oride'])
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqoverride")
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
     async def override(self, ctx, member, value):
         successful = 1
         try:
@@ -179,16 +170,16 @@ class pubquizCog:
             successful = 0
         if successful == 1 and value != 0:
             memberid = useful.getid(member)
-            query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
-            result = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+            query = "SELECT * FROM users WHERE userID = $1"
+            result = await ctx.bot.db.fetchrow(query, memberid)
             currentvalue = result["pubquizscoreweekly"]
             currenttotal = result["pubquizscoretotal"]
             connection = await self.bot.db.acquire()
             async with connection.transaction():
-                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currentvalue + value, ctx.guild.id, memberid)
-                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currenttotal + value, ctx.guild.id, memberid)
+                query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currentvalue + value, memberid)
+                query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currenttotal + value, memberid)
             await self.bot.db.release(connection)
             if value > 0:
                 await ctx.channel.send(":white_check_mark: | User **"+ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator +")** has had their weekly and total score increased by **" + str(value) + "**. Their new total is **"+str(currenttotal + value)+"** overall and **"+ str(currentvalue + value)+"** this week.")
@@ -198,9 +189,8 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
     @pubquiz.command(name="settime", aliases=['st'])
-    @checks.module_enabled("pubquiz")
     @checks.rolescheck("pqsettime")
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
     async def settime(self, ctx, time):
         success = 1
         try:
@@ -221,9 +211,7 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | Please enter a positive whole time number.")
 
     @pubquiz.command(name="undo")
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqcorrect")
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
     async def undo(self, ctx, *, correctMembers):
         correctMembers = correctMembers.split(" ")
         query = "SELECT * FROM guilds WHERE guildID = $1"
@@ -240,24 +228,22 @@ class pubquizCog:
                 toAdd = 13-i
                 if toAdd < 10:
                     toAdd = 10
-            query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
-            results = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+            query = "SELECT * FROM users WHERE userID = $2"
+            results = await ctx.bot.db.fetchrow(query, memberid)
             currentvalue = results["pubquizscoreweekly"]
             currenttotal = results["pubquizscoretotal"]
             async with connection.transaction():
-                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currentvalue - toAdd, ctx.guild.id, memberid)
-                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currenttotal - toAdd, ctx.guild.id, memberid)
+                query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currentvalue - toAdd, memberid)
+                query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currenttotal - toAdd, memberid)
             embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="lost **"+ str(toAdd) + "** points.")
         await self.bot.db.release(connection)
-        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+        await ctx.channel.send(embed=embed)
 
 
     @pubquiz.command(name="correct")
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqcorrect")
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
     async def correct(self, ctx, *, correctMembers):
         correctMembers = correctMembers.split(" ")
         query = "SELECT * FROM guilds WHERE guildID = $1"
@@ -276,22 +262,22 @@ class pubquizCog:
                 toAdd = 13-i
                 if toAdd < 10:
                     toAdd = 10
-            query = "SELECT * FROM guildusers WHERE guildID = $1 AND userID = $2"
-            results = await ctx.bot.db.fetchrow(query, ctx.guild.id, memberid)
+            query = "SELECT * FROM users WHERE userID = $1"
+            results = await ctx.bot.db.fetchrow(query, memberid)
             currentvalue = results["pubquizscoreweekly"]
             currenttotal = results["pubquizscoretotal"]
             async with connection.transaction():
-                query = "UPDATE guildusers SET pubquizscoreweekly = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currentvalue + toAdd, ctx.guild.id, memberid)
-                query = "UPDATE guildusers SET pubquizscoretotal = $1 WHERE guildID = $2 AND userID = $3"
-                await self.bot.db.execute(query, currenttotal + toAdd, ctx.guild.id, memberid)
+                query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currentvalue + toAdd, memberid)
+                query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currenttotal + toAdd, memberid)
             embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="gained **"+ str(toAdd) + "** points.")
         await self.bot.db.release(connection)
-        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+        await ctx.channel.send(embed=embed)
 
 
     @pubquiz.command()
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def help(self, ctx):
         embed = discord.Embed(title="PubQuiz Help", description="Help for the following tt!pubquiz commands:", colour=self.bot.getcolour())
         embed.add_field(name="total", value ="DM's the user the total scoreboard for the pub quiz.")
@@ -302,7 +288,8 @@ class pubquizCog:
 
 
     @pubquiz.command()
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
     async def qmhelp(self, ctx):
         embed = discord.Embed(title="PubQuiz Quizmaster Help", description="Help for the following tt!pubquiz commands:", colour=self.bot.getcolour())
         embed.add_field(name="settext", value ="Changes the text the bot sends when a new pub quiz is started.")
@@ -322,33 +309,30 @@ class pubquizCog:
         await ctx.channel.send(embed = embed)
 
     @pubquiz.command(name='question', aliases=['q'])
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqquestion")
     @checks.pubquiz_active()
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def question(self, ctx, *, question):
         superQuestion = False
         await self.questionFunction(ctx, question, superQuestion)
 
     @pubquiz.command(name='superquestion', aliases=['sq', 'spq'])
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqsuperquestion")
     @checks.pubquiz_active()
-    @checks.is_not_banned()
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
+    @checks.has_role(ctx.bot.rolesDict["User"])
     async def superquestion(self, ctx, *, question):
         superQuestion = True
         await self.questionFunction(ctx, question, superQuestion)
 
     @pubquiz.command(name="answer")
-    @checks.module_enabled("pubquiz")
-    @checks.rolescheck("pqquestion")
+    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
+    @checks.has_role(ctx.bot.rolesDict["User"])
     @checks.pubquiz_active()
-    @checks.is_not_banned()
     async def answer(self, ctx, *, answer):
         embed = discord.Embed(title="The answer is...", description = answer, colour=self.bot.getcolour())
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=embed)
+        await ctx.channel.send(embed=embed)
         await ctx.message.delete()
 
     async def questionFunction(self, ctx, question, superQuestion):
@@ -365,6 +349,7 @@ class pubquizCog:
                 await self.bot.db.execute(query, ctx.guild.id)
                 query = "UPDATE Guilds SET pubquizquestionuserid = $1 WHERE guildID = $2"
                 await self.bot.db.execute(query, ctx.author.id, ctx.guild.id)
+            self.bot.pubquizQuestionUserID = ctx.author.id
             if superQuestion:
                 questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
                 questionEmbed.add_field(name="Please type your answers now.", value ="DM's have been disabled! Please enter your answer below.")
@@ -378,14 +363,14 @@ class pubquizCog:
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
-            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=questionEmbed)
+            await ctx.channel.send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET pubquizquestionactive = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
-            await ctx.guild.get_channel(int(result["pubquizchannel"])).send("Answers are now closed!")
+            await ctx.channel.send("Answers are now closed!")
             answerEmbed = discord.Embed(title="Answers:", colour=self.bot.getcolour())
             toPop = []
             for answer in range(0,len(self.bot.pubquizAnswers)):
@@ -394,7 +379,7 @@ class pubquizCog:
                     toPop.append(self.bot.pubquizAnswers[answer])
             for i in range(0,len(toPop)):
                 self.bot.pubquizAnswers.remove(toPop[i])
-            await ctx.guild.get_channel(int(result["pubquizchannel"])).send(embed=answerEmbed)
+            await ctx.channel.send(embed=answerEmbed)
         else:
             await ctx.channel.send(":no_entry: | There is already an active question!")
 
@@ -435,9 +420,7 @@ class pubquizCog:
 
     async def on_message(self, ctx):
         if ctx.guild is not None:
-            query = "SELECT * FROM guilds WHERE guildID = $1"
-            result = await self.bot.db.fetchrow(query, ctx.guild.id)
-            if ctx.author == self.bot.user or str(ctx.author.id) == str(result["pubquizquestionuserid"]) or ctx.channel.id != int(result["pubquizchannel"]):
+            if ctx.author == self.bot.user or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID) or ctx.channel.id != self.bot.pubquizChannel:
                 pass
             else:
                 guild = 1
@@ -446,7 +429,7 @@ class pubquizCog:
                 except:
                     guild = 0
                 if guild == 1:
-                    if result["pubquizquestionactive"] == True:
+                    if self.bot.pubquizActive == True:
                         toadd = []
                         toadd.append(ctx.author)
                         toadd.append(ctx.guild.id)

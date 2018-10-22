@@ -13,361 +13,6 @@ class adminCog:
         await self.bot.change_presence(status=discord.Status.online, activity=game)
         await ctx.channel.send(":white_check_mark: | Online status set to: ** playing "+ gameName+"**")
 
-    @commands.command(name='setup', aliases=['botsetup', 'guildsettings', 'modules','modulesettings', 'module','settings'])
-    @checks.owner_or_admin()
-    @checks.is_not_banned()
-    async def setup(self, ctx):
-        embed = discord.Embed(title="Menu Loading...", description="Please stand by.", colour=self.bot.getcolour())
-        menu = await ctx.channel.send(embed = embed)
-        emojis = useful.getMenuEmoji(10)
-        for emoji in range(0,len(emojis)):
-            await menu.add_reaction(emojis[emoji])
-        await self.setupMainMenu(ctx, menu)
-
-
-    async def setupMainMenu(self, ctx, menu):
-        embed = discord.Embed(title='Modules main menu', description="Here you can select which modules are enabled on this server.\n\nOptions:\n0: Administrator\n1: Miscellaneous\n2: Pub Quiz\n3: Bluetext\n4: Welcome\n5: Leave\n6: Games\n7: NSFW\n8: Next Page\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Current guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(9)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.setupAdminMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.setupMiscMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupPubQuizMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "3\u20e3":
-                await self.setupBluetextMenu(ctx, menu)
-
-
-            elif str(reaction.emoji) == "4\u20e3":
-                await self.setupWelcomeMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "5\u20e3":
-                await self.setupLeaveMenu(ctx, menu)
-
-
-            elif str(reaction.emoji) == "6\u20e3":
-                await self.setupGamesMenu(ctx, menu)
-
-
-            elif str(reaction.emoji) == "7\u20e3":
-                await self.setupNSFWMenu(ctx, menu)
-
-
-            elif str(reaction.emoji) == "8\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupAdminMenu(self, ctx, menu):
-        embed = discord.Embed(title='Administrator Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "administrator")
-                await self.setupAdminMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "administrator")
-                await self.setupAdminMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupMiscMenu(self, ctx, menu):
-        embed = discord.Embed(title='Miscellaneous Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "misc")
-                await self.setupMiscMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "misc")
-                await self.setupMiscMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupPubQuizMenu(self, ctx, menu):
-        embed = discord.Embed(title='Pub Quiz Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "pubquiz")
-                await self.setupPubQuizMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "pubquiz")
-                await self.setupPubQuizMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupBluetextMenu(self, ctx, menu):
-        embed = discord.Embed(title='Bluetext Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "bluetext")
-                await self.setupBluetextMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "bluetext")
-                await self.setupBluetextMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupWelcomeMenu(self, ctx, menu):
-        embed = discord.Embed(title='Welcome Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "welcome")
-                await self.setupWelcomeMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "welcome")
-                await self.setupWelcomeMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupLeaveMenu(self, ctx, menu):
-        embed = discord.Embed(title='Leave/Farewell Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "leave")
-                await self.setupLeaveMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "leave")
-                await self.setupLeaveMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupGamesMenu(self, ctx, menu):
-        embed = discord.Embed(title='Games Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "games")
-                await self.setupGamesMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "games")
-                await self.setupGamesMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-    async def setupNSFWMenu(self, ctx, menu):
-        embed = discord.Embed(title='NSFW Module', description="This module contains the following commands.\n\nLIST COMING SOON\n\nOptions:\n0: Enable\n1: Disable\n2: Back to main menu\nx: Closes Menu", colour=self.bot.getcolour())
-        embed.set_footer(text="Modules for guild: "+ ctx.guild.name +"("+ str(ctx.guild.id)+")")
-        await menu.edit(embed=embed)
-        options = useful.getMenuEmoji(3)
-        def emojiCheck(reaction, user):
-            return (user == ctx.author) and (str(reaction.emoji) in options)
-        try:
-            reaction, user = await self.bot.wait_for('reaction_add', check=emojiCheck, timeout=60.0)
-        except asyncio.TimeoutError:
-            try:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.nick + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            except TypeError:
-                await ctx.channel.send(":no_entry: | **" + ctx.author.name + "** The command menu has closed due to inactivity. Please reuse the modules command to restart the process.")
-            await menu.delete()
-        else:
-            await menu.remove_reaction(reaction.emoji, user)
-            if str(reaction.emoji) == "0\u20e3":
-                await self.enableModule(ctx, "nsfw")
-                await self.setupNSFWMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "1\u20e3":
-                await self.disableModule(ctx, "nsfw")
-                await self.setupNSFWMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "2\u20e3":
-                await self.setupMainMenu(ctx, menu)
-
-            elif str(reaction.emoji) == "❌":
-                closed = await ctx.channel.send(":white_check_mark: | Menu closed!")
-                await menu.delete()
-                await asyncio.sleep(1)
-                await closed.delete()
-
-
-    async def enableModule(self, ctx, module):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "UPDATE Guilds SET " + module + " = true WHERE guildID = $1"
-            await self.bot.db.execute(query, ctx.guild.id)
-            await ctx.channel.send(":white_check_mark: | **'"+module+"'** module enabled.")
-        await self.bot.db.release(connection)
-
-    async def disableModule(self, ctx, module):
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "UPDATE Guilds SET " + module + " = false WHERE guildID = $1"
-            await self.bot.db.execute(query, ctx.guild.id)
-            await ctx.channel.send(":white_check_mark: | **'"+module+"'** module disabled.")
-        await self.bot.db.release(connection)
-
     @commands.command()
     @checks.justme()
     async def evalquery(self, ctx, *, query):
@@ -386,23 +31,8 @@ class adminCog:
         result = await ctx.bot.db.fetch(query)
         await ctx.channel.send(str(result))
 
-
-
-    @commands.command(name='botglobalban', aliases=['bgb', 'fuckoff'], hidden = True)
-    @checks.justme()
-    async def botglobalban(self, ctx, member):
-        memberid = int(useful.getid(member))
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "UPDATE Users SET banned = true WHERE userID = $1"
-            await self.bot.db.execute(query, memberid)
-        await self.bot.db.release(connection)
-        await ctx.channel.send(":white_check_mark: | Done!")
-
     @commands.command(name="setfarewell", aliases=['setleave', 'setleavechannel', 'setfarewellchannel'])
-    @checks.module_enabled("leave")
-    @checks.is_not_banned()
-    @checks.rolescheck("setleavechannel")
+    @checks.justme()
     async def setfarewell(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -412,9 +42,7 @@ class adminCog:
         await ctx.channel.send(":white_check_mark: | Done! Farewell channel set here.")
 
     @commands.command(name="setwelcome", aliases=['setwelcomechannel'])
-    @checks.is_not_banned()
-    @checks.module_enabled("welcome")
-    @checks.rolescheck("setwelcomechannel")
+    @checks.justme()
     async def setwelcome(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -424,9 +52,7 @@ class adminCog:
         await ctx.channel.send(":white_check_mark: | Done! Welcome channel set here.")
 
     @commands.command()
-    @checks.module_enabled("welcome")
-    @checks.is_not_banned()
-    @checks.rolescheck("setwelcometext")
+    @checks.justme()
     async def setwelcometext(self, ctx, *, welcometext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -436,9 +62,7 @@ class adminCog:
         await ctx.channel.send("Done! Welcome text set to ```" + welcometext + "```")
 
     @commands.command(name="setfarewelltext", aliases =['setleavetext'])
-    @checks.module_enabled("leave")
-    @checks.is_not_banned()
-    @checks.rolescheck("setleavetext")
+    @checks.justme()
     async def setfarewelltext(self, ctx, *, leavetext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -495,21 +119,9 @@ class adminCog:
         if successful:
             await ctx.channel.send(":white_check_mark: | Information sent to DM!")
 
-    @commands.command(name='botglobalunban', aliases=['bgub', 'wback'], hidden = True)
-    @checks.justme()
-    async def botglobalunban(self, ctx, member):
-        memberid = int(useful.getid(member))
-        connection = await self.bot.db.acquire()
-        async with connection.transaction():
-            query = "UPDATE Users SET banned = false WHERE userID = $1"
-            await self.bot.db.execute(query, memberid)
-        await self.bot.db.release(connection)
-        await ctx.channel.send(":white_check_mark: | Done!")
 
     @commands.command(name='setbantext')
-    @checks.module_enabled("administrator")
-    @checks.is_not_banned()
-    @checks.rolescheck("setbantext")
+    @commands.has_permissions(ban_members=True)
     async def setbantext(self, ctx, *, banText):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -519,9 +131,7 @@ class adminCog:
         await ctx.channel.send(":white_check_mark: | Ban text set to `"+banText+"`!")
 
     @commands.command(name='setkicktext')
-    @checks.module_enabled("administrator")
-    @checks.is_not_banned()
-    @checks.rolescheck("setkicktext")
+    @commands.has_permissions(ban_members=True)
     async def setkicktext(self, ctx, *, kickText):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -531,8 +141,6 @@ class adminCog:
         await ctx.channel.send(":white_check_mark: | Kick text set to `"+kickText+"`!")
 
     @commands.command()
-    @checks.module_enabled("administrator")
-    @checks.is_not_banned()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member, *, reason):
         memberid = int(useful.getid(member))
@@ -567,8 +175,6 @@ class adminCog:
                 await kickinfo.delete()
 
     @commands.command()
-    @checks.module_enabled("administrator")
-    @checks.is_not_banned()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member, *, reason):
         memberid = int(useful.getid(member))
@@ -605,8 +211,6 @@ class adminCog:
 
 
     @commands.command()
-    @checks.module_enabled("administrator")
-    @checks.is_not_banned()
     @commands.has_permissions(ban_members=True)
     async def hackban(self, ctx, memberid):
         try:

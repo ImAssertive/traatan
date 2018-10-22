@@ -1,4 +1,4 @@
-/tt3/.idea/
+.idea/
 token.txt
 tt3/credentialsFile.py
 traatan commands list.docx
@@ -6,3 +6,4 @@ traatan commands list.docx
 traatan rework commands list.docx
 ~$aatan rework commands list.docx
 transfer
+.idea/workspace.xml
