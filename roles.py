@@ -65,6 +65,24 @@ class rolesCog:
             await ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
             await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "**.")
 
+    @roles.command()
+    async def view(self, ctx, *, roleName):
+        role = discord.utils.get(ctx.guild.roles, name=roleName)
+        if role is None:
+            await ctx.channel.send(":no_entry: | Role not found.")
+        else:
+            embed = discord.Embed(title="Info for role: "+roleName+"", colour = discord.Colour(role.colour.value))
+            embed.add_field(name="ID", value=str(role.id), inline=False)
+            embed.add_field(name="Created", value=str(role.created_at), inline=False)
+            embed.add_field(name="Members", value=str(len(role.members)), inline=False)
+            embed.add_field(name="Colour", value=str(hex(role.colour.value)), inline=False)
+            embed.add_field(name="Displayed separately (Hoisted)", value=str(role.hoist), inline=False)
+            embed.add_field(name="Externally managed", value=str(role.managed), inline=False)
+            embed.add_field(name="Position", value=str(role.position)+" of "+str(len(ctx.guild.roles)-1)+" roles.", inline=False)
+            embed.add_field(name="Mentionable", value=str(role.mentionable), inline=False)
+            embed.add_field(name="Created at", value=str(role.created_at), inline=False)
+            await ctx.channel.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(rolesCog(bot))
