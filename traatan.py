@@ -38,9 +38,8 @@ async def run():
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
     selfAssignable boolean DEFAULT false);''')
 
-    query = "SELECT * FROM guilds WHERE guildID = $1"
-    test = 331517548636143626
-    result = await db.fetchrow(query, test)
+    query = "SELECT * FROM guilds WHERE guildID = 331517548636143626"
+    result = await db.fetchrow(query)
     print(result)
     bot = Bot(description=description, db=db, pubquizActive=result["ongoingpubquiz"], pubquizQuestionUserID = result["pubquizquestionuserid"], pubquizChannel = result["pubquizchannel"])
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
