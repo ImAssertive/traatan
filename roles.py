@@ -65,8 +65,8 @@ class rolesCog:
             await ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
             await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "**.")
 
-    @roles.command()
-    async def view(self, ctx, *, roleName):
+    @commands.command()
+    async def viewrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
             await ctx.channel.send(":no_entry: | Role not found.")
