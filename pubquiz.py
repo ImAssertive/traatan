@@ -65,7 +65,7 @@ class pubquizCog:
                     connection = await self.bot.db.acquire()
                     async with connection.transaction():
                         query = "UPDATE Users SET pubquizscoretotal = 0"
-                        await self.bot.db.execute(query, ctx.guild.id)
+                        await self.bot.db.execute(query)
                     await self.bot.db.release(connection)
                     await ctx.channel.send(":white_check_mark: | Pub quiz scores reset!")
 
@@ -131,7 +131,7 @@ class pubquizCog:
         return resultsEmbed
 
     async def totalleaderboardFunction(self, ctx):
-        query = "SELECT * FROM users pubquizscoretotal != 0 ORDER BY pubquizscoretotal DESC"
+        query = "SELECT * FROM users WHERE pubquizscoretotal != 0 ORDER BY pubquizscoretotal DESC"
         result = await ctx.bot.db.fetch(query)
         resultsEmbed = discord.Embed(title=ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range(0, len(result)):
