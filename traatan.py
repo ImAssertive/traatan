@@ -36,15 +36,11 @@ async def run():
     leaveText text);
 
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
-    selfAssignable boolean DEFAULT false);
-    
-    CREATE TABLE IF NOT EXISTS GuildUsers(userID bigint references Users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
-    guildID bigint references Guilds(guildID) ON DELETE CASCADE ON UPDATE CASCADE,
-    pubquizScoreTotal integer DEFAULT 0,
-    pubquizScoreWeekly integer DEFAULT 0,
-    PRIMARY KEY(userID, guildID));''')
+    selfAssignable boolean DEFAULT false);''')
+
     query = "SELECT * FROM guilds WHERE guildID = $1"
-    result = await db.fetchrow(query, 331517548636143626)
+    test = 331517548636143626
+    result = await db.fetchrow(query, test)
     print(result)
     bot = Bot(description=description, db=db, pubquizActive=result["ongoingpubquiz"], pubquizQuestionUserID = result["pubquizquestionuserid"], pubquizChannel = result["pubquizchannel"])
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
