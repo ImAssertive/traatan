@@ -126,14 +126,14 @@ class setupCog:
             await ctx.guild.get_channel(int(channelID)).send(welcometext)
 
 
-    async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandNotFound):
-            return
-        elif isinstance(error, commands.CheckFailure):
-            try:
-                await ctx.channel.send(":no_entry: | {} caused an error! This is most likely a permission error but due to how bad Assertive is at coding this could be anything.".format(ctx.command))
-            except:
-                pass
+    # async def on_command_error(self, ctx, error):
+    #     if isinstance(error, commands.CommandNotFound):
+    #         return
+    #     elif isinstance(error, commands.CheckFailure):
+    #         try:
+    #             await ctx.channel.send(":no_entry: | {} caused an error! This is most likely a permission error but due to how bad Assertive is at coding this could be anything.".format(ctx.command))
+    #         except:
+    #             pass
 
 
 
