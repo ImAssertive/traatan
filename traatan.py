@@ -82,7 +82,7 @@ class Bot(commands.Bot):
         await self.change_presence(status=discord.Status.online, activity=game)
         query = "SELECT * FROM guilds WHERE guildID = 331517548636143626"
         result = await self.db.fetchrow(query)
-        print(result)
+        print(result, "HERE IS THE RESULT")
         if result["ongoingpubquiz"]:
             self.pubquizActive = True
         else:

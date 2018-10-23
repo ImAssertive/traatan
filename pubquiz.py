@@ -12,7 +12,7 @@ class pubquizCog:
             await ctx.channel.send("Please enter a command. tt!help or tt!pubquiz help for a list of commands.")
 
     @pubquiz.command(name='settext', aliases=['stext'])
-    @checks.has_role("Quizmaster", "Bot Tinkerer"])
+    @checks.has_role("Quizmaster", "Bot Tinkerer")
     @checks.has_role("User")
     async def settext(self, ctx, *, pubquiztext):
         connection = await self.bot.db.acquire()
