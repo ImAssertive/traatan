@@ -89,7 +89,7 @@ class Bot(commands.Bot):
             self.pubquizActive = True
         else:
             self.pubquizActive = False
-        if result["pubquizquestionactive"]:
+        if result["pubquizquestionactive"] == True:
             self.pubquizQuestionActive = True
         else:
             self.pubquizQuestionActive = False
@@ -101,6 +101,8 @@ class Bot(commands.Bot):
             self.pubquizChannel = result["pubquizchannel"]
         except:
             self.pubquizChannel = 1
+
+        print(self.pubquizActive, self.pubquizQuestionActive, self.pubquizQuestionUserID, self.pubquizChannel)
 
 
     def getcolour(self):
