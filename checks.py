@@ -5,6 +5,8 @@ def has_role(*arg):
     async def predicate(ctx):
         for counter in range (0,len(arg)):
             print(ctx.bot.rolesDict[arg[counter]])
+            print(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict[arg[counter]]) in ctx.author.roles)
+            print(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict[arg[counter]]))
             if discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict[arg[counter]]) in ctx.author.roles:
                 return True
         return False
