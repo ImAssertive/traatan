@@ -85,7 +85,7 @@ class pubquizCog:
                 query = "UPDATE Guilds SET pubquizchannel = $1 WHERE guildID = $2"
                 await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
                 query = "UPDATE Users SET pubquizscoreweekly = 0"
-                await self.bot.db.execute(query, ctx.guild.id)
+                await self.bot.db.execute(query)
                 query = "UPDATE Guilds SET pubquizquestionnumber = 0 WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
