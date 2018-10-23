@@ -39,8 +39,8 @@ async def run():
     selfAssignable boolean DEFAULT false);''')
 
     query = "SELECT * FROM guilds WHERE guildID = 331517548636143626"
-    result = await db.fetchrow(query)
-    print(result)
+    result = await db.fetch(query)
+    print(result, "1")
     bot = Bot(description=description, db=db, pubquizActive=result["ongoingpubquiz"], pubquizQuestionUserID = result["pubquizquestionuserid"], pubquizChannel = result["pubquizchannel"])
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
     if __name__ == '__main__':
