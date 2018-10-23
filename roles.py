@@ -7,7 +7,7 @@ class rolesCog:
 
 
     @commands.command()
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def iam(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
@@ -25,7 +25,7 @@ class rolesCog:
                 await ctx.channel.send(":no_entry: | This role is not self assignable!")
 
     @commands.command()
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def iamnot(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
@@ -46,23 +46,23 @@ class rolesCog:
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def mute(self, ctx, *, member):
-        muteRole = discord.utils.get(ctx.guild.roles, name=ctx.bot.rolesDict["Muted"])
+        muteRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Muted"])
         if muteRole in ctx.guild.get_member(memberID).roles:
             await ctx.channel.send(":no_entry: | This user is already muted. Use the unmute command to unmute them.")
         else:
             await ctx.guild.get_member(memberID).add_roles(muteRole)
             await ctx.channel.send(":white_check_mark: | Muted user **"+ctx.guild.get_member(memberID).display_name+"**.")
-            await ctx.guild.get_member(memberID).remove_roles(discord.utils.get(ctx.guild.roles, name=ctx.bot.rolesDict["User"]))
+            await ctx.guild.get_member(memberID).remove_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def unmute(self, ctx, *, member):
-        muteRole = discord.utils.get(ctx.guild.roles, name=ctx.bot.rolesDict["Muted"])
+        muteRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Muted"])
         if muteRole not in ctx.guild.get_member(memberID).roles:
             await ctx.channel.send(":no_entry: | This user is not muted. Use the mute command to mute them.")
         else:
             await ctx.guild.get_member(memberID).remove_roles(muteRole)
-            await ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, name=ctx.bot.rolesDict["User"]))
+            await ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
             await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "**.")
 
 

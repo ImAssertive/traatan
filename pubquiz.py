@@ -12,8 +12,8 @@ class pubquizCog:
             await ctx.channel.send("Please enter a command. tt!help or tt!pubquiz help for a list of commands.")
 
     @pubquiz.command(name='settext', aliases=['stext'])
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Bot Tinkerer"])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("Quizmaster", "Bot Tinkerer"])
+    @checks.has_role("User")
     async def settext(self, ctx, *, pubquiztext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -33,8 +33,8 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | The pub quiz is not currently active.")
 
     @pubquiz.command(name='setendtext', aliases=['sendtext'])
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Helper Powers"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("Quizmaster", "Helper Powers", "Moderator Powers","Admin Powers", "Bot Tinkerer")
+    @checks.has_role("User")
     async def setendtext(self, ctx, *, pubquizendtext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
@@ -70,8 +70,8 @@ class pubquizCog:
                     await ctx.channel.send(":white_check_mark: | Pub quiz scores reset!")
 
     @pubquiz.command(name='start', aliases=['begin', 'go'])
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Bot Tinkerer"])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("Quizmaster", "Bot Tinkerer")
+    @checks.has_role("User")
     async def start(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -101,8 +101,8 @@ class pubquizCog:
 
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
     @checks.pubquiz_active()
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Bot Tinkerer"])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("Quizmaster", "Bot Tinkerer")
+    @checks.has_role("User")
     async def stop(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1 AND pubquizendtext IS NOT NULL"
         results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -139,9 +139,9 @@ class pubquizCog:
         return resultsEmbed
 
     @pubquiz.command(name="totalleaderboard", aliases=['total', 'totalscoreboard', 'totalscores','totalscore'])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def totalleaderboard(self, ctx):
-        rolecheck = await checks.has_role_not_check(ctx, ctx.bot.rolesDict["Quizmaster"])
+        rolecheck = await checks.has_role_not_check(ctx, "Quizmaster")
         embed = await self.totalleaderboardFunction(ctx)
         if rolecheck:
             await ctx.channel.send(embed=embed)
@@ -150,9 +150,9 @@ class pubquizCog:
 
     @pubquiz.command(name="leaderboard", aliases=['scoreboard', 'score', 'scores'])
     @checks.pubquiz_active()
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def leaderboard(self, ctx):
-        rolecheck = await checks.has_role_not_check(ctx, ctx.bot.rolesDict["Quizmaster"])
+        rolecheck = await checks.has_role_not_check(ctx, "Quizmaster")
         embed = await self.leaderboardFunction(ctx)
         if rolecheck:
             await ctx.channel.send(embed=embed)
@@ -160,7 +160,7 @@ class pubquizCog:
             await ctx.author.send(embed=embed)
 
     @pubquiz.command(name="override", aliases=['or', 'oride'])
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def override(self, ctx, member, value):
         successful = 1
         try:
@@ -190,7 +190,7 @@ class pubquizCog:
 
     @pubquiz.command(name="settime", aliases=['st'])
     @checks.rolescheck("pqsettime")
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def settime(self, ctx, time):
         success = 1
         try:
@@ -211,7 +211,7 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | Please enter a positive whole time number.")
 
     @pubquiz.command(name="undo")
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def undo(self, ctx, *, correctMembers):
         correctMembers = correctMembers.split(" ")
         query = "SELECT * FROM guilds WHERE guildID = $1"
@@ -243,7 +243,7 @@ class pubquizCog:
 
 
     @pubquiz.command(name="correct")
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"], ctx.bot.rolesDict["Moderator Powers"], ctx.bot.rolesDict["Admin Powers"], ctx.bot.rolesDict["Bot Tinkerer"])
+    @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def correct(self, ctx, *, correctMembers):
         correctMembers = correctMembers.split(" ")
         query = "SELECT * FROM guilds WHERE guildID = $1"
@@ -277,7 +277,7 @@ class pubquizCog:
 
 
     @pubquiz.command()
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def help(self, ctx):
         embed = discord.Embed(title="PubQuiz Help", description="Help for the following tt!pubquiz commands:", colour=self.bot.getcolour())
         embed.add_field(name="total", value ="DM's the user the total scoreboard for the pub quiz.")
@@ -288,8 +288,8 @@ class pubquizCog:
 
 
     @pubquiz.command()
-    @checks.has_role(ctx.bot.rolesDict["User"])
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
+    @checks.has_role("User")
+    @checks.has_role("Quizmaster")
     async def qmhelp(self, ctx):
         embed = discord.Embed(title="PubQuiz Quizmaster Help", description="Help for the following tt!pubquiz commands:", colour=self.bot.getcolour())
         embed.add_field(name="settext", value ="Changes the text the bot sends when a new pub quiz is started.")
@@ -310,23 +310,23 @@ class pubquizCog:
 
     @pubquiz.command(name='question', aliases=['q'])
     @checks.pubquiz_active()
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("Quizmaster")
+    @checks.has_role("User")
     async def question(self, ctx, *, question):
         superQuestion = False
         await self.questionFunction(ctx, question, superQuestion)
 
     @pubquiz.command(name='superquestion', aliases=['sq', 'spq'])
     @checks.pubquiz_active()
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("Quizmaster")
+    @checks.has_role("User")
     async def superquestion(self, ctx, *, question):
         superQuestion = True
         await self.questionFunction(ctx, question, superQuestion)
 
     @pubquiz.command(name="answer")
-    @checks.has_role(ctx.bot.rolesDict["Quizmaster"])
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("Quizmaster")
+    @checks.has_role("User")
     @checks.pubquiz_active()
     async def answer(self, ctx, *, answer):
         embed = discord.Embed(title="The answer is...", description = answer, colour=self.bot.getcolour())

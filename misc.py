@@ -20,7 +20,7 @@ class miscCog:
         return blueText
 
     @commands.command(name="bluetext", aliases=['bt'])##Makes the bot echo whatever entered in blue emoji's
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def bluetext(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, False)
         await ctx.channel.send(toOutput)
@@ -28,7 +28,7 @@ class miscCog:
             await ctx.message.delete()
 
     @commands.command(name="bluetextcode", aliases=['bluetextmarkup', 'btc', 'btmu'])##Pastes the code for blue emoji's of any text entered after the command.
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def bluetextcode(self, ctx, *, userText):
         toOutput = self.blueTextFunction(userText, True)
         await ctx.channel.send(":white_check_mark | **"+ctx.author.display_name+"** here's your code:")
@@ -57,7 +57,7 @@ class miscCog:
             await ctx.channel.send(":white_check_mark: | No longer hiding bluetext commands!")
 
     @commands.command(name="conch", aliases=['shell']) #Spongebob themed eightball command.
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def conch(self, ctx):
         randomNumber = random.randint(0,19)
         conchName = ("**" +ctx.author.name + "** | The conch says:")
@@ -69,7 +69,7 @@ class miscCog:
         await ctx.channel.send(embed = embed)
 
     @commands.command(name="eightball", aliases=['8ball']) #Regular eightball command, near identical to tatsu's
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def eightball(self, ctx):
         randomNumber = random.randint(0, 19)
         eightballName = ("**" + ctx.author.name + "** - The 8ball says:")
@@ -77,7 +77,7 @@ class miscCog:
         await ctx.channel.send(":8ball: | "+eightballName + " " + eightballValue)
 
     @commands.command(name="roll")
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def roll(self, ctx, diceCommand): #DND Diceroll command - rolls a number of dice and adds the score.
         diceCommand = diceCommand.lower()
         diceCommand = diceCommand.split("d")
@@ -113,7 +113,7 @@ class miscCog:
                     await ctx.channel.send(":no_entry: | Incorrect command usage. Correct usage is `traa!roll 1d20`")
 
     @commands.command(name="choose", alises=['choice']) ##Chooses an item from a list of other items
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def choose(self, ctx, *, choices):
         choices = choices.split(" | ")
         if len(choices) < 2 or (len(choices)==2 and choices[0] == choices[1]):
@@ -123,7 +123,7 @@ class miscCog:
             await ctx.channel.send(":white_check_mark: | **"+ctx.author.display_name+"** I choose **"+choices[choice]+" **.")
 
     @commands.command(name='flip', alises=['coin', 'coinflip']) #Flips a coin
-    @checks.has_role(ctx.bot.rolesDict["User"])
+    @checks.has_role("User")
     async def flip(self, ctx):
         result = random.randint(0,1)
         if result == 1:
