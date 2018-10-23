@@ -124,7 +124,7 @@ class pubquizCog:
 
     async def leaderboardFunction(self, ctx):
         query = "SELECT * FROM users WHERE pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
-        result = await ctx.bot.db.fetch(query, ctx.guild.id)
+        result = await ctx.bot.db.fetch(query)
         resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range (0,len(result)):
             resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" +ctx.guild.get_member(int(result[row]["userid"])).name +"#" +ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoreweekly"]) + "** points. Placing them **"+ inflect.engine().ordinal(row + 1) + "**. ("+str(result[row]["pubquizscoretotal"])+" total points)", inline=False)
@@ -132,7 +132,7 @@ class pubquizCog:
 
     async def totalleaderboardFunction(self, ctx):
         query = "SELECT * FROM users pubquizscoretotal != 0 ORDER BY pubquizscoretotal DESC"
-        result = await ctx.bot.db.fetch(query, ctx.guild.id)
+        result = await ctx.bot.db.fetch(query)
         resultsEmbed = discord.Embed(title=ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range(0, len(result)):
             resultsEmbed.add_field(name=ctx.guild.get_member(int(result[row]["userid"])).display_name + " (" + ctx.guild.get_member(int(result[row]["userid"])).name + "#" + ctx.guild.get_member(int(result[row]["userid"])).discriminator + ")", value="has a total of **" + str(result[row]["pubquizscoretotal"]) + "** points. Placing them **" + inflect.engine().ordinal(row + 1) + "**.", inline=False)
