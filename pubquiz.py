@@ -350,6 +350,7 @@ class pubquizCog:
                 query = "UPDATE Guilds SET pubquizquestionuserid = $1 WHERE guildID = $2"
                 await self.bot.db.execute(query, ctx.author.id, ctx.guild.id)
             self.bot.pubquizQuestionUserID = ctx.author.id
+            self.bot.pubquizQuestionActive = True
             if superQuestion:
                 questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
                 questionEmbed.add_field(name="Please type your answers now.", value ="DM's have been disabled! Please enter your answer below.")
@@ -370,6 +371,7 @@ class pubquizCog:
                 query = "UPDATE Guilds SET pubquizquestionactive = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
+            self.bot.pubquizQuestionActive = False
             await ctx.channel.send("Answers are now closed!")
             answerEmbed = discord.Embed(title="Answers:", colour=self.bot.getcolour())
             toPop = []
