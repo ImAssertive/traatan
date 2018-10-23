@@ -45,27 +45,49 @@ class rolesCog:
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def mute(self, ctx, *, member):
+    async def mute(self, ctx, member, time=None):
         memberID = useful.getid(member)
         muteRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Muted"])
-        if muteRole in ctx.guild.get_member(memberID).roles:
-            await ctx.channel.send(":no_entry: | This user is already muted. Use the unmute command to unmute them.")
+        if time:
+            await self.muteFunction(ctx, memberID)
+            await asyncio.sleep(time*60)
+            await self.unmuteFunction(ctx, memberID)
         else:
-            await ctx.guild.get_member(memberID).add_roles(muteRole)
-            await ctx.channel.send(":white_check_mark: | Muted user **"+ctx.guild.get_member(memberID).display_name+"**.")
-            await ctx.guild.get_member(memberID).remove_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
+            await self.muteFunction(ctx, memberID)
+
+
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def unmute(self, ctx, *, member):
+    async def unmute(self, ctx, member, time=None):
         memberID = useful.getid(member)
+        if time:
+            await self.unmuteFunction(ctx, memberID)
+            await asyncio.sleep(time*60)
+            await self.muteFunction(ctx, memberID)
+        else:
+            await self.unmuteFunction(ctx, memberID)
+
+    async def muteFunction(self, ctx, memberID):
         muteRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Muted"])
         if muteRole not in ctx.guild.get_member(memberID).roles:
-            await ctx.channel.send(":no_entry: | This user is not muted. Use the mute command to mute them.")
+            await ctx.channel.send(":no_entry: | This user is not muted.")
         else:
             await ctx.guild.get_member(memberID).remove_roles(muteRole)
             await ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
-            await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "**.")
+            await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "** `"+ctx.guild.get_member(memberID).id+"`")
+
+    async def unmuteFunction(self, ctx, memberID):
+        muteRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Muted"])
+        if muteRole not in ctx.guild.get_member(memberID).roles:
+            await ctx.channel.send(":no_entry: | This user is unmuted.")
+        else:
+            await ctx.guild.get_member(memberID).remove_roles(muteRole)
+            await ctx.guild.get_member(memberID).add_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
+            await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "** `"+ctx.guild.get_member(memberID).id+"`")
+
+
+
 
     @commands.command()
     @checks.has_role("Helper Powers", "Moderator Powers","Admin Powers", "Bot Tinkerer")
