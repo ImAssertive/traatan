@@ -120,7 +120,7 @@ class pubquizCog:
             query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.guild.id)
         await self.bot.db.release(connection)
-        self.bot.pubquizActive = True
+        self.bot.pubquizActive = False
 
     async def leaderboardFunction(self, ctx):
         query = "SELECT * FROM users WHERE userid = * AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
@@ -420,7 +420,7 @@ class pubquizCog:
 
     async def on_message(self, ctx):
         if ctx.guild is not None:
-            if ctx.author == self.bot.user or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID) or ctx.channel.id != self.bot.pubquizChannel:
+            if ctx.author == self.bot.user or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID) or ctx.channel.id != self.bot.pubquizChannel or self.bot.pubquizActive == False:
                 pass
             else:
                 guild = 1
@@ -429,7 +429,7 @@ class pubquizCog:
                 except:
                     guild = 0
                 if guild == 1:
-                    if self.bot.pubquizActive == True:
+                    if self.bot.pubquizQuestionActive == True:
                         toadd = []
                         toadd.append(ctx.author)
                         toadd.append(ctx.guild.id)

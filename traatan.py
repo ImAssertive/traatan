@@ -88,6 +88,10 @@ class Bot(commands.Bot):
             self.pubquizActive = True
         else:
             self.pubquizActive = False
+        if result["pubquizquestionactive"]:
+            self.pubquizQuestionActive = True
+        else:
+            self.pubquizQuestionActive = False
         try:
             self.pubquizQuestionUserID = result["pubquizquestionuserid"]
         except:
