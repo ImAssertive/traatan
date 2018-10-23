@@ -234,9 +234,9 @@ class pubquizCog:
             currenttotal = results["pubquizscoretotal"]
             async with connection.transaction():
                 query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
-                await self.bot.db.execute(query, currentvalue - toAdd, memberid)
+                await self.bot.db.execute(query, int(currentvalue - toAdd), memberid)
                 query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
-                await self.bot.db.execute(query, currenttotal - toAdd, memberid)
+                await self.bot.db.execute(query, int(currenttotal - toAdd), memberid)
             embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="lost **"+ str(toAdd) + "** points.")
         await self.bot.db.release(connection)
         await ctx.channel.send(embed=embed)
