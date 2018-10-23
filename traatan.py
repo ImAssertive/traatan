@@ -48,7 +48,7 @@ async def run():
                 traceback.print_exc()
 
     try:
-        await bot.start(credentialsFile.getToken())
+        await bot.start(credentialsFileDev.getToken())
     except KeyboardInterrupt:
         await db.close()
         await bot.logout()
