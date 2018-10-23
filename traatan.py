@@ -80,7 +80,7 @@ class Bot(commands.Bot):
         print("Username: {0}\nID: {0.id}".format(self.user))
         game = discord.Game("chess with Rainbow Restarter!")
         await self.change_presence(status=discord.Status.online, activity=game)
-        query = "SELECT * FROM Guilds WHERE guildID = $1"
+        query = "SELECT * FROM Guilds"
         result = await self.db.fetchrow(query, 331517548636143626)
         print(result, "HERE IS THE RESULT")
         if result["ongoingpubquiz"]:
