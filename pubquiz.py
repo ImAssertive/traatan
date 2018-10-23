@@ -189,8 +189,8 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | The score can not be modified by 0.")
 
     @pubquiz.command(name="settime", aliases=['st'])
-    @checks.rolescheck("pqsettime")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
+    @checks.has_role("User")
     async def settime(self, ctx, time):
         success = 1
         try:
