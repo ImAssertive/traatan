@@ -42,7 +42,7 @@ class setupCog:
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             for role in ctx.guild.roles:
-                query = "INSERT INTO Roles (roleID) VALUES($1, $2) ON CONFLICT DO NOTHING"
+                query = "INSERT INTO Roles (roleID) VALUES($1) ON CONFLICT DO NOTHING"
                 await self.bot.db.execute(query, role.id)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done!")

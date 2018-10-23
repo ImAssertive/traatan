@@ -84,7 +84,6 @@ class Bot(commands.Bot):
         query = "SELECT * FROM Guilds WHERE guildID = $1"
         serverID = 331517548636143626
         result = await self.db.fetchrow(query, serverID)
-        print(result, "HERE IS THE RESULT")
         if result["ongoingpubquiz"]:
             self.pubquizActive = True
         else:

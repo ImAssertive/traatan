@@ -123,7 +123,7 @@ class pubquizCog:
         self.bot.pubquizActive = True
 
     async def leaderboardFunction(self, ctx):
-        query = "SELECT * FROM users WHERE pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
+        query = "SELECT * FROM users WHERE userid = * AND pubquizscoreweekly != 0 ORDER BY pubquizscoreweekly DESC"
         result = await ctx.bot.db.fetch(query)
         resultsEmbed = discord.Embed(title= ctx.guild.name + " Pub Quiz Leaderboard:", colour=self.bot.getcolour())
         for row in range (0,len(result)):

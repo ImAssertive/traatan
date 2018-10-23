@@ -66,6 +66,7 @@ class rolesCog:
             await ctx.channel.send(":white_check_mark: | Unmuted user **" + ctx.guild.get_member(memberID).display_name + "**.")
 
     @commands.command()
+    @checks.has_role("Helper Powers", "Moderator Powers","Admin Powers", "Bot Tinkerer")
     async def viewrole(self, ctx, *, roleName):
         role = discord.utils.get(ctx.guild.roles, name=roleName)
         if role is None:
