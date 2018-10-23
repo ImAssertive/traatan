@@ -46,6 +46,7 @@ class rolesCog:
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def mute(self, ctx, *, member):
+        memberID = useful.getid(member)
         muteRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Muted"])
         if muteRole in ctx.guild.get_member(memberID).roles:
             await ctx.channel.send(":no_entry: | This user is already muted. Use the unmute command to unmute them.")
@@ -57,6 +58,7 @@ class rolesCog:
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def unmute(self, ctx, *, member):
+        memberID = useful.getid(member)
         muteRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Muted"])
         if muteRole not in ctx.guild.get_member(memberID).roles:
             await ctx.channel.send(":no_entry: | This user is not muted. Use the mute command to mute them.")
