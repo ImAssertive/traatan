@@ -37,11 +37,7 @@ async def run():
 
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
     selfAssignable boolean DEFAULT false);''')
-
-    query = "SELECT * FROM guilds WHERE guildID = 331517548636143626"
-    result = await db.fetch(query)
-    print(result, "1")
-    bot = Bot(description=description, db=db, pubquizActive=result["ongoingpubquiz"], pubquizQuestionUserID = result["pubquizquestionuserid"], pubquizChannel = result["pubquizchannel"])
+    bot = Bot(description=description, db=db)
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
     if __name__ == '__main__':
         for extension in initial_extensions:
@@ -72,9 +68,6 @@ class Bot(commands.Bot):
                         "Quizmaster": 449941007619063828,
                         "Muted": 356529701675859990}
         self.db = kwargs.pop("db")
-        self.pubquizActive = kwargs.pop("pubquizActive")
-        self.pubquizQuestionUserID = kwargs.pop("pubquizQuestionUserID")
-        self.pubquizChannel = kwargs.pop("pubquizChannel")
         self.currentColour = -1
         self.outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely",
                     "You may rely on it",
@@ -87,6 +80,21 @@ class Bot(commands.Bot):
         print("Username: {0}\nID: {0.id}".format(self.user))
         game = discord.Game("chess with Rainbow Restarter!")
         await self.change_presence(status=discord.Status.online, activity=game)
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await self.db.fetchrow(query, ctx.guild.id)
+        if result["ongoingpubquiz"]:
+            self.pubquizActive = True
+        else:
+            self.pubquizActive = False
+        try:
+            self.pubquizQuestionUserID = result["pubquizquestionuserid"]
+        except:
+            self.pubquizQuestionUserID = 1
+        try:
+            self.pubquizChannel = result["pubquizchannel"]
+        except:
+            self.pubquizChannel = 1
+
 
     def getcolour(self):
         colours = ["5C6BC0", "AB47BC", "EF5350", "FFA726", "FFEE58", "66BB6A", "5BCEFA", "F5A9B8", "FFFFFF", "F5A9B8", "5BCEFA"]
