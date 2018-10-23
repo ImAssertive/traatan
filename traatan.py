@@ -28,6 +28,7 @@ async def run():
     pubquizquestionnumber integer DEFAULT 0,
     pubquizquestionactive boolean DEFAULT false,
     pubquizlastquestionsuper boolean DEFAULT false,
+    pubquizquestionuserid bigint, 
     welcome boolean DEFAULT false,
     welcomeChannel bigint,
     welcomeText text,
