@@ -441,6 +441,7 @@ class pubquizCog:
                 else:
                     pass
         else:
+            print("Someone DM'ed me!")
             pass
 
 def setup(bot):
