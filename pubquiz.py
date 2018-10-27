@@ -228,15 +228,15 @@ class pubquizCog:
                 toAdd = 13-i
                 if toAdd < 10:
                     toAdd = 10
-            query = "SELECT * FROM users WHERE userID = $2"
+            query = "SELECT * FROM users WHERE userID = $1"
             results = await ctx.bot.db.fetchrow(query, memberid)
             currentvalue = results["pubquizscoreweekly"]
             currenttotal = results["pubquizscoretotal"]
             async with connection.transaction():
                 query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
-                await self.bot.db.execute(query, currenttotal + toAdd, memberid)
+                await self.bot.db.execute(query, currenttotal - toAdd, memberid)
                 query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
-                await self.bot.db.execute(query, currenttotal + toAdd, memberid)
+                await self.bot.db.execute(query, currenttotal - toAdd, memberid)
             embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="lost **"+ str(toAdd) + "** points.")
         await self.bot.db.release(connection)
         await ctx.channel.send(embed=embed)
