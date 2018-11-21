@@ -76,6 +76,7 @@ class rolesCog:
             await ctx.channel.send(":no_entry: | This user is already muted. Use the unmute command to unmute them.")
         else:
             await ctx.guild.get_member(memberID).add_roles(muteRole)
+            await ctx.guild.get_member(memberID).remove_roles(discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["User"]))
             await ctx.channel.send(":white_check_mark: | Muted user **" + ctx.guild.get_member(memberID).display_name + "** `"+str(ctx.guild.get_member(memberID).id)+"`")
 
     async def unmuteFunction(self, ctx, memberID):
