@@ -149,7 +149,7 @@ class adminCog:
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member, *, reason):
-        async def ban(self, ctx, member, *, reason=None):
+        async def ban(self, ctx, member, *, reason):
             kickban = "ban"
             await self.bankickFunction(ctx, member, kickban, reason)
 
