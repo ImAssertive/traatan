@@ -15,6 +15,12 @@ class adminCog:
 
     @commands.command()
     @checks.justme()
+    async def eval(self, ctx, *, query):
+        eval(query)
+
+
+    @commands.command()
+    @checks.justme()
     async def evalquery(self, ctx, *, query):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
