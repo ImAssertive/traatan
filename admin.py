@@ -37,6 +37,11 @@ class adminCog:
         result = await ctx.bot.db.fetch(query)
         await ctx.channel.send(str(result))
 
+    @commands.command()
+    @commands.has_permissions(manage_messages=True)
+    async def say(self, ctx, *, toSay):
+        await ctx.guild.get_channel(528673771062689812).send(toSay)
+
     @commands.command(name="setfarewell", aliases=['setleave', 'setleavechannel', 'setfarewellchannel'])
     @checks.justme()
     async def setfarewell(self, ctx):
