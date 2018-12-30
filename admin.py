@@ -40,6 +40,7 @@ class adminCog:
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def say(self, ctx, *, toSay):
+        print(toSay)
         await ctx.guild.get_channel(528673771062689812).send(toSay)
 
     @commands.command(name="setfarewell", aliases=['setleave', 'setleavechannel', 'setfarewellchannel'])
