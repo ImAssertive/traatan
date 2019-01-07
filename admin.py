@@ -152,18 +152,27 @@ class adminCog:
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Kick text set to `"+kickText+"`!")
 
+
     @commands.command()
-    @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member, *, reason):
-        kickban = "kick"
+    @commands.has_permissions(ban_members=True)
+    async def ban(self, ctx, member, *, reason = None):
+        kickban = "ban"
         await self.bankickFunction(ctx, member, kickban, reason)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member, *, reason):
-        async def ban(self, ctx, member, *, reason):
-            kickban = "ban"
-            await self.bankickFunction(ctx, member, kickban, reason)
+    async def hackban(self, ctx, memberid):
+        try:
+            await ctx.guild.ban(discord.Object(id=int(memberid)))
+            await ctx.channel.send(":white_check_mark: | Banned ID `"+str(memberid)+"`")
+        except:
+            await ctx.channel.send(":no_entry: | An error occurred. Was that a valid user ID?")
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def kick(self, ctx, member, *, reason = None):
+        kickban = "kick"
+        await self.bankickFunction(ctx, member, kickban, reason)
 
     async def bankickFunction(self, ctx, member, kickban, reason = None):
         memberid = ctx.message.mentions[0].id
@@ -220,6 +229,7 @@ class adminCog:
                 await baninfo.delete()
                 await asyncio.sleep(2)
                 await canceledtext.delete()
+
 
 
     @commands.command()
