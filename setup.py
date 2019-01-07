@@ -23,6 +23,7 @@ class setupCog:
         await self.bot.db.close()
         await self.bot.logout()
         sys.exit()
+        quit()
 
 
     @commands.command(hidden = True)
