@@ -151,31 +151,29 @@ class adminCog:
         if isinstance(body[-1], ast.With):
             insert_returns(body[-1].body)
 
-    @commands.command()
-    @checks.justme()
-    async def eval(ctx, *, cmd):
-        fn_name = "_eval_expr"
-        cmd = cmd.strip("` ")
-        # add a layer of indentation
-        cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
-        # wrap in async def body
-        body = f"async def {fn_name}():\n{cmd}"
-        parsed = ast.parse(body)
-        body = parsed.body[0].body
-
-        insert_returns(body)
-
-        env = {
-            'bot': ctx.bot,
-            'discord': discord,
-            'commands': commands,
-            'ctx': ctx,
-            '__import__': __import__
-        }
-        exec(compile(parsed, filename="<ast>", mode="exec"), env)
-
-        result = (await eval(f"{fn_name}()", env))
-        await ctx.send(result)
+    # @commands.command()
+    # @checks.justme()
+    # async def eval(ctx, *, cmd):
+    #     fn_name = "_eval_expr"
+    #     cmd = cmd.strip("` ")
+    #     # add a layer of indentation
+    #     cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
+    #     # wrap in async def body
+    #     body = f"async def {fn_name}():\n{cmd}"
+    #     parsed = ast.parse(body)
+    #     body = parsed.body[0].body
+    #     insert_returns(body)
+    #     env = {
+    #         'bot': ctx.bot,
+    #         'discord': discord,
+    #         'commands': commands,
+    #         'ctx': ctx,
+    #         '__import__': __import__
+    #     }
+    #     exec(compile(parsed, filename="<ast>", mode="exec"), env)
+    #
+    #     result = (await eval(f"{fn_name}()", env))
+    #     await ctx.send(result)
 
     @commands.command(name='setkicktext')
     @commands.has_permissions(ban_members=True)
