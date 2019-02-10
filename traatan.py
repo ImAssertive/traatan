@@ -34,7 +34,8 @@ async def run():
     welcomeText text,
     leave boolean DEFAULT false,
     leaveChannel bigint,
-    leaveText text);
+    leaveText text,
+    dmroleid bigint);
 
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
     selfAssignable boolean DEFAULT false);''')

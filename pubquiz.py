@@ -78,6 +78,7 @@ class pubquizCog:
         if result:
             await ctx.channel.send(":no_entry: | A quiz is already active!")
         else:
+            dmRole = await ctx.guild.create_role(reason="Traatan Automatic Pubquiz Role Creation")
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = true WHERE guildID = $1"
@@ -88,6 +89,8 @@ class pubquizCog:
                 await self.bot.db.execute(query)
                 query = "UPDATE Guilds SET pubquizquestionnumber = 0 WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
+                query = "UPDATE Guilds SET dmroleid = $1 WHERE guildID = $2"
+                await self.bot.db.execute(query, dmRole, ctx.guild.id)
             await self.bot.db.release(connection)
             self.bot.pubquizActive = True
             self.bot.pubquizChannel = ctx.channel.id
@@ -95,9 +98,14 @@ class pubquizCog:
             results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
             if results:
                 pubquiztext = ("{}".format(results["pubquiztext"]))
-                await ctx.channel.send(pubquiztext)
             else:
-                await ctx.channel.send("Pub quiz started!")
+                pubquiztext = "Pub Quiz Started!"
+            resultsEmbed = discord.Embed(title=pubquiztext, description="React to this message to enable DM answers!", colour=self.bot.getcolour())
+            reactMessage = await self.ctx.channel.send(embed=resultsEmbed)
+            ##reactMessage.add_reaction()
+            
+
+
 
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
     @checks.pubquiz_active()
@@ -218,17 +226,16 @@ class pubquizCog:
 
     @pubquiz.command(name="undo")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
-    async def undo(self, ctx, *, correctMembers):
-        correctMembers = correctMembers.split(" ")
+    async def undo(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="Reduced the following users scores:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
-        for i in range (0, len(correctMembers)):
-            memberid = (useful.getid(correctMembers[i]))
+        for i in range (0, len(ctx.mentions)): ##<------------------------------------------
+            memberid = ctx.mentions[i].id
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(correctMembers))
-            elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
+                toAdd = round(25/len(ctx.mentions))
+            elif len(ctx.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
                 toAdd = 13-i
@@ -250,19 +257,18 @@ class pubquizCog:
 
     @pubquiz.command(name="correct")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
-    async def correct(self, ctx, *, correctMembers):
-        correctMembers = correctMembers.split(" ")
+    async def correct(self, ctx):
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="The following users were correct:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
-        for i in range (0, len(correctMembers)):
-            memberid = (useful.getid(correctMembers[i]))
+        for i in range (0, len(ctx.mentions)): ##<------------------------------------------
+            memberid = ctx.mentions[i].id
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(correctMembers))
+                toAdd = round(25/len(ctx.mentions))
                 if toAdd == 12:
                     toAdd = 13
-            elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
+            elif len(ctx.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
                 toAdd = 13-i
@@ -372,13 +378,13 @@ class pubquizCog:
             await self.bot.db.release(connection)
             await ctx.channel.send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
+            await ctx.channel.send("Answers are now closed!")
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET pubquizquestionactive = false WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
             self.bot.pubquizQuestionActive = False
-            await ctx.channel.send("Answers are now closed!")
             answerEmbed = discord.Embed(title="Answers:", colour=self.bot.getcolour())
             toPop = []
             for answer in range(0,len(self.bot.pubquizAnswers)):
@@ -447,7 +453,7 @@ class pubquizCog:
                 else:
                     pass
         else:
-            print("Someone DM'ed me!")
+            print(ctx.author.name+"#"+ctx.author.discriminator + " DM'ed me!")
             pass
 
 def setup(bot):
