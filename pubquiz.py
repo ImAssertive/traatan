@@ -79,6 +79,7 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | A quiz is already active!")
         else:
             dmRole = await ctx.guild.create_role(name = "Pub Quiz DM", reason="Traatan Automatic Pubquiz DM Role Creation")
+            ctx.bot.rolesDict["Pub Quiz DM"] = int(dmRole.id)
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = true WHERE guildID = $1"
@@ -107,15 +108,20 @@ class pubquizCog:
     @checks.pubquiz_active()
     @checks.has_role("User")
     async def dm(self, ctx):
-        query = "SELECT dmroleid FROM guilds WHERE guildID = $1"
-        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        dmRole = discord.utils.get(ctx.guild.roles, id=int(result[0]))
+        try:
+            dmRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"])
+        except:
+            print("DM Role Not Found (Something has gone very wrong)")
         print(result, dmRole)
         rolecheck = await checks.has_role_not_check(ctx, dmRole.name)
         if rolecheck:
+            embed = discord.Embed(title="I will no longer DM you questions.", colour=self.bot.getcolour())
             await ctx.author.remove_roles(dmRole, reason="User requested role removal.")
+            await ctx.author.send(embed=embed)
         else:
+            embed = discord.Embed(title="Got it! I'll DM you questions.", colour=self.bot.getcolour())
             await ctx.author.add_roles(dmRole, reason="User requested role addition.")
+            await ctx.author.send(embed=embed)
 
 
 
@@ -136,6 +142,12 @@ class pubquizCog:
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         await ctx.channel.send(embed=embed)
+        await discord.utils.get(ctx.guild.roles, id=rolesDict["Pub Quiz DM"]).delete()
+        try:
+            del ctx.bot.rolesDict["Pub Quiz DM"]
+        except KeyError:
+            print("DM Role not found in rolesDict.")
+            pass
         connection = await self.bot.db.acquire()
         async with connection.transaction():
             query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"

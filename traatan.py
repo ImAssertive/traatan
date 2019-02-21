@@ -103,6 +103,13 @@ class Bot(commands.Bot):
         except:
             self.pubquizChannel = 1
 
+        query = "SELECT dmroleid FROM Guilds WHERE guildID = $1"
+        result = await self.db.fetchrow(query, serverID)
+        try:
+            self.rolesDict["Pub Quiz DM"] = result[0]
+        except:
+            pass
+
         print(self.pubquizActive, self.pubquizQuestionActive, self.pubquizQuestionUserID, self.pubquizChannel)
 
 
