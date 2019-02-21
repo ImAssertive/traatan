@@ -246,7 +246,7 @@ class adminCog:
                 if results:
                     embed.add_field(name="Message from server:", value=results[texttosend])
                 await ctx.channel.send(":white_check_mark: | "+kickingbanning.title()+" user...")
-                await ctx.message.mentions[0].send(embed=embed)
+                await ctx.guild.get_member(memberid).send(embed=embed)
                 if reason:
                     if kickban == "kick":
                         await ctx.guild.get_member(memberid).kick(reason=reason)
