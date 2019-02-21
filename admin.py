@@ -208,7 +208,7 @@ class adminCog:
         await self.bankickFunction(ctx, member, kickban, reason)
 
     async def bankickFunction(self, ctx, member, kickban, reason = None):
-        memberid = ctx.message.mentions[0].id
+        memberid = useful.getid(member)
         if kickban == "kick":
             kickedbanned = "kicked"
             kickingbanning = "kicking"
