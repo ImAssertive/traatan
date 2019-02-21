@@ -112,7 +112,7 @@ class pubquizCog:
             dmRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"])
         except:
             print("DM Role Not Found (Something has gone very wrong)")
-        print(result, dmRole)
+        print(dmRole)
         rolecheck = await checks.has_role_not_check(ctx, dmRole.name)
         if rolecheck:
             embed = discord.Embed(title="I will no longer DM you questions.", colour=self.bot.getcolour())
