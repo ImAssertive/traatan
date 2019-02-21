@@ -90,7 +90,7 @@ class pubquizCog:
                 query = "UPDATE Guilds SET pubquizquestionnumber = 0 WHERE guildID = $1"
                 await self.bot.db.execute(query, ctx.guild.id)
                 query = "UPDATE Guilds SET dmroleid = $1 WHERE guildID = $2"
-                await self.bot.db.execute(query, dmRole, ctx.guild.id)
+                await self.bot.db.execute(query, dmRole.id, ctx.guild.id)
             await self.bot.db.release(connection)
             self.bot.pubquizActive = True
             self.bot.pubquizChannel = ctx.channel.id
@@ -100,10 +100,23 @@ class pubquizCog:
                 pubquiztext = ("{}".format(results["pubquiztext"]))
             else:
                 pubquiztext = "Pub Quiz Started!"
-            resultsEmbed = discord.Embed(title=pubquiztext, description="React to this message to enable DM answers!", colour=self.bot.getcolour())
-            reactMessage = await self.ctx.channel.send(embed=resultsEmbed)
-            ##reactMessage.add_reaction()
-            
+            resultsEmbed = discord.Embed(title=pubquiztext, description="Use the `tt!pq dm` command to enable receiving questions via DM's!", colour=self.bot.getcolour())
+            await self.ctx.channel.send(embed=resultsEmbed)
+
+    @pubquiz.command(name='dm', aliases=['dmme', 'toggledms', 'toggledm'])
+    @checks.pubquiz_active()
+    @checks.has_role("User")
+    async def dm(self, ctx):
+        query = "SELECT dmroleid FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        dmRole = ctx.guild.get_role(int(result))
+        print(result, dmRole)
+        rolecheck = await checks.has_role_not_check(ctx, dmRole.name)
+        if rolecheck:
+            await ctx.author.remove_roles(dmRole, reason="User requested role removal.")
+        else:
+            await ctx.author.add_roles(dmRole, reason="User requested role addition.")
+
 
 
 
@@ -127,6 +140,12 @@ class pubquizCog:
         async with connection.transaction():
             query = "UPDATE Guilds SET ongoingpubquiz = false WHERE guildID = $1"
             await self.bot.db.execute(query, ctx.guild.id)
+            query = "UPDATE Guilds SET pubquizchannel = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, None, ctx.guild.id)
+            query = "UPDATE Guilds SET pubquizquestionnumber = 0 WHERE guildID = $1"
+            await self.bot.db.execute(query, ctx.guild.id)
+            query = "UPDATE Guilds SET dmroleid = $1 WHERE guildID = $2"
+            await self.bot.db.execute(query, None, ctx.guild.id)
         await self.bot.db.release(connection)
         self.bot.pubquizActive = False
 
