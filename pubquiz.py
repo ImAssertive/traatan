@@ -117,11 +117,12 @@ class pubquizCog:
             print(dmRole)
             rolecheck = await checks.has_role_not_check(ctx, dmRole.name)
             if rolecheck:
-                embed = discord.Embed(title="I will no longer DM you questions.", colour=self.bot.getcolour())
+                embed = discord.Embed(title="I will no longer DM you questions.", description=ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention, colour=self.bot.getcolour())
                 await ctx.author.remove_roles(dmRole, reason="User requested role removal.")
                 await ctx.author.send(embed=embed)
             else:
-                embed = discord.Embed(title="Got it! I'll DM you questions.", colour=self.bot.getcolour())
+                embed = discord.Embed(title="Got it! I'll DM you questions.", description = ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention, colour=self.bot.getcolour())
+
                 await ctx.author.add_roles(dmRole, reason="User requested role addition.")
                 await ctx.author.send(embed=embed)
             await ctx.message.add_reaction("\N{WHITE HEAVY CHECK MARK}")
@@ -399,13 +400,17 @@ class pubquizCog:
             self.bot.pubquizQuestionActive = True
             if superQuestion:
                 questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
+                questionDMEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
                 questionEmbed.add_field(name="Please type your answers now.", value = ctx.bot.user.mention +" "+ctx.bot.user.mention +" "+ctx.bot.user.mention +" "+ctx.bot.user.mention +" "+ctx.bot.user.mention +" ")
+                questionDMEmbed.add_field(name="Please type your answers now.", value = ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention)
                 async with connection.transaction():
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = true WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
             else:
                 questionEmbed = discord.Embed(title="**Question " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
                 questionEmbed.add_field(name="Please type your answers now.", value =ctx.bot.user.mention +" "+ctx.bot.user.mention +" "+ctx.bot.user.mention +" "+ctx.bot.user.mention +" "+ctx.bot.user.mention +" ")
+                questionDMEmbed = discord.Embed(title="**Question " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
+                questionDMEmbed.add_field(name="Please type your answers now.", value = ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention)
                 async with connection.transaction():
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
@@ -413,8 +418,7 @@ class pubquizCog:
             dmRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"])
             for member in ctx.guild.members:
                 if dmRole in member.roles:
-                    await member.send(embed=questionEmbed)
-                    await member.send(ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention)
+                    await member.send(embed=questionDMEmbed)
             await ctx.channel.send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("Answers are now closed!")
