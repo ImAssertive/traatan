@@ -108,21 +108,23 @@ class pubquizCog:
     @checks.pubquiz_active()
     @checks.has_role("User")
     async def dm(self, ctx):
-        try:
-            dmRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"])
-        except:
-            print("DM Role Not Found (Something has gone very wrong)")
-        print(dmRole)
-        rolecheck = await checks.has_role_not_check(ctx, dmRole.name)
-        if rolecheck:
-            embed = discord.Embed(title="I will no longer DM you questions.", colour=self.bot.getcolour())
-            await ctx.author.remove_roles(dmRole, reason="User requested role removal.")
-            await ctx.author.send(embed=embed)
-        else:
-            embed = discord.Embed(title="Got it! I'll DM you questions.", colour=self.bot.getcolour())
-            await ctx.author.add_roles(dmRole, reason="User requested role addition.")
-            await ctx.author.send(embed=embed)
-        await ctx.add_reaction("\N{WHITE HEAVY CHECK MARK}")
+        quizmasterCheck = await checks.has_role_not_check(ctx, "Quizmaster")
+        if not quizmasterCheck:
+            try:
+                dmRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"])
+            except:
+                print("DM Role Not Found (Something has gone very wrong)")
+            print(dmRole)
+            rolecheck = await checks.has_role_not_check(ctx, dmRole.name)
+            if rolecheck:
+                embed = discord.Embed(title="I will no longer DM you questions.", colour=self.bot.getcolour())
+                await ctx.author.remove_roles(dmRole, reason="User requested role removal.")
+                await ctx.author.send(embed=embed)
+            else:
+                embed = discord.Embed(title="Got it! I'll DM you questions.", colour=self.bot.getcolour())
+                await ctx.author.add_roles(dmRole, reason="User requested role addition.")
+                await ctx.author.send(embed=embed)
+            await ctx.message.add_reaction("\N{WHITE HEAVY CHECK MARK}")
 
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
     @checks.pubquiz_active()
@@ -408,6 +410,10 @@ class pubquizCog:
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
             await self.bot.db.release(connection)
+            dmRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"])
+            for member in ctx.guild.members:
+                if dmRole in member.roles:
+                    await member.send(embed=questionEmbed)
             await ctx.channel.send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("Answers are now closed!")
