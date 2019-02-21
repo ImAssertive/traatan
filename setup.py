@@ -88,8 +88,8 @@ class setupCog:
     async def on_guild_role_create(self, ctx): ##On the creation of a new role adds it to database
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "INSERT INTO Roles (roleID, guildID) VALUES($1) ON CONFLICT DO NOTHING"
-            await self.bot.db.execute(query, ctx.id, ctx.guild.id)
+            query = "INSERT INTO Roles (roleID) VALUES($1) ON CONFLICT DO NOTHING"
+            await self.bot.db.execute(query, ctx.id)
         await self.bot.db.release(connection)
 
     async def on_guild_role_delete(self, ctx): ##On deletion of a role remove it from database

@@ -122,9 +122,7 @@ class pubquizCog:
             embed = discord.Embed(title="Got it! I'll DM you questions.", colour=self.bot.getcolour())
             await ctx.author.add_roles(dmRole, reason="User requested role addition.")
             await ctx.author.send(embed=embed)
-
-
-
+        await ctx.add_reaction("\N{WHITE HEAVY CHECK MARK}")
 
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
     @checks.pubquiz_active()
@@ -487,8 +485,12 @@ class pubquizCog:
                 else:
                     pass
         else:
-            print(ctx.author.name+"#"+ctx.author.discriminator + " DM'ed me!")
-            pass
+            if ctx.author == self.bot.user or self.bot.pubquizActive == False or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID):
+                pass
+            elif self.bot.pubquizQuestionActive == True:
+                self.bot.pubquizAnswers.append([ctx.author, 331517548636143626, ctx.content])
+                await ctx.add_reaction("\N{WHITE HEAVY CHECK MARK}")
+
 
 def setup(bot):
     bot.add_cog(pubquizCog(bot))
