@@ -399,13 +399,13 @@ class pubquizCog:
             self.bot.pubquizQuestionActive = True
             if superQuestion:
                 questionEmbed = discord.Embed(title="**SUPER QUESTION " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
-                questionEmbed.add_field(name="Please type your answers now.", value ="DM's have been disabled! Please enter your answer below.")
+                questionEmbed.add_field(name="Please type your answers now.", value = ctx.bot.user.mention, ctx.bot.user.mention, ctx.bot.user.mention, ctx.bot.user.mention, ctx.bot.user.mention)
                 async with connection.transaction():
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = true WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
             else:
                 questionEmbed = discord.Embed(title="**Question " + str(currentquestion) + "!**", description=question, colour=self.bot.getcolour())
-                questionEmbed.add_field(name="Please type your answers now.", value ="DM's have been disabled! Please enter your answer below.")
+                questionEmbed.add_field(name="Please type your answers now.", value =ctx.bot.user.mention, ctx.bot.user.mention, ctx.bot.user.mention, ctx.bot.user.mention, ctx.bot.user.mention)
                 async with connection.transaction():
                     query = "UPDATE Guilds SET pubquizlastquestionsuper = false WHERE guildID = $1"
                     await self.bot.db.execute(query, ctx.guild.id)
@@ -414,6 +414,7 @@ class pubquizCog:
             for member in ctx.guild.members:
                 if dmRole in member.roles:
                     await member.send(embed=questionEmbed)
+                    await member.semd(ctx.channel.mention, ctx.channel.mention, ctx.channel.mention, ctx.channel.mention, ctx.channel.mention)
             await ctx.channel.send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("Answers are now closed!")
