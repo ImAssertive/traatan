@@ -414,7 +414,7 @@ class pubquizCog:
             for member in ctx.guild.members:
                 if dmRole in member.roles:
                     await member.send(embed=questionEmbed)
-                    await member.semd(ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention)
+                    await member.send(ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention)
             await ctx.channel.send(embed=questionEmbed)
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("Answers are now closed!")
