@@ -142,7 +142,7 @@ class pubquizCog:
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         await ctx.channel.send(embed=embed)
-        await discord.utils.get(ctx.guild.roles, id=rolesDict["Pub Quiz DM"]).delete()
+        await discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"]).delete()
         try:
             del ctx.bot.rolesDict["Pub Quiz DM"]
         except KeyError:
