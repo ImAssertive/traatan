@@ -122,7 +122,6 @@ class pubquizCog:
                 await ctx.author.send(embed=embed)
             else:
                 embed = discord.Embed(title="Got it! I'll DM you questions.", description = ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention+ctx.channel.mention, colour=self.bot.getcolour())
-
                 await ctx.author.add_roles(dmRole, reason="User requested role addition.")
                 await ctx.author.send(embed=embed)
             await ctx.message.add_reaction("\N{WHITE HEAVY CHECK MARK}")
@@ -441,39 +440,6 @@ class pubquizCog:
             await ctx.channel.send(":no_entry: | There is already an active question!")
 
 
-    # @pubquiz.command()
-    # @checks.module_enabled("pubquiz")
-    # async def dm(self, ctx):
-    #     toadd = []
-    #     toadd.append(ctx.author.id)
-    #     toadd.append(ctx.guild.id)
-    #     working = 0
-    #     try:
-    #         self.bot.pubquizDMList.index(toadd)
-    #     except ValueError:
-    #         working = 1
-    #     if working == 1:
-    #         self.bot.pubquizDMList.append(toadd)
-    #         await ctx.channel.send(":white_check_mark: | Ill start DMing you questions!")
-    #     else:
-    #         await ctx.channel.send(":no_entry: | I am already DMing you questions!")
-    #
-    # @pubquiz.command()
-    # @checks.module_enabled("pubquiz")
-    # async def stopdm(self, ctx):
-    #     toadd = []
-    #     toadd.append(ctx.author.id)
-    #     toadd.append(ctx.guild.id)
-    #     working = 1
-    #     try:
-    #         self.bot.pubquizDMList.index(toadd)
-    #     except ValueError:
-    #         working = 0
-    #     if working == 1:
-    #         self.bot.pubquizDMList.remove(self.bot.pubquizDMList.index(toadd))
-    #         await ctx.channel.send(":white_check_mark: | Ill stop DMing you questions!")
-    #     else:
-    #         await ctx.channel.send(":no_entry: | I am not currently DMing you questions!")
 
     async def on_message(self, ctx):
         if ctx.guild is not None:
