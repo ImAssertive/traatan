@@ -249,14 +249,14 @@ class adminCog:
                 await ctx.message.mentions[0].send(embed=embed)
                 if reason:
                     if kickban == "kick":
-                        await ctx.message.mentions[0].kick(reason=reason)
+                        await ctx.guild.get_member(memberid).kick(reason=reason)
                     elif kickban == "ban":
-                        await ctx.message.mentions[0].ban(reason=reason, delete_message_days = 0)
+                        await ctx.guild.get_member(memberid).ban(reason=reason, delete_message_days = 0)
                 else:
                     if kickban == "kick":
-                        await ctx.message.mentions[0].kick(reason="None given.")
+                        await ctx.guild.get_member(memberid).kick(reason="None given.")
                     elif kickban == "ban":
-                        await ctx.message.mentions[0].ban(reason="None given.", delete_message_days = 0)
+                        await ctx.guild.get_member(memberid).ban(reason="None given.", delete_message_days = 0)
             elif msg.content.lower() == "cancel":
                 canceledtext = await ctx.channel.send(":white_check_mark: | Canceled!")
                 await baninfo.delete()
