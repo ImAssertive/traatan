@@ -218,9 +218,9 @@ class adminCog:
             kickingbanning = "banning"
             texttosend = "bantext"
         confirmationnumber = random.randint(1000, 9999)
-        embed = discord.Embed(title="You are about to "+kickban+" user: " + ctx.message.mentions[0].display_name, description="This action is irreversable. To continue please type `" + str(confirmationnumber) + "` or to cancel, please type `cancel`.",colour=self.bot.getcolour())
-        embed.add_field(name='User ID: ', value=str(ctx.message.mentions[0].id), inline=False)
-        embed.add_field(name='User discord name: ',value=ctx.message.mentions[0].name + "#" + ctx.message.mentions[0].discriminator,inline=False)
+        embed = discord.Embed(title="You are about to "+kickban+" user: " + ctx.guild.get_member(memberid).display_name, description="This action is irreversable. To continue please type `" + str(confirmationnumber) + "` or to cancel, please type `cancel`.",colour=self.bot.getcolour())
+        embed.add_field(name='User ID: ', value=str(ctx.guild.get_member(memberid).id), inline=False)
+        embed.add_field(name='User discord name: ',value=ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator,inline=False)
         if reason:
             embed.add_field(name='Reason: ', value=reason, inline=False)
         else:
@@ -235,7 +235,7 @@ class adminCog:
         else:
             if msg.content == str(confirmationnumber):
                 embed = discord.Embed(title=":exclamation: | You have been "+ kickedbanned +" from " + ctx.guild.name,description="You have been "+ kickedbanned +" from " + ctx.guild.name + ". Details of this "+kickban+" are listed below.",colour=self.bot.getcolour())
-                embed.add_field(name="User (You):", value=ctx.message.mentions[0].mention + " " + ctx.message.mentions[0].name + "#" + ctx.message.mentions[0].discriminator + " `" + str(ctx.message.mentions[0].id) + "`", inline=False)
+                embed.add_field(name="User (You):", value=ctx.guild.get_member(memberid).mention + " " + ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator + " `" + str(ctx.guild.get_member(memberid).id) + "`", inline=False)
                 embed.add_field(name="Issued by:", value=ctx.author.mention + " " + ctx.author.name + "#" + ctx.author.discriminator + " `" + str(ctx.author.id) + "`", inline=False)
                 if reason:
                     embed.add_field(name='Reason: ', value=reason, inline=False)
