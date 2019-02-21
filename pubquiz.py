@@ -109,7 +109,7 @@ class pubquizCog:
     async def dm(self, ctx):
         query = "SELECT dmroleid FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        dmRole = ctx.guild.get_role(int(result))
+        dmRole = discord.utils.get(ctx.guild.roles, id=int(result))
         print(result, dmRole)
         rolecheck = await checks.has_role_not_check(ctx, dmRole.name)
         if rolecheck:
