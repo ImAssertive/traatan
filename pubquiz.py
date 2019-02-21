@@ -78,7 +78,7 @@ class pubquizCog:
         if result:
             await ctx.channel.send(":no_entry: | A quiz is already active!")
         else:
-            dmRole = await ctx.guild.create_role(reason="Traatan Automatic Pubquiz Role Creation")
+            dmRole = await ctx.guild.create_role(name = "Pub Quiz DM", reason="Traatan Automatic Pubquiz DM Role Creation")
             connection = await self.bot.db.acquire()
             async with connection.transaction():
                 query = "UPDATE Guilds SET ongoingpubquiz = true WHERE guildID = $1"
@@ -101,7 +101,7 @@ class pubquizCog:
             else:
                 pubquiztext = "Pub Quiz Started!"
             resultsEmbed = discord.Embed(title=pubquiztext, description="Use the `tt!pq dm` command to enable receiving questions via DM's!", colour=self.bot.getcolour())
-            await self.ctx.channel.send(embed=resultsEmbed)
+            await ctx.channel.send(embed=resultsEmbed)
 
     @pubquiz.command(name='dm', aliases=['dmme', 'toggledms', 'toggledm'])
     @checks.pubquiz_active()
