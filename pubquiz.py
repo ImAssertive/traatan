@@ -281,7 +281,7 @@ class pubquizCog:
             currenttotal = results["pubquizscoretotal"]
             async with connection.transaction():
                 query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
-                await self.bot.db.execute(query, currenttotal - toAdd, memberid)
+                await self.bot.db.execute(query, currentvalue - toAdd, memberid)
                 query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
                 await self.bot.db.execute(query, currenttotal - toAdd, memberid)
             embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="lost **"+ str(toAdd) + "** points.")
@@ -297,6 +297,7 @@ class pubquizCog:
         embed = discord.Embed(title="The following users were correct:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
         for i in range (0, len(ctx.message.mentions)): ##<------------------------------------------
+            print(ctx.message.mentions[i].name)
             memberid = ctx.message.mentions[i].id
             if result["pubquizlastquestionsuper"] == True:
                 toAdd = round(25/len(ctx.message.mentions))
