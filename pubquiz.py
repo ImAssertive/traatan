@@ -265,11 +265,11 @@ class pubquizCog:
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="Reduced the following users scores:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
-        for i in range (0, len(ctx.mentions)): ##<------------------------------------------
-            memberid = ctx.mentions[i].id
+        for i in range (0, len(ctx.message.mentions)): ##<------------------------------------------
+            memberid = ctx.message.mentions[i].id
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(ctx.mentions))
-            elif len(ctx.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
+                toAdd = round(25/len(ctx.message.mentions))
+            elif len(ctx.message.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
                 toAdd = 13-i
@@ -296,13 +296,13 @@ class pubquizCog:
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="The following users were correct:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
-        for i in range (0, len(ctx.mentions)): ##<------------------------------------------
-            memberid = ctx.mentions[i].id
+        for i in range (0, len(ctx.message.mentions)): ##<------------------------------------------
+            memberid = ctx.message.mentions[i].id
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(ctx.mentions))
+                toAdd = round(25/len(ctx.message.mentions))
                 if toAdd == 12:
                     toAdd = 13
-            elif len(ctx.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
+            elif len(ctx.message.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
                 toAdd = 13-i
