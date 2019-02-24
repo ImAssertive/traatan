@@ -296,8 +296,10 @@ class pubquizCog:
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def correct(self, ctx):
         correctMembers = re.findall("<@.*>", ctx.message.content)
+        print(correctMembers)
         for i in range(0,len(correctMembers)):
             correctMembers[i] = useful.getid(correctMembers[i])
+        print(correctMembers)
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="The following users were correct:", colour = self.bot.getcolour())
