@@ -261,7 +261,7 @@ class pubquizCog:
     @pubquiz.command(name="undo")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def undo(self, ctx):
-        correctMembers = re.findall("<@.*>", ctx.message.contents)
+        correctMembers = re.findall("<@.*>", ctx.message.content)
         for i in range(0,len(correctMembers)):
             correctMembers[i] = useful.getid(correctMembers[i])
         query = "SELECT * FROM guilds WHERE guildID = $1"
@@ -295,7 +295,7 @@ class pubquizCog:
     @pubquiz.command(name="correct")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def correct(self, ctx):
-        correctMembers = re.findall("<@.*>", ctx.message.contents)
+        correctMembers = re.findall("<@.*>", ctx.message.content)
         for i in range(0,len(correctMembers)):
             correctMembers[i] = useful.getid(correctMembers[i])
         query = "SELECT * FROM guilds WHERE guildID = $1"
