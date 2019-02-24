@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, random, useful, inflect, random
+import discord, asyncio, sys, traceback, checks, random, useful, inflect, random, re
 from discord.ext import commands
 
 class pubquizCog:
@@ -261,15 +261,18 @@ class pubquizCog:
     @pubquiz.command(name="undo")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def undo(self, ctx):
+        correctMembers = re.findall("<@.*>", ctx.message.contents)
+        for i in range(0,len(correctMembers)):
+            correctMembers[i] = useful.getid(correctMembers[i])
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="Reduced the following users scores:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
-        for i in range (0, len(ctx.message.mentions)): ##<------------------------------------------
-            memberid = ctx.message.mentions[i].id
+        for i in range (0, len(correctMembers)): ##<------------------------------------------
+            memberid = correctMembers[i]
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(ctx.message.mentions))
-            elif len(ctx.message.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
+                toAdd = round(25/len(correctMembers))
+            elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
                 toAdd = 13-i
@@ -292,18 +295,20 @@ class pubquizCog:
     @pubquiz.command(name="correct")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def correct(self, ctx):
+        correctMembers = re.findall("<@.*>", ctx.message.contents)
+        for i in range(0,len(correctMembers)):
+            correctMembers[i] = useful.getid(correctMembers[i])
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="The following users were correct:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
-        for i in range (0, len(ctx.message.mentions)): ##<------------------------------------------
-            print(ctx.message.mentions[i].name)
-            memberid = ctx.message.mentions[i].id
+        for i in range (0, len(correctMembers)): ##<------------------------------------------
+            memberid = correctMembers[i]
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(ctx.message.mentions))
+                toAdd = round(25/len(correctMembers))
                 if toAdd == 12:
                     toAdd = 13
-            elif len(ctx.message.mentions) == 1 and result["pubquizlastquestionsuper"] == False:
+            elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
                 toAdd = 13-i
