@@ -295,6 +295,7 @@ class pubquizCog:
     @pubquiz.command(name="correct")
     @checks.has_role("Quizmaster", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def correct(self, ctx):
+        print(ctx.message.content)
         correctMembers = re.findall("<@.*>", ctx.message.content)
         print(correctMembers)
         for i in range(0,len(correctMembers)):
