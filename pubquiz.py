@@ -458,7 +458,7 @@ class pubquizCog:
                 except:
                     guild = 0
                 if guild == 1:
-                    if self.bot.pubquizQuestionActive == True:
+                    if self.bot.pubquizQuestionActive == True and ctx.content is not None:
                         toadd = []
                         toadd.append(ctx.author)
                         toadd.append(ctx.guild.id)
@@ -468,7 +468,7 @@ class pubquizCog:
                 else:
                     pass
         else:
-            if ctx.author == self.bot.user or self.bot.pubquizActive == False or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID):
+            if ctx.author == self.bot.user or self.bot.pubquizActive == False or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID) or ctx.content == None:
                 pass
             elif self.bot.pubquizQuestionActive == True:
                 self.bot.pubquizAnswers.append([ctx.author, 331517548636143626, ctx.content])
