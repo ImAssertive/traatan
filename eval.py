@@ -7,12 +7,12 @@ from contextlib import redirect_stdout
 from discord.ext import commands
 
 
-class EvalCog(commands.Cog):
+class evalCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name="eval", aliases=["evaluate"], hidden=True)
-    @commands.is_owner()
+    @checks.just_me()
     async def _eval(self, ctx, *, body):
         env = {
             "discord": discord,

@@ -40,7 +40,7 @@ async def run():
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
     selfAssignable boolean DEFAULT false);''')
     bot = Bot(description=description, db=db)
-    initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz']
+    initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz', 'eval']
     if __name__ == '__main__':
         for extension in initial_extensions:
             try:
