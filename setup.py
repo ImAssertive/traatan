@@ -35,7 +35,7 @@ class setupCog:
                 query = "INSERT INTO Users (userID) VALUES($1) ON CONFLICT DO NOTHING"
                 await self.bot.db.execute(query, member.id)
         await self.bot.db.release(connection)
-        await ctx.channel.send(":white_check_mark: | Done!")
+        await ctx.message.add_reaction("\N{WHITE HEAVY CHECK MARK}")
 
     @commands.command(hidden= True)
     @checks.justme()

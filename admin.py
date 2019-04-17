@@ -262,6 +262,6 @@ class adminCog:
                 await baninfo.delete()
                 await asyncio.sleep(2)
                 await canceledtext.delete()
-                
+
 def setup(bot):
     bot.add_cog(adminCog(bot))

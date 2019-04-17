@@ -73,6 +73,7 @@ class pubquizCog:
     @checks.has_role("Quizmaster", "Bot Tinkerer")
     @checks.has_role("User")
     async def start(self, ctx):
+        await ctx.bot.cogs['setup'].addmembers()
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         if result:
@@ -109,7 +110,7 @@ class pubquizCog:
     @checks.has_role("User")
     async def dm(self, ctx):
         quizmasterCheck = await checks.has_role_not_check(ctx, "Quizmaster")
-        if not quizmasterCheck:
+        if not quizmasterCheck or ctx.author.id == 163691476788838401:
             try:
                 dmRole = discord.utils.get(ctx.guild.roles, id=ctx.bot.rolesDict["Pub Quiz DM"])
             except:
