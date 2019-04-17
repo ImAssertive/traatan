@@ -73,7 +73,7 @@ class pubquizCog:
     @checks.has_role("Quizmaster", "Bot Tinkerer")
     @checks.has_role("User")
     async def start(self, ctx):
-        await self.get_cog('setupCog').addmembers.invoke()
+        await self.get_cog('setupCog').addmembers.invoke(ctx)
         query = "SELECT * FROM guilds WHERE guildID = $1 AND ongoingpubquiz = true"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         if result:
