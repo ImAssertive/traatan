@@ -8,7 +8,7 @@ class evalCog:
         self.bot = bot
 
     @commands.command(name="eval", aliases=["evaluate"], hidden=True)
-    @checks.just_me()
+    @checks.justme()
     async def _eval(self, ctx, *, body):
         env = {
             "discord": discord,
