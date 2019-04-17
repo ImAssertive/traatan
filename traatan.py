@@ -109,7 +109,7 @@ class Bot(commands.Bot):
             self.rolesDict["Pub Quiz DM"] = result[0]
         except:
             pass
-        await self.get_cog('setupCog').addmembers()
+        await self.get_cog('setupCog').addmembers.invoke()
         print(self.pubquizActive, self.pubquizQuestionActive, self.pubquizQuestionUserID, self.pubquizChannel)
 
 
