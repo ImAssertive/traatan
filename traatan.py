@@ -43,11 +43,7 @@ async def run():
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz', 'eval']
     if __name__ == '__main__':
         for extension in initial_extensions:
-            try:
-                bot.load_extension(extension)
-            except Exception as e:
-                print('Failed to load extension ' + extension, file=sys.stderr)
-                traceback.print_exc()
+            bot.load_extension(extension)
 
     try:
         await bot.start(credentialsFileDev.getToken())
