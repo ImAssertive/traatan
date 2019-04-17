@@ -7,7 +7,7 @@ from contextlib import redirect_stdout
 from discord.ext import commands
 
 
-class evalCog(commands.Cog):
+class evalCog:
     def __init__(self, bot):
         self.bot = bot
 
