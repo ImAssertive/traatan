@@ -1,8 +1,4 @@
-import io
-import textwrap
-import traceback
-import re
-import discord
+import io, textwrap, traceback, re, discord, useful, checks
 from contextlib import redirect_stdout
 from discord.ext import commands
 
