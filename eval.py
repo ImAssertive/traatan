@@ -96,4 +96,4 @@ class evalCog:
 
 
 def setup(bot):
-    bot.add_cog(EvalCog(bot))
+    bot.add_cog(evalCog(bot))
