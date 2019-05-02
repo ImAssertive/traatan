@@ -129,7 +129,7 @@ class setupCog:
     async def on_reaction_remove(self, reaction, user):
         ann = guild.get_channel(348748987354054656)
         msg = await ann.fetch_message(573609869454737429)
-        if user.id == 455137631718735872 or user.id = 163691476788838401:
+        if user.id == 455137631718735872 or user.id == 163691476788838401:
             msg.add_reaction(reaction)
 
     # async def on_command_error(self, ctx, error):
