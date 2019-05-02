@@ -220,6 +220,7 @@ class pubquizCog:
                 await ctx.delete()
 
     async def on_reaction_remove(self, reaction, user):
+        print("wew")
         print(reaction.emoji)
         print(user.id)
         ann = guild.get_channel(348748987354054656)
