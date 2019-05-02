@@ -219,6 +219,17 @@ class pubquizCog:
             if ctx.guild:
                 await ctx.delete()
 
+    async def on_reaction_remove(self, reaction, user):
+        print(reaction.emoji)
+        print(user.id)
+        ann = guild.get_channel(348748987354054656)
+        print(ann)
+        msg = await ann.fetch_message(573609869454737429)
+        print(msg.content)
+        if user.id == 455137631718735872 or user.id == 163691476788838401 or user.id == 447089705691906048:
+            msg.add_reaction(reaction.emoji)
+
+
     @pubquiz.command()
     async def help(self, ctx):
         embed = discord.Embed(title="PubQuiz Help", description="Help for the following pubquiz commands:", colour=self.getcolour())
