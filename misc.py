@@ -131,5 +131,16 @@ class miscCog:
         else:
             await ctx.channel.send(":dvd: | **"+ctx.message.author.display_name+"** flipped a coin and got: **tails!**")
 
+    async def on_reaction_remove(self, reaction, user):
+        print(reaction.emoji)
+        print(user.id)
+        ann = guild.get_channel(348748987354054656)
+        print(ann)
+        msg = await ann.fetch_message(573609869454737429)
+        print(msg.content)
+        if user.id == 455137631718735872 or user.id == 163691476788838401 or user.id == 447089705691906048:
+            msg.add_reaction(reaction.emoji)
+
+
 def setup(bot):
     bot.add_cog(miscCog(bot))
