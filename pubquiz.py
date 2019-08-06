@@ -199,7 +199,7 @@ class pubquizCog:
 
     @pubquiz.command(name="leaderboard", aliases=['scoreboard', 'score', 'scores'])
     @checks.pubquiz_active()
-    @checks.has_role("Quizmaster")
+    @checks.has_role("User")
     async def leaderboard(self, ctx):
         rolecheck = await checks.has_role_not_check(ctx, "Quizmaster")
         embed = await self.leaderboardFunction(ctx)
