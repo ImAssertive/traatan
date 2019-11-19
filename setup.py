@@ -2,7 +2,7 @@ import discord, asyncio, sys, traceback, checks, useful, asyncpg, random
 from discord.ext import commands
 
 
-class setupCog:
+class setupCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

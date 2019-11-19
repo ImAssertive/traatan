@@ -1,7 +1,7 @@
 import discord, asyncio, sys, traceback, checks, inflect, useful, random
 from discord.ext import commands
 
-class miscCog:
+class miscCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.deleteBlueText = False ##Determines if the bot deletes the message issuing any bluetext commands. Should never be edited by a user.

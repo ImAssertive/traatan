@@ -1,7 +1,7 @@
 import discord, asyncio, sys, traceback, checks, random, useful, inflect, random, re
 from discord.ext import commands
 
-class pubquizCog:
+class pubquizCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

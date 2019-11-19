@@ -2,7 +2,7 @@ import discord, asyncio, sys, traceback, checks, inflect, useful, math, random
 from discord.ext import commands
 from operator import itemgetter
 
-class pubquizCog:
+class pubquizCog(commands.Cog):
     def __init__(self, bot):
         self.quizActive = False
         self.questionActive = False
