@@ -446,36 +446,6 @@ class pubquizCog(commands.Cog):
         else:
             await ctx.channel.send(":no_entry: | There is already an active question!")
 
-    @client.event
-    async def on_message(self, ctx):
-        print("made it here")
-        if ctx.guild is not None:
-            if ctx.author == self.bot.user or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID) or ctx.channel.id != self.bot.pubquizChannel or self.bot.pubquizActive == False:
-                pass
-            else:
-                guild = 1
-                try:
-                    ctx.guild
-                except:
-                    guild = 0
-                if guild == 1:
-                    if self.bot.pubquizQuestionActive == True and ctx.content is not None:
-                        toadd = []
-                        toadd.append(ctx.author)
-                        toadd.append(ctx.guild.id)
-                        toadd.append(ctx.content)
-                        self.bot.pubquizAnswers.append(toadd)
-                        print(self.bot.pubquizAnswers)
-                        await ctx.delete()
-                else:
-                    pass
-        else:
-            if ctx.author == self.bot.user or self.bot.pubquizActive == False or str(ctx.author.id) == str(self.bot.pubquizQuestionUserID) or ctx.content == None:
-                pass
-            elif self.bot.pubquizQuestionActive == True:
-                self.bot.pubquizAnswers.append([ctx.author, 331517548636143626, ctx.content])
-                await ctx.add_reaction("\N{WHITE HEAVY CHECK MARK}")
-                print(self.bot.pubquizAnswers)
 
 
 
