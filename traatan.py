@@ -69,7 +69,8 @@ class Bot(commands.Bot):
                         "User": 348208233254617110,
                         "Quizmaster": 449941007619063828,
                         "Muted": 356529701675859990,
-                        "Bot Tinkerer": 504059432238579712}
+                        "Bot Tinkerer": 504059432238579712,
+                        "Pub Quiz Senate": 663779037835165706}
         self.db = kwargs.pop("db")
         self.currentColour = -1
         self.outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely",
