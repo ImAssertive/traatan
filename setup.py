@@ -27,7 +27,7 @@ class setupCog(commands.Cog):
 
 
     @commands.command(hidden = True)
-    @checks.has_role("Quizmaster")
+    @checks.has_role("Quizmaster", "Pub Quiz Senate")
     async def addmembers(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
