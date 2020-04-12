@@ -570,6 +570,8 @@ class pubquizCog(commands.Cog):
 
         #Checks if there is currently a question active
         if result["pubquizquestionactive"] == False:
+            #Clears any saved answers the bot may have
+            self.bot.pubquizAnswers = []
             #Obtains current question number from results and increments it by 1
             currentquestion = result["pubquizquestionnumber"]
             currentquestion += 1
@@ -619,6 +621,7 @@ class pubquizCog(commands.Cog):
             #Waits for answers before closing answers for submission
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("Answers are now closed!")
+            print(self.bot.pubquizAnswers)
 
             #Updates database/client flags so that the question is no longer active
             connection = await self.bot.db.acquire()
@@ -630,6 +633,7 @@ class pubquizCog(commands.Cog):
 
             pages = []
             totalPages = math.ceil(len(self.bot.pubquizAnswers)/25)
+            print("total pages: " + totalPages)
 
             # Creates an appropriate number of embeds to add users too
             for i in range(0, totalPages):
@@ -639,6 +643,7 @@ class pubquizCog(commands.Cog):
                 # Appends newly created embed to a list
                 pages.append(toAppend)
 
+            #Loops over answers provided, adding them to the correct embed
             for answer in range(0, len(self.bot.pubquizAnswers)):
                 if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
                     pages[math.ceil(answer/25)-1].add_field(
@@ -646,7 +651,11 @@ class pubquizCog(commands.Cog):
                             0].name + "#" + self.bot.pubquizAnswers[answer][0].discriminator + ") answered:",
                         value=self.bot.pubquizAnswers[answer][2], inline=False)
 
-
+            #Outputs final results embeds
+            for embed in pages:
+                await ctx.channel.send(embed=embed)
+            #Clears bot saved answers
+            self.bot.pubquizAnswers = []
         else:
             #Outputs message to user that a question is currently active
             await ctx.channel.send(":no_entry: | There is already an active question!")
@@ -669,7 +678,6 @@ class pubquizCog(commands.Cog):
                         toadd.append(ctx.guild.id)
                         toadd.append(ctx.content)
                         self.bot.pubquizAnswers.append(toadd)
-                        print(self.bot.pubquizAnswers)
                         await ctx.delete()
                 else:
                     pass
@@ -679,7 +687,6 @@ class pubquizCog(commands.Cog):
             elif self.bot.pubquizQuestionActive == True:
                 self.bot.pubquizAnswers.append([ctx.author, 331517548636143626, ctx.content])
                 await ctx.add_reaction("\N{WHITE HEAVY CHECK MARK}")
-                print(self.bot.pubquizAnswers)
 
 
 
