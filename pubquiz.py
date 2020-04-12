@@ -633,7 +633,6 @@ class pubquizCog(commands.Cog):
 
             pages = []
             totalPages = math.ceil(len(self.bot.pubquizAnswers)/25)
-            print("total pages: " + totalPages)
 
             # Creates an appropriate number of embeds to add users too
             for i in range(0, totalPages):
