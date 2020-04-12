@@ -1,14 +1,18 @@
 import discord, asyncio, sys, traceback, checks, asyncpg, useful, credentialsFileDev
 from discord.ext import commands
 
+##Returns valid prefixes for the bot, determines which prefixes the bot will respond to
 def getPrefix(bot, message):
     prefixes = ["traa!","valtarithegreat!","tt!","tt?"]
     return commands.when_mentioned_or(*prefixes)(bot, message)
 
 async def run():
+    ##Gets bot token and database
     description = "Super Gay Bot"
     credentials = credentialsFileDev.getCredentials()
-    db = await asyncpg.create_pool(**credentials) ##CAPITALS ARE NOT CARRIED OVER ON DATABASE CREATION SO ARNT INCLUDED TO REDUCE CONFUSION
+
+    ##Database creation - needs editing upon rewrite
+    db = await asyncpg.create_pool(**credentials) ##Table entry seems to be lowercase only
     await db.execute('''CREATE TABLE IF NOT EXISTS Users(userID bigint PRIMARY KEY,
     pubquizScoreTotal integer DEFAULT 0,
     pubquizScoreWeekly integer DEFAULT 0,
@@ -39,6 +43,8 @@ async def run():
 
     CREATE TABLE IF NOT EXISTS Roles(roleID bigint PRIMARY KEY,
     selfAssignable boolean DEFAULT false);''')
+
+    ##Creates bot object and attempts to load cogs
     bot = Bot(description=description, db=db)
     initial_extensions = ['admin', 'setup', 'misc', 'roles', 'pubquiz', 'eval']
     if __name__ == '__main__':
@@ -46,9 +52,11 @@ async def run():
             try:
                 bot.load_extension(extension)
             except Exception as e:
+                ##Outputs exception upon failing to load a cog
                 print('Failed to load extension ' + extension, file=sys.stderr)
                 traceback.print_exc()
 
+    ##Launches bot
     try:
         await bot.start(credentialsFileDev.getToken())
     except KeyboardInterrupt:
@@ -61,7 +69,10 @@ class Bot(commands.Bot):
             description=kwargs.pop("description"),
             command_prefix=getPrefix
         )
+        ##Temporary store of users pubquiz answers
         self.pubquizAnswers = []
+
+        ##Dictionary of all named roles and their corresponding ID's (note to self, make this less bad)
         self.rolesDict = {"Admin": 348608087793467412, "Admin Powers": 406091590923321355,
                         "Helper": 395565792457916417, "Helper Powers": 395565792457916417,
                         "Owner": 348207687319683072,
@@ -73,6 +84,8 @@ class Bot(commands.Bot):
                         "Pub Quiz Senate": 663779037835165706}
         self.db = kwargs.pop("db")
         self.currentColour = -1
+
+        ##List of all 8ball/conch phrases
         self.outcomes = ["It is certain", "It is decidedly so", "Without a doubt", "Yes - definitely",
                     "You may rely on it",
                     "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes",
@@ -80,10 +93,16 @@ class Bot(commands.Bot):
                     "Cannot predict now", "Concentrate and ask again", "Don't count on it",
                     "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
 
+    ##Run upon successful bot login
     async def on_ready(self):
+        ##Outputs the username and ID of bot client on login
         print("Username: {0}\nID: {0.id}".format(self.user))
+
+        ##Updates bots presence
         game = discord.Game("chess with Rainbow Restarter!")
         await self.change_presence(status=discord.Status.online, activity=game)
+
+        ##Sets pub quiz status flags using results from database
         query = "SELECT * FROM Guilds WHERE guildID = $1"
         serverID = 331517548636143626
         result = await self.db.fetchrow(query, serverID)
@@ -104,6 +123,7 @@ class Bot(commands.Bot):
         except:
             self.pubquizChannel = 1
 
+        ##Sets the ID
         query = "SELECT dmroleid FROM Guilds WHERE guildID = $1"
         result = await self.db.fetchrow(query, serverID)
         try:
@@ -113,13 +133,17 @@ class Bot(commands.Bot):
         print(self.pubquizActive, self.pubquizQuestionActive, self.pubquizQuestionUserID, self.pubquizChannel)
 
 
+    ##Returns the next unused colour of the rainbow as a discord colour object - can be used with embeds for style
     def getcolour(self):
         colours = ["5C6BC0", "AB47BC", "EF5350", "FFA726", "FFEE58", "66BB6A", "5BCEFA", "F5A9B8", "FFFFFF", "F5A9B8", "5BCEFA"]
         self.currentColour += 1
+        ##Resets colour value to 0 if all colour values have been used
         if self.currentColour ==  len(colours):
             self.currentColour = 0
+        ##Returns colour object using the assigned hex code
         return discord.Colour(int(colours[self.currentColour], 16))
 
+    ##Returns a red/yellow/green discord colour object equating to the statement shown when using the magic conch command
     def conchcolour(self, number):
         if number < 10 and number > -1:
             return discord.Colour(int("00FF00", 16))
