@@ -635,7 +635,7 @@ class pubquizCog(commands.Cog):
             totalPages = math.ceil(len(self.bot.pubquizAnswers)/25)
             # Creates an appropriate number of embeds to add users too
             for i in range(0, totalPages):
-                print("Current page: " + str(i)+ "\nTotal Pages: " + str(totalPages))
+                #print("Current page: " + str(i) + "\nTotal Pages: " + str(totalPages))
                 toAppend = discord.Embed(title="Answers:", colour=self.bot.getcolour())
                 # Sets the footer of each page to the correct page number
                 toAppend.set_footer(text="Current Page: (" + str(i + 1) + "/" + str(totalPages) + ")")
@@ -645,8 +645,8 @@ class pubquizCog(commands.Cog):
             #Loops over answers provided, adding them to the correct embed
             for answer in range(0, len(self.bot.pubquizAnswers)):
                 if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
-                    print("Current answer index: " + str(pages[math.ceil(answer/25)]))
-                    pages[math.ceil(answer/25)].add_field(
+                    print("Current answer index: " + str(pages[math.ceil(answer/25)-1]))
+                    pages[math.ceil(answer/25)-1].add_field(
                         name=self.bot.pubquizAnswers[answer][0].display_name + " (" + self.bot.pubquizAnswers[answer][
                             0].name + "#" + self.bot.pubquizAnswers[answer][0].discriminator + ") answered:",
                         value=self.bot.pubquizAnswers[answer][2], inline=False)
