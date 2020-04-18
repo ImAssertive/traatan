@@ -621,7 +621,7 @@ class pubquizCog(commands.Cog):
             #Waits for answers before closing answers for submission
             await asyncio.sleep(result["pubquiztime"])
             await ctx.channel.send("Answers are now closed!")
-            print(self.bot.pubquizAnswers)
+            print("answers")
 
             #Updates database/client flags so that the question is no longer active
             connection = await self.bot.db.acquire()
@@ -633,9 +633,9 @@ class pubquizCog(commands.Cog):
 
             pages = []
             totalPages = math.ceil(len(self.bot.pubquizAnswers)/25)
-
             # Creates an appropriate number of embeds to add users too
             for i in range(0, totalPages):
+                print("Current page: " + i + "\nTotal Pages: " + totalPages)
                 toAppend = discord.Embed(title="Answers:", colour=self.bot.getcolour())
                 # Sets the footer of each page to the correct page number
                 toAppend.set_footer(text="Current Page: (" + str(i + 1) + "/" + str(totalPages) + ")")
@@ -645,6 +645,7 @@ class pubquizCog(commands.Cog):
             #Loops over answers provided, adding them to the correct embed
             for answer in range(0, len(self.bot.pubquizAnswers)):
                 if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
+                    print("Current answer index: " + pages[math.ceil(answer/25)])
                     pages[math.ceil(answer/25)].add_field(
                         name=self.bot.pubquizAnswers[answer][0].display_name + " (" + self.bot.pubquizAnswers[answer][
                             0].name + "#" + self.bot.pubquizAnswers[answer][0].discriminator + ") answered:",
