@@ -645,7 +645,8 @@ class pubquizCog(commands.Cog):
             #Loops over answers provided, adding them to the correct embed
             for answer in range(0, len(self.bot.pubquizAnswers)):
                 if self.bot.pubquizAnswers[answer][1] == ctx.guild.id:
-                    print("Current answer index: " + str(pages[math.ceil(answer/25)-1]))
+                    print("Current answer index: " + str(math.ceil(answer/25)-1))
+                    print("Current answer number: " + str(answer))
                     pages[math.ceil(answer/25)-1].add_field(
                         name=self.bot.pubquizAnswers[answer][0].display_name + " (" + self.bot.pubquizAnswers[answer][
                             0].name + "#" + self.bot.pubquizAnswers[answer][0].discriminator + ") answered:",
