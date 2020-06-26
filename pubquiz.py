@@ -463,9 +463,7 @@ class pubquizCog(commands.Cog):
             memberid = correctMembers[i]
             #Calculates the correct amount of points to award each member depending on if the last question was a SQ or not
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(correctMembers))
-                if toAdd == 12:
-                    toAdd = 13
+                toAdd = round(20/len(correctMembers))
             elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
