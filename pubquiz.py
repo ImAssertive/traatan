@@ -562,6 +562,8 @@ class pubquizCog(commands.Cog):
         await ctx.message.delete()
 
     async def questionFunction(self, ctx, question, superQuestion):
+        ##Obscures question from google
+        question = '\u2060'.join(question[i:i+1] for i in range(0, len(question), 1))
         #Gets current status of guild from database
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
@@ -658,6 +660,7 @@ class pubquizCog(commands.Cog):
         else:
             #Outputs message to user that a question is currently active
             await ctx.channel.send(":no_entry: | There is already an active question!")
+
 
     @commands.Cog.listener()
     async def on_message(self, ctx):
