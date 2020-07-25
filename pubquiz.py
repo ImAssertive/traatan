@@ -536,7 +536,9 @@ class pubquizCog(commands.Cog):
     async def question(self, ctx, *, question):
         #Calls the question function, setting the superQuestion bool to false
         superQuestion = False
+        await ctx.message.delete()
         await self.questionFunction(ctx, question, superQuestion)
+
 
     #Command to allow a quizmaster to start a new super question (awarding bonus points)
     @pubquiz.command(name='superquestion', aliases=['sq', 'spq'])
@@ -546,7 +548,9 @@ class pubquizCog(commands.Cog):
     async def superquestion(self, ctx, *, question):
         #Calls the question function, setting the superQuestion bool to false
         superQuestion = True
+        await ctx.message.delete()
         await self.questionFunction(ctx, question, superQuestion)
+        
 
     #Allows a quizmaster to display the answer in an easy to read embed
     @pubquiz.command(name="answer")
