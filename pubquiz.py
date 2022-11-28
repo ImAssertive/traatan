@@ -182,7 +182,7 @@ class pubquizCog(commands.Cog):
                 ##Sends embed to user
                 await ctx.author.send(embed=embed)
             ##Adds a white check mark reaction to the users original command
-            await ctx.message.add_reaction("\N{WHITE HEAVY CHECK MARK}")
+            #await ctx.message.add_reaction("\N{WHITE HEAVY CHECK MARK}")
 
     @pubquiz.command(name='stop', aliases =['end', 'halt'])
     @checks.pubquiz_active()
@@ -673,7 +673,7 @@ class pubquizCog(commands.Cog):
         await ctx.channel.send(embed=embed)
 
         #Deletes the original invoke message
-        await ctx.message.delete()
+        #await ctx.message.delete()
 
     async def questionFunction(self, ctx, question, superQuestion):
         ##Obscures question from google
