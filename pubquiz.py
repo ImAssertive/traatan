@@ -407,16 +407,56 @@ class pubquizCog(commands.Cog):
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
         embed = discord.Embed(title="Reduced the following users scores:", colour = self.bot.getcolour())
         connection = await self.bot.db.acquire()
+        scores = [12,10,10,8,8,8,8,8,7]
         for i in range (0, len(correctMembers)): ##<------------------------------------------
             memberid = correctMembers[i]
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(25/len(correctMembers))
+                toAdd = 18
             elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
-                toAdd = 13-i
-                if toAdd < 10:
-                    toAdd = 10
+                if i >= len(scores):
+                    toAdd = 7
+                else:
+                    toAdd = scores[i]
+            query = "SELECT * FROM users WHERE userID = $1"
+            results = await ctx.bot.db.fetchrow(query, memberid)
+            currentValue = results["pubquizscoreweekly"]
+            currentTotal = results["pubquizscoretotal"]
+            async with connection.transaction():
+                query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currentValue - toAdd, memberid)
+                query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currentTotal - toAdd, memberid)
+            embed.add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="lost **"+ str(toAdd) + "** points.")
+        await self.bot.db.release(connection)
+        await ctx.channel.send(embed=embed)
+
+    ##Literally just the correct command but with will subtract points instead of add them, used for debugging.
+    @pubquiz.command(name="exactundo")
+    @checks.has_role("Quizmaster", "Pub Quiz Senate", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
+    async def exactundo(self, ctx):
+        ##Uses regex to find the ID of all correct members if mentions have been used
+        correctMembers = re.findall("<@.*?>", ctx.message.content)
+        ##Iterates over correct members
+        for i in range(0,len(correctMembers)):
+            correctMembers[i] = useful.getid(correctMembers[i])
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+        embed = discord.Embed(title="Reduced the following users scores:", colour = self.bot.getcolour())
+        connection = await self.bot.db.acquire()
+        scores = [12,10,10,8,8,8,8,8,7]
+        for i in range (0, len(correctMembers)): ##<------------------------------------------
+            memberid = correctMembers[i]
+            if result["pubquizlastquestionsuper"] == True:
+                toAdd = 18
+            elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
+                toAdd = 16
+            else:
+                if i >= len(scores):
+                    toAdd = 7
+                else:
+                    toAdd = scores[i]
             query = "SELECT * FROM users WHERE userID = $1"
             results = await ctx.bot.db.fetchrow(query, memberid)
             currentValue = results["pubquizscoreweekly"]
@@ -459,17 +499,19 @@ class pubquizCog(commands.Cog):
 
         #Creates new database connection
         connection = await self.bot.db.acquire()
+        scores = [12,10,10,8,8,8,8,8,7]
         for i in range (0, len(correctMembers)):
             memberid = correctMembers[i]
             #Calculates the correct amount of points to award each member depending on if the last question was a SQ or not
             if result["pubquizlastquestionsuper"] == True:
-                toAdd = round(20/len(correctMembers))
+                toAdd = 18
             elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
                 toAdd = 16
             else:
-                toAdd = 13-i
-                if toAdd < 10:
-                    toAdd = 10
+                if i>=len(scores):
+                    toAdd = 7
+                else:
+                    toAdd = scores[i]
 
             #Queries database to find users current points
             query = "SELECT * FROM users WHERE userID = $1"
@@ -492,6 +534,74 @@ class pubquizCog(commands.Cog):
         #Sends all embeds to context object channel
         for embed in pages:
             await ctx.channel.send(embed=embed)
+
+
+    @pubquiz.command(name="exactcorrect")
+    @checks.has_role("Quizmaster", "Pub Quiz Senate", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
+    async def exactcorrect(self, ctx):
+        ##Uses regex to find the ID of all correct members if mentions have been used
+        correctMembers = re.findall("<@.*?>", ctx.message.content)
+
+        ##Iterates over mentions of correct members, obtaining their ID
+        for i in range(0,len(correctMembers)):
+            correctMembers[i] = useful.getid(correctMembers[i])
+
+        ##Queries database for current pub quiz settings
+        query = "SELECT * FROM guilds WHERE guildID = $1"
+        result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
+
+        ##Creates an empty array to be filled with discord embeds
+        pages = []
+        totalPages = math.ceil(len(correctMembers)/25)
+
+        #Creates an appropriate number of embeds to add users too
+        for j in range(0, totalPages):
+            toAppend = discord.Embed(title="The following users were correct:", colour = self.bot.getcolour())
+            #Sets the footer of each page to the correct page number
+            toAppend.set_footer(text="Current Page: (" + str(j+1) +"/" + str(totalPages)+")")
+            #Appends newly created embed to a list
+            pages.append(toAppend)
+
+        #Creates new database connection
+        connection = await self.bot.db.acquire()
+        scores = [12,10,10,8,8,8,8,8,7]
+        for i in range (0, len(correctMembers)):
+            memberid = correctMembers[i]
+            #Calculates the correct amount of points to award each member depending on if the last question was a SQ or not
+            if result["pubquizlastquestionsuper"] == True:
+                toAdd = 23
+            elif len(correctMembers) == 1 and result["pubquizlastquestionsuper"] == False:
+                toAdd = 16
+            else:
+                if i>=len(scores):
+                    toAdd = 7
+                else:
+                    toAdd = scores[i]
+
+            #Queries database to find users current points
+            query = "SELECT * FROM users WHERE userID = $1"
+            results = await ctx.bot.db.fetchrow(query, memberid)
+            currentValue = results["pubquizscoreweekly"]
+            currentTotal = results["pubquizscoretotal"]
+
+            #Connects to database and updates users weekly and total scores
+            async with connection.transaction():
+                query = "UPDATE users SET pubquizscoreweekly = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currentValue + toAdd, memberid)
+                query = "UPDATE users SET pubquizscoretotal = $1 WHERE userID = $2"
+                await self.bot.db.execute(query, currentTotal + toAdd, memberid)
+
+            ##Adds the appropriate confirmation text to one of the embeds
+            pages[math.ceil(i/25)-1].add_field(name=ctx.guild.get_member(memberid).display_name + " (" +ctx.guild.get_member(memberid).name +"#" +ctx.guild.get_member(memberid).discriminator+")", inline=False, value="gained **"+ str(toAdd) + "** points.")
+        #Closes database connection
+        await self.bot.db.release(connection)
+
+        #Sends all embeds to context object channel
+        for embed in pages:
+            await ctx.channel.send(embed=embed)
+
+
+
 
     #Help command
     @pubquiz.command()
