@@ -336,7 +336,6 @@ class pubquizCog(commands.Cog):
             await ctx.channel.send(":no_entry: | Please enter a whole number to add or subtract from the users score.")
             successful = False
 
-
         if successful and value != 0:
             #Obtains the users ID and queries database to obtain their current weekly and total scores
             memberid = useful.getid(member)
@@ -394,19 +393,21 @@ class pubquizCog(commands.Cog):
             ##Outputs message to user if a valid time number was supplied
             await ctx.channel.send(":no_entry: | Please enter a positive whole time number.")
 
-    async def update_scores(ctx, correctMembers, toAdd, exact=False):
+    async def update_scores(self, ctx, correctMembers, toAdd, exact=False):
         connection = await ctx.bot.db.acquire()
         embed = discord.Embed(
             title="Reduced the following users scores:" if toAdd < 0 else "Increased the following users scores:",
             colour=ctx.bot.getcolour())
         query = "SELECT * FROM guilds WHERE guildID = $1"
         result = await ctx.bot.db.fetchrow(query, ctx.guild.id)
-        scores = [12, 10, 10, 9, 8, 8, 8, 8, 7]
+        scores = [12, 10, 10, 8, 8, 8, 8, 8, 7]
         for i, memberid in enumerate(correctMembers):
             if result["pubquizlastquestionsuper"]:
                 points = 23 if exact else 18
             elif len(correctMembers) == 1 and not result["pubquizlastquestionsuper"]:
                 points = 16
+            elif len(correctMembers) == 4 and not result["pubquizlastquestionsuper"]:
+                points = [12, 10, 10, 9][i]
             else:
                 points = scores[i] if i < len(scores) else 7
             query = "SELECT * FROM users WHERE userID = $1"
