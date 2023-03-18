@@ -499,7 +499,7 @@ class pubquizCog(commands.Cog):
 
         #Creates new database connection
         connection = await self.bot.db.acquire()
-        scores = [12,10,10,8,8,8,8,8,7]
+        scores = [12,10,10,9,8,8,8,8,7]
         for i in range (0, len(correctMembers)):
             memberid = correctMembers[i]
             #Calculates the correct amount of points to award each member depending on if the last question was a SQ or not
