@@ -428,26 +428,26 @@ class pubquizCog(commands.Cog):
     @checks.has_role("Quizmaster", "Pub Quiz Senate", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def undo(self, ctx):
         correctMembers = [useful.getid(member) for member in re.findall("<@.*?>", ctx.message.content)]
-        await update_scores(ctx, correctMembers, -1)
+        await self.update_scores(ctx, correctMembers, -1)
 
     @pubquiz.command(name="exactundo")
     @checks.has_role("Quizmaster", "Pub Quiz Senate", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def exactundo(self, ctx):
         correctMembers = [useful.getid(member) for member in re.findall("<@.*?>", ctx.message.content)]
-        await update_scores(ctx, correctMembers, -1, True)
+        await self.update_scores(ctx, correctMembers, -1, True)
 
     @pubquiz.command(name="correct")
     @checks.has_role("Quizmaster", "Pub Quiz Senate", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def correct(self, ctx):
         ##Uses regex to find the ID of all correct members if mentions have been used
         correctMembers = [useful.getid(member) for member in re.findall("<@.*?>", ctx.message.content)]
-        await update_scores(ctx, correctMembers, 1)
+        await self.update_scores(ctx, correctMembers, 1)
 
     @pubquiz.command(name="exactcorrect")
     @checks.has_role("Quizmaster", "Pub Quiz Senate", "Moderator Powers", "Admin Powers", "Bot Tinkerer")
     async def exactcorrect(self, ctx):
         correctMembers = [useful.getid(member) for member in re.findall("<@.*?>", ctx.message.content)]
-        await update_scores(ctx, correctMembers, 1, True)
+        await self.update_scores(ctx, correctMembers, 1, True)
 
 
     #Help command
