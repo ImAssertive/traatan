@@ -8,6 +8,20 @@ def formatText(ctx, text):
 def formatTextLeave(ctx, text):
     return text.replace("%user%", ctx.display_name)
 
+def extract_object_pronoun(pronoun_string):
+  """
+  Extracts the object pronoun from a pronoun string.
+
+  Args:
+    pronoun_string: A string containing pronouns separated by a slash (e.g., "they/them").
+
+  Returns:
+    The object pronoun from the input string.
+  """
+  if pronoun_string is not None:
+    return pronoun_string.split("/")[1]
+  else:
+      return None
 
 def getMenuEmoji(noOfOptions):
     #emojis = [["one", "1\u20e3"],["two", "2\u20e3"],["three", "3\u20e3"],["four", "4\u20e3"], ["five", "5\u20e3"],["six", "6\u20e3"], ["seven", "7\u20e3"],["eight", "8\u20e3"],["nine", "9\u20e3"],["ten", "\U0001f51f"]]

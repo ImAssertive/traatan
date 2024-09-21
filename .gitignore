@@ -7,5 +7,9 @@ traatan rework commands list.docx
 ~$aatan rework commands list.docx
 transfer
 .idea/workspace.xml
-credentialsFile.py
+credentials.py
 temp.py
+credentialsFileDev.py
+venv/
+__pycache__/
+.git/

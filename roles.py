@@ -111,5 +111,6 @@ class rolesCog(commands.Cog):
             await ctx.channel.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(rolesCog(bot))
+async def setup(bot):
+    await bot.add_cog(rolesCog(bot))
+    return

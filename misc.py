@@ -132,6 +132,6 @@ class miscCog(commands.Cog):
             await ctx.channel.send(":dvd: | **"+ctx.message.author.display_name+"** flipped a coin and got: **tails!**")
 
 
-
-def setup(bot):
-    bot.add_cog(miscCog(bot))
+async def setup(bot):
+    await bot.add_cog(miscCog(bot))
+    return

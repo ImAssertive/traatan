@@ -95,5 +95,6 @@ class evalCog(commands.Cog):
                         await ctx.send(f"```\n{page}\n```")
 
 
-def setup(bot):
-    bot.add_cog(evalCog(bot))
+async def setup(bot):
+    await bot.add_cog(evalCog(bot))
+    return

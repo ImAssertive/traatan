@@ -1,4 +1,4 @@
-import discord, asyncio, sys, traceback, checks, useful, asyncpg, random, ast
+import discord, asyncio, sys, traceback, checks, useful, asyncpg, random, ast, re
 from discord.ext import commands
 
 
@@ -33,16 +33,25 @@ class adminCog(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def say(self, ctx, channel, *, toSay):
-        print(toSay)
-        await ctx.guild.get_channel(int(channel)).send(toSay)
+    async def say(self, ctx, channel: discord.TextChannel, *, message):
+        """
+        Sends a message to the specified channel.
+        Usage: !say #channel-name This is the message to send
+        """
+        try:
+            await channel.send(message)
+            await ctx.message.add_reaction('✅')  # Add a checkmark reaction on success
+        except discord.Forbidden:
+            await ctx.send("I don't have permission to send messages in that channel.")
+        except discord.NotFound:
+            await ctx.send("I couldn't find that channel. Make sure you're using the correct channel mention or ID.")
 
     @commands.command(name="setfarewell", aliases=['setleave', 'setleavechannel', 'setfarewellchannel'])
     @checks.justme()
     async def setfarewell(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "UPDATE Guilds SET leavechannel = $1 WHERE guildID = $2"
+            query = "UPDATE guilds SET leave_enabled = TRUE, leave_channel_id = $1 WHERE guild_id = $2"
             await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done! Farewell channel set here.")
@@ -52,7 +61,7 @@ class adminCog(commands.Cog):
     async def setwelcome(self, ctx):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "UPDATE Guilds SET welcomechannel = $1 WHERE guildID = $2"
+            query = "UPDATE guilds SET welcome_enabled = TRUE, welcome_channel_id = $1 WHERE guild_id = $2"
             await self.bot.db.execute(query, ctx.channel.id, ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Done! Welcome channel set here.")
@@ -62,7 +71,7 @@ class adminCog(commands.Cog):
     async def setwelcometext(self, ctx, *, welcometext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "UPDATE Guilds SET welcometext = $1 WHERE guildID = $2"
+            query = "UPDATE guilds SET welcome_message = $1 WHERE guild_id = $2"
             await self.bot.db.execute(query, welcometext, ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send("Done! Welcome text set to ```" + welcometext + "```")
@@ -72,84 +81,40 @@ class adminCog(commands.Cog):
     async def setfarewelltext(self, ctx, *, leavetext):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "UPDATE Guilds SET leavetext = $1 WHERE guildID = $2"
+            query = "UPDATE guilds SET leave_message = $1 WHERE guild_id = $2"
             await self.bot.db.execute(query, leavetext, ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send("Done! Farewell text set to: ```" + leavetext + "```")
 
+        @commands.command()
+        @checks.justme()
+        async def enable_welcome(self, ctx):
+            connection = await self.bot.db.acquire()
+            async with connection.transaction():
+                query = "UPDATE guilds SET welcome_enabled = TRUE WHERE guild_id = $1"
+                await self.bot.db.execute(query, ctx.guild.id)
+            await self.bot.db.release(connection)
+            await ctx.send(":white_check_mark: | Welcome messages enabled!")
 
-    @commands.command()
-    async def gdpr(self, ctx):
-        finished = 0
-        successful = True
-        while finished == 0:
-            try:
-                await ctx.author.send("Here is the data currently stored about you:")
-            except:
-                await ctx.channel.send("Please enable 'Allow direct messages from server members' under 'Privacy & Safety' in settings. For security reasons this information can not be posted publicly.")
-                successful = False
-                break
-            embed = discord.Embed(title="Global Data:", description="", colour=self.bot.getcolour())
-            query = "SELECT * FROM Users WHERE userID = $1"
-            results = await ctx.bot.db.fetchrow(query, ctx.author.id)
-            if results:
-                embed.add_field(name="Your user ID is: ", value=("{}".format(results["userid"])))
-                embed.add_field(name="You are pubquizDM settings are currently:", value=("{}".format(results["pubquizdm"])))
-                embed.add_field(name="Your global banned status is currently:", value=("{}".format(results["banned"])))
-            else:
-                embed = discord.Embed(title="Global Data:", description="No data found!", colour=self.bot.getcolour())
-            await ctx.author.send(embed=embed)
-            query = "SELECT * FROM GuildUsers WHERE userID = $1"
-            results = await ctx.bot.db.fetch(query, ctx.author.id)
-            if results:
-                embed = discord.Embed(title="Server Data:", description="", colour=self.bot.getcolour())
-                for row in results:
-                    currentRow = row
-                    embed.add_field(name="The following information is for guild ID:", value=("{}".format(currentRow["guildid"])), inline=False)
-                    embed.add_field(name="Your Total Pub Quiz Score is:", value=("{}".format(currentRow["pubquizscoretotal"])), inline=False)
-                    embed.add_field(name="Last Pub Quiz your score was:", value=("{}".format(currentRow["pubquizscoreweekly"])), inline=False)
-                    embed.add_field(name="Your banned status here is:", value=("{}".format(currentRow["banned"])), inline=False)
-            else:
-                embed = discord.Embed(title="Server Data:", description="No data found!", colour=self.bot.getcolour())
-            await ctx.author.send(embed=embed)
-            query = "SELECT * FROM UserGameAccounts WHERE userID = $1"
-            results = await ctx.bot.db.fetch(query, ctx.author.id)
-            if results:
-                for row in results:
-                    currentRow = row
-                embed = discord.Embed(title="Im still working on this bit!", description="You should never see this! If you do, contact @Zootopia#0001 for this information.")
-            else:
-                embed = discord.Embed(title="Game account data:", description="No data found!")
-            await ctx.author.send(embed = embed)
-            finished = 1
-        if successful:
-            await ctx.channel.send(":white_check_mark: | Information sent to DM!")
-
+        @commands.command()
+        @checks.justme()
+        async def disable_welcome(self, ctx):
+            connection = await self.bot.db.acquire()
+            async with connection.transaction():
+                query = "UPDATE guilds SET welcome_enabled = FALSE WHERE guild_id = $1"
+                await self.bot.db.execute(query, ctx.guild.id)
+            await self.bot.db.release(connection)
+            await ctx.send(":white_check_mark: | Welcome messages disabled!")
 
     @commands.command(name='setbantext')
     @commands.has_permissions(ban_members=True)
     async def setbantext(self, ctx, *, banText):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "UPDATE Guilds SET bantext = $1 WHERE guildID = $2"
-            await self.bot.db.execute(query, banText,ctx.guild.id)
+            query = "UPDATE guilds SET ban_message = $1 WHERE guild_id  = $2"
+            await self.bot.db.execute(query, banText, ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Ban text set to `"+banText+"`!")
-
-    def insert_returns(body):
-        # insert return stmt if the last expression is a expression statement
-        if isinstance(body[-1], ast.Expr):
-            body[-1] = ast.Return(body[-1].value)
-            ast.fix_missing_locations(body[-1])
-
-        # for if statements, we insert returns into the body and the orelse
-        if isinstance(body[-1], ast.If):
-            insert_returns(body[-1].body)
-            insert_returns(body[-1].orelse)
-
-        # for with blocks, again we insert returns into the body
-        if isinstance(body[-1], ast.With):
-            insert_returns(body[-1].body)
 
     # @commands.command()
     # @checks.justme()
@@ -180,88 +145,140 @@ class adminCog(commands.Cog):
     async def setkicktext(self, ctx, *, kickText):
         connection = await self.bot.db.acquire()
         async with connection.transaction():
-            query = "UPDATE Guilds SET kicktext = $1 WHERE guildID = $2"
+            query = "UPDATE Guilds SET kick_message = $1 WHERE guild_id = $2"
             await self.bot.db.execute(query, kickText,ctx.guild.id)
         await self.bot.db.release(connection)
         await ctx.channel.send(":white_check_mark: | Kick text set to `"+kickText+"`!")
 
+    @commands.command()
+    @commands.has_permissions(ban_members=True)
+    async def ban(self, ctx, member: discord.Member, *, reason=None):
+        await self._ban_or_kick(ctx, member, "ban", reason)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, member, *, reason = None):
-        kickban = "ban"
-        await self.bankickFunction(ctx, member, kickban, reason)
-
-    @commands.command()
-    @commands.has_permissions(ban_members=True)
-    async def hackban(self, ctx, memberid):
+    async def hackban(self, ctx, member_id: int):
         try:
-            await ctx.guild.ban(discord.Object(id=int(memberid)), delete_message_days = 0)
-            await ctx.channel.send(":white_check_mark: | Banned ID `"+str(memberid)+"`")
-        except:
+            await ctx.guild.ban(discord.Object(id=member_id), delete_message_days=0)
+            await ctx.channel.send(f":white_check_mark: | Banned ID `{member_id}`")
+        except discord.NotFound:
             await ctx.channel.send(":no_entry: | An error occurred. Was that a valid user ID?")
 
     @commands.command()
-    @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, member, *, reason = None):
-        kickban = "kick"
-        await self.bankickFunction(ctx, member, kickban, reason)
+    async def setpronouns(self, ctx, *, pronouns: str):
+        """Sets the user's pronouns for this server.
 
-    async def bankickFunction(self, ctx, member, kickban, reason = None):
-        memberid = useful.getid(member)
-        if kickban == "kick":
-            kickedbanned = "kicked"
-            kickingbanning = "kicking"
-            texttosend = "kicktext"
-        elif kickban == "ban":
-            kickedbanned = "banned"
-            kickingbanning = "banning"
-            texttosend = "bantext"
-        confirmationnumber = random.randint(1000, 9999)
-        embed = discord.Embed(title="You are about to "+kickban+" user: " + ctx.guild.get_member(memberid).display_name, description="This action is irreversable. To continue please type `" + str(confirmationnumber) + "` or to cancel, please type `cancel`.",colour=self.bot.getcolour())
-        embed.add_field(name='User ID: ', value=str(ctx.guild.get_member(memberid).id), inline=False)
-        embed.add_field(name='User discord name: ',value=ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator,inline=False)
-        if reason:
-            embed.add_field(name='Reason: ', value=reason, inline=False)
-        else:
-            embed.add_field(name='Reason: ', value="None given.", inline=False)
-        baninfo = await ctx.channel.send(embed=embed)
-        def confirmationcheck(msg):
-            return (msg.content == str(confirmationnumber) or msg.content.lower() == "cancel") and ctx.channel.id == msg.channel.id and msg.author.id == ctx.author.id
+        Usage: tt!setpronouns she/her
+        """
+
+        # Basic validation - you might want to enhance this
+        if not re.match(r"^[a-zA-Z]+/[a-zA-Z]+$", pronouns):
+            await ctx.send("Invalid pronoun format. Please use the format 'pronoun/pronoun' (e.g., he/him, they/them). Please note this is only a requirement because my developer is bad at coding. (Sorry about that)")
+            return
+
+        connection = await self.bot.db.acquire()
+        async with connection.transaction():
+            # Update or insert pronouns in 'guild_users' table
+            query = """
+                INSERT INTO guild_users (user_id, guild_id, pronouns)
+                VALUES ($1, $2, $3)
+                ON CONFLICT (user_id, guild_id) DO UPDATE
+                SET pronouns = $3;
+            """
+            await self.bot.db.execute(query, ctx.author.id, ctx.guild.id, pronouns)
+        await self.bot.db.release(connection)
+
+        await ctx.send(f":white_check_mark: | Your pronouns have been set to **{pronouns}** for this server.")
+
+
+    @commands.command(name='sync')
+    @checks.justme()
+    async def sync(self, ctx):
         try:
-            msg = await self.bot.wait_for('message', check=confirmationcheck, timeout=60.0)
+            await self.bot.tree.sync()
+            await ctx.send(f":white_check_mark: | Slash commands synced.")
+        except Exception as e:
+            traceback_str = traceback.format_exc()
+            print(e)
+            print(traceback_str)
+
+    @commands.command(name='sync_current')
+    @checks.justme()
+    async def sync_current(self, ctx):
+        try:
+            await self.bot.tree.sync(guild=ctx.guild)
+            await ctx.send(f":white_check_mark: | Slash commands synced for guild ID **" + str(ctx.guild.id)+"**")
+        except Exception as e:
+            traceback_str = traceback.format_exc()
+            print(e)
+            print(traceback_str)
+
+    @commands.command()
+    @commands.has_permissions(kick_members=True)
+    async def kick(self, ctx, member: discord.Member, *, reason=None):
+        await self._ban_or_kick(ctx, member, "kick", reason)
+
+    async def _ban_or_kick(self, ctx, member, action, reason=None):
+        action_past_tense = "banned" if action == "ban" else "kicked"
+        action_present_participle = "banning" if action == "ban" else "kicking"
+        text_to_send = "ban_message" if action == "ban" else "kick_message"
+
+        confirmation_number = random.randint(1000, 9999)
+
+        embed = discord.Embed(
+            title=f"You are about to {action} user: {member.display_name}",
+            description=f"This action is irreversible. To continue please type `{confirmation_number}` or to cancel, please type `cancel`.",
+            color=self.bot.getcolour()
+        )
+        embed.add_field(name='User ID:', value=str(member.id), inline=False)
+        embed.add_field(name='User discord name:', value=f"{member.name}#{member.discriminator}", inline=False)
+        embed.add_field(name='Reason:', value=reason or "None given.", inline=False)
+
+        ban_info = await ctx.channel.send(embed=embed)
+
+        def confirmation_check(msg):
+            return (msg.content == str(confirmation_number) or msg.content.lower() == "cancel") and \
+                msg.channel.id == ctx.channel.id and msg.author.id == ctx.author.id
+
+        try:
+            msg = await self.bot.wait_for('message', check=confirmation_check, timeout=60.0)
         except asyncio.TimeoutError:
-            await ctx.channel.send(":no_entry: | **" + ctx.author.display_name + "** The menu has closed due to inactivity.")
+            await ctx.channel.send(f":no_entry: | {ctx.author.display_name}, the menu has closed due to inactivity.")
         else:
-            if msg.content == str(confirmationnumber):
-                embed = discord.Embed(title=":exclamation: | You have been "+ kickedbanned +" from " + ctx.guild.name,description="You have been "+ kickedbanned +" from " + ctx.guild.name + ". Details of this "+kickban+" are listed below.",colour=self.bot.getcolour())
-                embed.add_field(name="User (You):", value=ctx.guild.get_member(memberid).mention + " " + ctx.guild.get_member(memberid).name + "#" + ctx.guild.get_member(memberid).discriminator + " `" + str(ctx.guild.get_member(memberid).id) + "`", inline=False)
-                embed.add_field(name="Issued by:", value=ctx.author.mention + " " + ctx.author.name + "#" + ctx.author.discriminator + " `" + str(ctx.author.id) + "`", inline=False)
-                if reason:
-                    embed.add_field(name='Reason: ', value=reason, inline=False)
-                else:
-                    embed.add_field(name='Reason: ', value="None given.", inline=False)
-                query = "SELECT * FROM guilds WHERE guildID = $1 AND "+texttosend+" IS NOT NULL"
+            if msg.content == str(confirmation_number):
+                embed = discord.Embed(
+                    title=f":exclamation: | You have been {action_past_tense} from {ctx.guild.name}",
+                    description=f"You have been {action_past_tense} from {ctx.guild.name}. Details of this {action} are listed below.",
+                    color=self.bot.getcolour()
+                )
+                embed.add_field(name="User (You):",
+                                value=f"{member.mention} {member.name}#{member.discriminator} `{member.id}`",
+                                inline=False)
+                embed.add_field(name="Issued by:",
+                                value=f"{ctx.author.mention} {ctx.author.name}#{ctx.author.discriminator} `{ctx.author.id}`",
+                                inline=False)
+                embed.add_field(name='Reason:', value=reason or "None given.", inline=False)
+
+                query = f"SELECT {text_to_send} FROM guilds WHERE guild_id = $1 AND {text_to_send} IS NOT NULL"
                 results = await ctx.bot.db.fetchrow(query, ctx.guild.id)
                 if results:
-                    embed.add_field(name="Message from server:", value=results[texttosend])
-                await ctx.channel.send(":white_check_mark: | "+kickingbanning.title()+" user...")
-                await ctx.guild.get_member(memberid).send(embed=embed)
-                if reason:
-                    if kickban == "kick":
-                        await ctx.guild.get_member(memberid).kick(reason=reason)
-                    elif kickban == "ban":
-                        await ctx.guild.get_member(memberid).ban(reason=reason, delete_message_days = 0)
-                else:
-                    if kickban == "kick":
-                        await ctx.guild.get_member(memberid).kick(reason="None given.")
-                    elif kickban == "ban":
-                        await ctx.guild.get_member(memberid).ban(reason="None given.", delete_message_days = 0)
-            elif msg.content.lower() == "cancel":
-                canceledtext = await ctx.channel.send(":white_check_mark: | Canceled!")
-                await baninfo.delete()
-                await asyncio.sleep(2)
-                await canceledtext.delete()
+                    embed.add_field(name="Message from server:", value=results[text_to_send])
 
-def setup(bot):
-    bot.add_cog(adminCog(bot))
+                await ctx.channel.send(f":white_check_mark: | {action_present_participle.title()} user...")
+                await member.send(embed=embed)
+
+                if action == "kick":
+                    await member.kick(reason=reason)
+                elif action == "ban":
+                    await member.ban(reason=reason, delete_message_days=0)
+
+            elif msg.content.lower() == "cancel":
+                canceled_text = await ctx.channel.send(":white_check_mark: | Canceled!")
+                await ban_info.delete()
+                await asyncio.sleep(2)
+                await canceled_text.delete()
+
+
+async def setup(bot):
+    await bot.add_cog(adminCog(bot))
+    return
